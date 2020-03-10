@@ -13,7 +13,7 @@ import javafx.util.Duration;
 
 
 public class Snake extends Group{
-    final int TAM_PIEZA_SNAKE=42;
+    //final int TAM_PIEZA_SNAKE=42;
     //static final int TAM_PIEZA_SNAKE=42;
     
     public Snake(int parte){// parte 1 es cabeza, parte 2 es cuerpo, parte 3 es cola
@@ -25,26 +25,23 @@ public class Snake extends Group{
         //Haré que los visores midan 42 para poder establecer el tamaño de la matriz del tablero según tamño de escena    
         if(parte==1){//CABEZA SNAKE
             ImageView snakeHeadView = new ImageView(snakeHead);
-            snakeHeadView.setFitHeight(TAM_PIEZA_SNAKE);
-            snakeHeadView.setFitWidth(TAM_PIEZA_SNAKE);
+            snakeHeadView.setFitHeight(App.TAM_PIEZA_SNAKE);
+            snakeHeadView.setFitWidth(App.TAM_PIEZA_SNAKE);
             this.getChildren().add(snakeHeadView);
                         
         }else if(parte==2){//CUERPO SNAKE
             ImageView snakeBodyView = new ImageView(snakeBody);
-            snakeBodyView.setFitHeight(TAM_PIEZA_SNAKE);
-            snakeBodyView.setFitWidth(TAM_PIEZA_SNAKE);
+            snakeBodyView.setFitHeight(App.TAM_PIEZA_SNAKE);
+            snakeBodyView.setFitWidth(App.TAM_PIEZA_SNAKE);
             this.getChildren().add(snakeBodyView);
             
         }else{//COLA SNAKE
             ImageView snakeTailView = new ImageView(snakeTail);
-            snakeTailView.setFitHeight(TAM_PIEZA_SNAKE);
-            snakeTailView.setFitWidth(TAM_PIEZA_SNAKE);            
+            snakeTailView.setFitHeight(App.TAM_PIEZA_SNAKE);
+            snakeTailView.setFitWidth(App.TAM_PIEZA_SNAKE);            
             this.getChildren().add(snakeTailView);            
         }
     }
   
-    public int tamañoSnake(){
-        return TAM_PIEZA_SNAKE;
-    }
     
 }

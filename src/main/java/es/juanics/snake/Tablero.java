@@ -12,12 +12,12 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
 //*****La clase en sí es el panel
     
 
-    private Snake snake1;
+    private Snake snake1;//Crear un objeto de tipo Snake
+    private Apple apple1;//Crear un objeto de tipo Apple
     private Timeline timelineSnake;   
     private SnakeGame snakeGame;   //objeto de tipo SnakeGame para poder usar todos los métodos y parámetros de SnakeGame
     private int filas;//Guardará filas totales de la Matriz(desde SnakeGame)
     private int columnas;//Guardará columnas totales de la Matriz(desde SnakeGame)
-    private int tamSnake;//Guardará el tamaño de una pieza de la Snake(desde Snake)
     private int matFilaIni;//posición inicial de la cabeza en la FILA dentro de la matriz
     private int matColumnaIni;//posición inicial de la cabeza en la COLUMNA dentro de la matriz    
    
@@ -41,14 +41,13 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         //Primero obtengo los datos que necesito de las otras Clases
         filas = snakeGame.getNumFilasMatriz();
         columnas = snakeGame.getNumColumnasMatriz();
-        tamSnake = snake1.tamañoSnake();
         
         for(int i=0;i<=columnas;i++){
-            Line line = new Line(tamSnake*i, 0, tamSnake*i, tamSnake*filas);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
+            Line line = new Line(App.TAM_PIEZA_SNAKE*i, 0, App.TAM_PIEZA_SNAKE*i, App.TAM_PIEZA_SNAKE*filas);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
             this.getChildren().add(line); //añade la linea a esta misma clase Tablero (que es el panel)
         }
         for(int i=0;i<=filas;i++){
-            Line line = new Line(0, tamSnake*i, tamSnake*columnas, tamSnake*i);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
+            Line line = new Line(0, App.TAM_PIEZA_SNAKE*i, App.TAM_PIEZA_SNAKE*columnas, App.TAM_PIEZA_SNAKE*i);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
             this.getChildren().add(line); //añade la linea a esta misma clase Tablero (que es el panel)
         }
         
@@ -69,8 +68,14 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         
         
         //Colocar la cabeza de la serpiente a la mitad de la matriz
-        snake1.setLayoutX(tamSnake*matColumnaIni);
-        snake1.setLayoutY(tamSnake*matFilaIni);
+        snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
+        snake1.setLayoutY(App.TAM_PIEZA_SNAKE*matFilaIni);
+        
+        //Colocar la manzana en un sitio aleatorio donde no esté la serpiente               
+        apple1 = new Apple();
+        apple1.setLayoutX(0);
+        apple1.setLayoutY(0);
+        this.getChildren().add(apple1);
         
     }   
     
@@ -103,7 +108,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                     }
                 })
         );
-        timelineSnake.setCycleCount(tamSnake);//Llama al método setCycleCount(Timeline.INDEFINITE)
+        timelineSnake.setCycleCount(App.TAM_PIEZA_SNAKE);//Llama al método setCycleCount(Timeline.INDEFINITE)
         timelineSnake.play(); //Llama al método Play para echar a andar la animación       
     }
 }

@@ -15,7 +15,8 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     public final int SCENE_WIDTH=882;//SEGÚN TAMAÑO MATRIZ
-    public final int SCENE_HEIGHT=546;  
+    public final int SCENE_HEIGHT=546;
+    public static final int TAM_PIEZA_SNAKE=42;//Tamaño que tendrán los visores de las imágenes (Tamaño grafico de cada celda)
  
     public static final int D_RIGHT = 1;//Constantes que para comparar la direcciones en switch
     public static final int D_LEFT = -1;//Ponemos static para poder usarlas en otras clases
@@ -35,12 +36,11 @@ public class App extends Application {
         stage.setTitle("SNAKE");
         scene.setFill(Color.LIGHTYELLOW);
         
-
+        //el tablero ya contiene la cabeza de la serpiente y la manzana
         Tablero tablero = new Tablero(SCENE_WIDTH, SCENE_HEIGHT);//Le paso las medidas al tablero
         root.getChildren().add(tablero);
        
-        SnakeGame snakeGame = new SnakeGame();
-              
+        SnakeGame snakeGame = new SnakeGame();       
         
         //CUANDO LAS TECLAS SON PULSADAS
         //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)

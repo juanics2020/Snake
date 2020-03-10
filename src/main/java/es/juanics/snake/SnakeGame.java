@@ -15,7 +15,7 @@ public class SnakeGame {
     //Creamos un objeto Snake para utilizar la función que nos da su tamaño
     private Snake snake1 = new Snake(1);
     //Declaro una variable que guardará el tamaño del visor de la serpiente para usarlo en la función de tamañoMatriz
-    private int tamSnakeV;
+    
      
     private static int filaActual;//posición actual de la cabeza en la FILA dentro de la matriz //PARA QUE SÓLO LAS CREE UNA VEZ PONEMOS ESTÁTICA (si no las crea de 0 siempre que entra)
     private static int columnaActual;//posición actual de la cabeza en la COLUMNA dentro de la matriz //PARA QUE SÓLO LAS CREE UNA VEZ PONEMOS ESTÁTICA (si no las crea de 0 siempre que entra)  
@@ -24,14 +24,14 @@ public class SnakeGame {
     //Calcula cuantas FILAS Y COLUMNAS tiene la Matriz usando el ancho y alto de la escena y el tamaño del visor de la serpiente
     public void tamañoMatriz(int sceneWidth, int sceneHeight){
         //Llamamos a la función dentro de Snake que le pasa el tamaño que tendrán los visores para calcular el tamaño de la matriz 
-        tamSnakeV = snake1.tamañoSnake();
+        
         //Calculamos filas y columnas según alto y ancho de la escena
-        filas = (int)(sceneHeight/tamSnakeV);
-        columnas = (int)(sceneWidth/tamSnakeV);
+        filas = (int)(sceneHeight/App.TAM_PIEZA_SNAKE);
+        columnas = (int)(sceneWidth/App.TAM_PIEZA_SNAKE);
         //Declaro la matriz del tablero  ej [13 filas hacia abajo][21 columnas hacia la derecha]
         matrizTablero = new int [filas][columnas];//FILAS Y COLUMNAS TOTALES QUE TENDRÁ LA MATRIZ
         
-        System.out.println("Tamaño Snake: "+tamSnakeV+", Nº FILAS TOTALES: "+filas+", Nº COLUMNAS TOTALES: "+columnas);              
+        System.out.println("Tamaño Snake: "+App.TAM_PIEZA_SNAKE+", Nº FILAS TOTALES: "+filas+", Nº COLUMNAS TOTALES: "+columnas);              
     }
     
     //Al inicio del juego rellenaremos la matriz de 0 escepto la mitad de la matriz que será un 1 donde está la cabeza de la serpiente  
