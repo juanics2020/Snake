@@ -1,5 +1,7 @@
 package es.juanics.snake;
 
+import java.util.Random;
+
 
 public class SnakeGame {
     //LA MATRIZ DEL TABLERO TENDRÁ TANTAS FILAS Y COLUMNAS COMO SEA POSIBLE
@@ -70,6 +72,18 @@ public class SnakeGame {
         return columnas;
     }
 
+    //POSICIONES ALEATORIA PARA LA MANZANA
+    public int setRandomAppleCol(){//Obtener una columna de la matriz aleatoria
+        Random randomX = new Random();
+        int rX = randomX.nextInt(columnas);//La X se calcula con las columnas
+        return rX;
+    }
+    public int setRandomAppleFil(){//Obtener una fila de la matriz aleatoria
+        Random randomY = new Random();
+        int rY = randomY.nextInt(filas);//La X se calcula con las filas
+        return rY;
+    }
+    
     
     public void matrixMovement(int direccion) {  
         System.out.println("DENTRO SWITCH ----> FILA ACTUAL: "+filaActual+", COLUMNA ACTUAL: "+columnaActual);

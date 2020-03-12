@@ -20,7 +20,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     private int columnas;//Guardará columnas totales de la Matriz(desde SnakeGame)
     private int matFilaIni;//posición inicial de la cabeza en la FILA dentro de la matriz
     private int matColumnaIni;//posición inicial de la cabeza en la COLUMNA dentro de la matriz    
-   
+    private int appleCol;//Columna aleatoria de la manzana
+    private int appleFil;//Fila aleatoria de la manzana   
     
     public Tablero(int width, int height) {//pone la serpiente en el tablero //Método constructor (new Tablero)
       
@@ -61,23 +62,45 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         
         System.out.println("Mitad filas: "+matFilaIni);
         System.out.println("Mitad columnas: "+matColumnaIni);
-        
-        
+                
         snakeGame.matrizTablero[matFilaIni][matColumnaIni] = 1;//Pongo el 1 a mitad de la matriz      
         snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
-        
-        
+               
         //Colocar la cabeza de la serpiente a la mitad de la matriz
         snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
         snake1.setLayoutY(App.TAM_PIEZA_SNAKE*matFilaIni);
         
-        //Colocar la manzana en un sitio aleatorio donde no esté la serpiente               
-        apple1 = new Apple();
-        apple1.setLayoutX(0);
-        apple1.setLayoutY(0);
-        this.getChildren().add(apple1);
+        snakeGame.mostrarMatrizConsola();
         
+        //--------------MANZANA
+        //Colocar la manzana en un sitio aleatorio donde no esté la serpiente
+        //La X corresponde a las columnas y la Y corresponde a las filas   
+        //Llamo al método de abajo. Lo volveremos a usar en SnakeGame cada vez que la serpiente se coma la manzana
+        this.setAppleRandom();//Calculamos posición de la manzana y la colocamos en la matriz con un 4 sin pisar la serpiente
+          
     }   
+    
+    public void setAppleRandom(){//PONER LA MANZANA ALEATORIA SIN QUE PISE LA SERPIENTE (cabeza 1, cuerpo 2, cola 3)   
+        do{
+            appleCol = snakeGame.setRandomAppleCol();
+            appleFil = snakeGame.setRandomAppleFil();
+            System.out.println("Manzana Alearoia en matriz: "+appleFil+", "+appleCol);
+            System.out.println("Contenido Matriz: "+snakeGame.matrizTablero[appleFil][appleCol]);
+        }while (snakeGame.matrizTablero[appleFil][appleCol]==1 || snakeGame.matrizTablero[appleFil][appleCol]==2 || snakeGame.matrizTablero[appleFil][appleCol]==3);    
+        //La cabeza es 1, el cuerpo es 2 y la cola es 3
+        
+        snakeGame.matrizTablero[appleFil][appleCol]=4;//Pongo un cuatro en la matriz donde esté la manzana    
+        snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
+        //Ponemos la manzana gráficamente en el tablero
+        //En la matriz es una fila menos(0 a 12) y una columna menos (0-20)
+        System.out.println("POSICIÓN ALEATORIA MANZANA: "+"(fila)"+(appleFil+1)+"(columna)"+(appleCol+1)+"-----MATRIZ UNO MENOS -> FILA (0-12) Y COLUMNA (0-20)");
+        apple1 = new Apple();
+        apple1.setLayoutX(App.TAM_PIEZA_SNAKE*appleCol);
+        apple1.setLayoutY(App.TAM_PIEZA_SNAKE*appleFil);
+        System.out.println("POSICIÓN MANZANA X,Y: "+"(X)"+apple1.getLayoutX()+"(Y)"+apple1.getLayoutY());
+        this.getChildren().add(apple1); 
+    }
+    
     
     public void snakeMovement(int direccion) {
         //El timeline se para cuando llamamos a la función si ya se había creado
