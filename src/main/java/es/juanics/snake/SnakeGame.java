@@ -19,11 +19,13 @@ public class SnakeGame {
         
     private static int filaActual;//posición actual de la cabeza en la FILA dentro de la matriz //PARA QUE SÓLO LAS CREE UNA VEZ PONEMOS ESTÁTICA (si no las crea de 0 siempre que entra)
     private static int columnaActual;//posición actual de la cabeza en la COLUMNA dentro de la matriz //PARA QUE SÓLO LAS CREE UNA VEZ PONEMOS ESTÁTICA (si no las crea de 0 siempre que entra)  
-              
-    public static int puntuacion = 0;
-    
+                 
     public static int appleCol;//Columna aleatoria de la manzana
-    public static int appleFil;//Fila aleatoria de la manzana       
+    public static int appleFil;//Fila aleatoria de la manzana 
+    
+    public static int puntuacion = 0;
+    private static boolean eaten = false;
+   
     
     
     //Calcula cuantas FILAS Y COLUMNAS tiene la Matriz usando el ancho y alto de la escena y el tamaño del visor de la serpiente
@@ -36,6 +38,7 @@ public class SnakeGame {
         //Declaro la matriz del tablero  ej [13 filas hacia abajo][21 columnas hacia la derecha]
         matrizTablero = new int [filas][columnas];//FILAS Y COLUMNAS TOTALES QUE TENDRÁ LA MATRIZ
         
+        System.out.println("");
         System.out.println("Tamaño Snake: "+App.TAM_PIEZA_SNAKE+", Nº FILAS TOTALES: "+filas+", Nº COLUMNAS TOTALES: "+columnas);              
     }
     
@@ -95,7 +98,6 @@ public class SnakeGame {
             appleCol = this.setRandomAppleCol();
             appleFil = this.setRandomAppleFil();
             System.out.println("Manzana Alearoia en matriz: "+appleFil+", "+appleCol);
-            System.out.println("Contenido Matriz: "+this.matrizTablero[appleFil][appleCol]);
         }while (this.matrizTablero[appleFil][appleCol]==App.NUM_HEAD || this.matrizTablero[appleFil][appleCol]==App.NUM_BODY || this.matrizTablero[appleFil][appleCol]==App.NUM_TAIL);    
         //La cabeza es 1, el cuerpo es 2 y la cola es 3
         
@@ -104,44 +106,77 @@ public class SnakeGame {
         //Ponemos la manzana gráficamente en el tablero
         //En la matriz es una fila menos(0 a 12) y una columna menos (0-20)
         System.out.println("POSICIÓN ALEATORIA MANZANA: "+"(fila)"+(appleFil+1)+"(columna)"+(appleCol+1)+"-----MATRIZ UNO MENOS -> FILA (0-12) Y COLUMNA (0-20)");           
+        System.out.println("");
     }
     
     
+    public void appleEatenM(){
+        puntuacion++;
+        System.out.println("Puntuación: "+puntuacion);
+        this.setAppleRandom();    
+    }
     
-    public void matrixMovement(int direccion) {  //MOVIEMIENTO LÓGICO DE LA SERPIENTE EN LA MATRIZ
+    
+    public boolean matrixMovement(int direccion) {  //MOVIEMIENTO LÓGICO DE LA SERPIENTE EN LA MATRIZ
         System.out.println("DENTRO SWITCH ----> FILA ACTUAL: "+filaActual+", COLUMNA ACTUAL: "+columnaActual);
-        
-        this.matrizTablero[appleFil][appleCol]=App.NUM_APPLE;//SI NO VUELVO A ASIGNAR LA MANZANA AQUÍ SE BORRA
-        
+                     
         switch (direccion) {//Según la tecla pulsada
             case App.D_LEFT: // la matriz se moverá a la IZQUIERDA(sólo la COLUMNA)
                 matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0
                 columnaActual --;
-                /////////////////////////////////////////////////////////-------OJO-----------------------------------------------------
+                //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    puntuacion++;
-                    System.out.println("Puntuación: "+puntuacion);
-                    
+                    this.appleEatenM();
+                    eaten = true;
+                }else{
+                    eaten = false;
                 }
-                 /////////////////////////////////////////////////////////-------OJO-----------------------------------------------------
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1                                           
                 break;
+                
+                
             case App.D_RIGHT: // la matriz se moverá a la DERECHA(sólo la COLUMNA)
                 matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0
                 columnaActual ++;
+                //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
+                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
+                    this.appleEatenM();                   
+                    eaten = true;
+                }else{
+                    eaten = false;
+                }                
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
+                
+                
             case App.D_DOWN: // la matriz se moverá ABAJO(sólo la FILA)
                 matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0
                 filaActual ++;
+                //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
+                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
+                    this.appleEatenM();                   
+                    eaten = true;
+                }else{
+                    eaten = false;
+                }
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
+                
+                
             case App.D_UP: // la matriz se moverá ARRIBA(sólo la FILA)
                 matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0
                 filaActual --;
+                //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
+                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
+                    this.appleEatenM();                   
+                    eaten = true;
+                }else{
+                    eaten = false;
+                }
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
         }
         this.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola
+        return eaten;
     }
 }

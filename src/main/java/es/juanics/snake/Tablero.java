@@ -14,7 +14,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
 
     private Snake snake1;//Crear un objeto de tipo Snake
     private Timeline timelineSnake;   
-    private SnakeGame snakeGame;   //objeto de tipo SnakeGame para poder usar todos los métodos y parámetros de SnakeGame
+    public SnakeGame snakeGame;   //objeto de tipo SnakeGame para poder usar todos los métodos y parámetros de SnakeGame
     private int filas;//Guardará filas totales de la Matriz(desde SnakeGame)
     private int columnas;//Guardará columnas totales de la Matriz(desde SnakeGame)
     private int matFilaIni;//posición inicial de la cabeza en la FILA dentro de la matriz
@@ -78,13 +78,14 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         //Llamo al método de abajo. Lo volveremos a usar en SnakeGame cada vez que la serpiente se coma la manzana
         snakeGame.setAppleRandom();//Calculamos posición de la manzana y la colocamos en la matriz con un 4 sin pisar la serpiente
         apple1 = new Apple();
-        apple1.setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.appleCol);
-        apple1.setLayoutY(App.TAM_PIEZA_SNAKE*snakeGame.appleFil);
-        System.out.println("POSICIÓN MANZANA X,Y: "+"(X)"+apple1.getLayoutX()+"(Y)"+apple1.getLayoutY());
+        this.setImageApple();
         this.getChildren().add(apple1);   
     }   
     
-    
+    public void setImageApple(){
+        apple1.setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.appleCol);
+        apple1.setLayoutY(App.TAM_PIEZA_SNAKE*snakeGame.appleFil);       
+    }
     
     public void snakeMovement(int direccion) {// MOVIMIENTO GRÁFICO DE LA SERPIENTE
         //El timeline se para cuando llamamos a la función si ya se había creado
@@ -100,7 +101,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                         switch (direccion) {//Según la tecla pulsada
                             case App.D_LEFT:// la serpiente se moverá a la izquierda
                                 snake1.setLayoutX(snake1.getLayoutX() - 1);
-                                snake1.setHead(App.D_LEFT);//cambio el sentido de la cabeza de la serpiente
+                                snake1.setHead(App.D_LEFT);//cambio el sentido de la cabeza de la serpiente                                
                                 break;
                             case App.D_RIGHT:// la serpiente se moverá a la derecha
                                 snake1.setLayoutX(snake1.getLayoutX() + 1);
@@ -123,3 +124,4 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         timelineSnake.play(); //Llama al método Play para echar a andar la animación       
     }
 }
+           

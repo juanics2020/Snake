@@ -49,14 +49,16 @@ public class App extends Application {
         Tablero tablero = new Tablero(SCENE_WIDTH, SCENE_HEIGHT);//Le paso las medidas al tablero
         root.getChildren().add(tablero);
        
-        SnakeGame snakeGame = new SnakeGame();       
+        //NO CREARÉ UN SNAKEGAME NUEVO. SÓLO USARÉ EL QUE HE CREADO EN TABLERO PARA PORQUE SI NO TENDRÍA DOS SNAKEGAMES QUE NO COINCIDEN
+        //SnakeGame snakeGame = new SnakeGame();
+        
         
         //CUANDO LAS TECLAS SON PULSADAS
         //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
         scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             public void handle(final KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {//Según la tecla pulsada
-                    //¡¡¡1LEFT, RIGHT, DOWN Y UP ES COMO SE LLAMAN LAS TECLAS (NO LAS DIRECCIONES DIRECTAMENTE)!!!!
+                    //¡¡¡LEFT, RIGHT, DOWN Y UP ES COMO SE LLAMAN LAS TECLAS (NO LAS DIRECCIONES DIRECTAMENTE)!!!!
                     case LEFT:// el dinosaurio se moverá a la izquierda
                         direccion=-1;
                         break;
@@ -69,10 +71,12 @@ public class App extends Application {
                     case UP:// el dinosaurio se moverá a la izquierda
                         direccion=-2;
                         break;
-                }
+                }               
+                boolean eaten = tablero.snakeGame.matrixMovement(direccion);//Hacer el movimiento lógico en la matriz en SnakeGame
                 tablero.snakeMovement(direccion);//Hacer el movimiento de la snake1 en el Tablero
-                snakeGame.matrixMovement(direccion);//Hacer el movimiento lógico en la matriz en SnakeGame
-//                snakeGame.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola
+                if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
+                    tablero.setImageApple();
+                }
                 direccion=0;//Si no se pone se pisa
             }
         });         
