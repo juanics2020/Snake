@@ -119,63 +119,67 @@ public class SnakeGame {
     
     public boolean matrixMovement(int direccion) {  //MOVIEMIENTO LÓGICO DE LA SERPIENTE EN LA MATRIZ
         System.out.println("DENTRO SWITCH ----> FILA ACTUAL: "+filaActual+", COLUMNA ACTUAL: "+columnaActual);
-                     
+                    
         switch (direccion) {//Según la tecla pulsada
             case App.D_LEFT: // la matriz se moverá a la IZQUIERDA(sólo la COLUMNA)
-                matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0
-                columnaActual --;
+                matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0               
+                columnaActual --;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
                     this.appleEatenM();
                     eaten = true;
                 }else{
                     eaten = false;
-                }
+                }                
+                //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN                                              
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1                                           
                 break;
-                
-                
+
+
             case App.D_RIGHT: // la matriz se moverá a la DERECHA(sólo la COLUMNA)
-                matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0
-                columnaActual ++;
+                matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0               
+                columnaActual ++;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
                     this.appleEatenM();                   
                     eaten = true;
                 }else{
                     eaten = false;
-                }                
+                }               
+                //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN              
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
-                
-                
+
+
             case App.D_DOWN: // la matriz se moverá ABAJO(sólo la FILA)
-                matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0
-                filaActual ++;
+                matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0               
+                filaActual ++;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
                     this.appleEatenM();                   
                     eaten = true;
                 }else{
                     eaten = false;
-                }
+                }               
+                //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN                
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
-                
-                
+
+
             case App.D_UP: // la matriz se moverá ARRIBA(sólo la FILA)
-                matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0
-                filaActual --;
+                matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0                
+                filaActual --;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
                     this.appleEatenM();                   
                     eaten = true;
                 }else{
                     eaten = false;
-                }
+                }               
+                //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN               
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
-        }
+        }          
         this.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola
         return eaten;
     }

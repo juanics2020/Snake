@@ -1,9 +1,11 @@
 /*LA SERPIENTE SE DESCUADRA CUANDO SE PULSAN DOS TECLAS JUNTAS O MUY SEGUIDAS
 (NO DA TIEMPO DE QUE TERMINE EL MOVIMIENTO DE LA PULSACIÓN DE UNA TECLA CUANDO LE DAMOS A OTRA)*/
 
+//CUANDO SALGA DE LOS LÍMITES EN ESTA CLASE DEBE PODER SEGUIR JUGANDO
 
 package es.juanics.snake;
 
+import java.lang.reflect.Array;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -53,33 +55,37 @@ public class App extends Application {
         //SnakeGame snakeGame = new SnakeGame();
         
         
-        //CUANDO LAS TECLAS SON PULSADAS
-        //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            public void handle(final KeyEvent keyEvent) {
-                switch (keyEvent.getCode()) {//Según la tecla pulsada
-                    //¡¡¡LEFT, RIGHT, DOWN Y UP ES COMO SE LLAMAN LAS TECLAS (NO LAS DIRECCIONES DIRECTAMENTE)!!!!
-                    case LEFT:// el dinosaurio se moverá a la izquierda
-                        direccion=-1;
-                        break;
-                    case RIGHT:// el dinosaurio se moverá a la izquierda
-                        direccion=1;
-                        break;
-                    case DOWN:// el dinosaurio se moverá a la izquierda
-                        direccion=2;
-                        break;
-                    case UP:// el dinosaurio se moverá a la izquierda
-                        direccion=-2;
-                        break;
-                }               
-                boolean eaten = tablero.snakeGame.matrixMovement(direccion);//Hacer el movimiento lógico en la matriz en SnakeGame
-                tablero.snakeMovement(direccion);//Hacer el movimiento de la snake1 en el Tablero
-                if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
-                    tablero.setImageApple();
+        try {
+            //CUANDO LAS TECLAS SON PULSADAS
+            //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
+            scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                public void handle(final KeyEvent keyEvent) {
+
+                    switch (keyEvent.getCode()) {//Según la tecla pulsada
+                        //¡¡¡LEFT, RIGHT, DOWN Y UP ES COMO SE LLAMAN LAS TECLAS (NO LAS DIRECCIONES DIRECTAMENTE)!!!!
+                        case LEFT:// el dinosaurio se moverá a la izquierda
+                            direccion=-1;
+                            break;
+                        case RIGHT:// el dinosaurio se moverá a la izquierda
+                            direccion=1;
+                            break;
+                        case DOWN:// el dinosaurio se moverá a la izquierda
+                            direccion=2;
+                            break;
+                        case UP:// el dinosaurio se moverá a la izquierda
+                            direccion=-2;
+                            break;
+                    }               
+                    boolean eaten = tablero.snakeGame.matrixMovement(direccion);//Hacer el movimiento lógico en la matriz en SnakeGame
+                    tablero.snakeMovement(direccion);//Hacer el movimiento de la snake1 en el Tablero
+                    if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
+                        tablero.setImageApple();
+                    }
+                    direccion=0;//Si no se pone se pisa
                 }
-                direccion=0;//Si no se pone se pisa
-            }
-        });         
+            });         
+        } catch(ArrayIndexOutOfBoundsException e) {}
+               
     }
 
     public static void main(String[] args) {
