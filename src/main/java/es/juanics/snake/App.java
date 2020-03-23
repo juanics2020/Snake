@@ -135,7 +135,7 @@ public class App extends Application {
                         
                         if (result.isPresent() && result.get() == ButtonType.OK) { //DESEA CONTINUAR
                             System.out.println("Vamos a Continuar");
-                            tablero.reiniciar();
+                            tablero.reiniciar();                           
                         }else{//NO DESEA CONTINUAR
                             System.exit(0);
                         }
