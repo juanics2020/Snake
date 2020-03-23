@@ -23,7 +23,7 @@ public class SnakeGame {
     public static int appleCol;//Columna aleatoria de la manzana
     public static int appleFil;//Fila aleatoria de la manzana 
     
-    public static int puntuacion = 0;
+    //public static int puntuacion = 0;
     private static boolean eaten = false;
    
     
@@ -111,11 +111,15 @@ public class SnakeGame {
     
     
     public void appleEatenM(){
-        puntuacion++;
-        System.out.println("Puntuación: "+puntuacion);
+        App.puntuacion++;
+        App.textScore.setText(String.valueOf(App.puntuacion));
+        System.out.println("Puntuación: "+App.puntuacion);
         this.setAppleRandom();    
     }
     
+    public void emptyApple(){//Cuando reinicie hay que vaciar la celda de la manzana en la matriz
+        matrizTablero[appleFil][appleCol] = App.NUM_EMPTY;
+    }
     
     public boolean matrixMovement(int direccion) {  //MOVIEMIENTO LÓGICO DE LA SERPIENTE EN LA MATRIZ
         System.out.println("DENTRO SWITCH ----> FILA ACTUAL: "+filaActual+", COLUMNA ACTUAL: "+columnaActual);

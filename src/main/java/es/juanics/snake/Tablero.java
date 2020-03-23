@@ -1,5 +1,6 @@
 package es.juanics.snake;
 
+import static es.juanics.snake.SnakeGame.matrizTablero;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -20,7 +21,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     private int matFilaIni;//posición inicial de la cabeza en la FILA dentro de la matriz
     private int matColumnaIni;//posición inicial de la cabeza en la COLUMNA dentro de la matriz    
      
-    private Apple apple1;//Crear un objeto de tipo Apple  
+    private static Apple apple1;//Crear un objeto de tipo Apple  
      
      
     public Tablero(int width, int height) {//pone la serpiente en el tablero //Método constructor (new Tablero)
@@ -86,6 +87,26 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         apple1.setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.appleCol);
         apple1.setLayoutY(App.TAM_PIEZA_SNAKE*snakeGame.appleFil);       
     }
+    
+    
+    public void reiniciar(){
+        App.puntuacion=0;
+        App.textScore.setText(String.valueOf(App.puntuacion));
+        snakeGame.emptyApple();
+        snakeGame.setAppleRandom();
+        this.setImageApple();
+        
+        //LE PASO LA POSICIÓN INICIAL DE LA MATRIZ A SnakeGame para que vaya cambiando posicones Actuales de fila y columna al pulsar teclas
+        snakeGame.inicioFilaColActual(matFilaIni, matColumnaIni);
+        snakeGame.matrizTablero[matFilaIni][matColumnaIni] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente      
+        snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
+            
+        //Colocar Imagen de la cabeza de la serpiente a la mitad de la matriz
+        snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
+        snake1.setLayoutY(App.TAM_PIEZA_SNAKE*matFilaIni);
+        snake1.setHead(App.D_DOWN);
+    }
+    
     
     public void snakeMovement(int direccion) {// MOVIMIENTO GRÁFICO DE LA SERPIENTE
         //El timeline se para cuando llamamos a la función si ya se había creado
