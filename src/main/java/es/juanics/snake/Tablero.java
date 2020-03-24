@@ -1,6 +1,5 @@
 package es.juanics.snake;
 
-import static es.juanics.snake.SnakeGame.matrizTablero;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -22,7 +21,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     private int matColumnaIni;//posición inicial de la cabeza en la COLUMNA dentro de la matriz    
      
     private static Apple apple1;//Crear un objeto de tipo Apple  
-     
+    private int siguienteDireccion = App.D_DOWN; //Cuando pulse las teclas guardará la siguiente direccion (comenzará hacia abajo)
+    private int direccionActual = App.D_DOWN;//Cogerá la nueva dirección que le den las teclas (comenzará hacia abajo)
      
     public Tablero(int width, int height) {//pone la serpiente en el tablero //Método constructor (new Tablero)
       
@@ -70,7 +70,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                
         //Colocar Imagen de la cabeza de la serpiente a la mitad de la matriz
         snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
-        snake1.setLayoutY(App.TAM_PIEZA_SNAKE*matFilaIni);
+        snake1.setLayoutY((App.TAM_PIEZA_SNAKE*matFilaIni)-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
         
         
         //--------------MANZANA
@@ -105,10 +105,32 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
         snake1.setLayoutY(App.TAM_PIEZA_SNAKE*matFilaIni);
         snake1.setHead(App.D_DOWN);
+        
+        direccionActual = App.D_DOWN;
+        siguienteDireccion= App.D_DOWN;
+    }
+    
+
+    public void panelVisible(){
+        App.paneContinuar.setVisible(true);
+    }
+    
+    public void panelInvisible(){
+        App.paneContinuar.setVisible(false);
+    }
+    
+    
+    
+    //PASAR DEL APP AL TABLERO LA DIRECCIÓN SIGUIENTE
+    public void nextDirection(int direccion){
+        siguienteDireccion = direccion;
+        System.out.println("2. Siguiente DIRECCIÓN: "+siguienteDireccion);
     }
     
     
     public void snakeMovement(int direccion) {// MOVIMIENTO GRÁFICO DE LA SERPIENTE
+        direccionActual = direccion; //La dirección que le digamos por teclado. Comienza hacia abajo
+        
         //El timeline se para cuando llamamos a la función si ya se había creado
         //la primera vez. Si no, crea un timeline nuevo cada vez que se llame a la función y se pisan.
         if (timelineSnake != null) {
@@ -119,7 +141,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                 new KeyFrame(Duration.seconds(0.008), new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent ae) {//Sólo puede haber un handle en el timeline
 
-                        switch (direccion) {//Según la tecla pulsada
+                        switch (direccionActual) {//Según la tecla pulsada
                             case App.D_LEFT:// la serpiente se moverá a la izquierda
                                 snake1.setLayoutX(snake1.getLayoutX() - 1);
                                 snake1.setHead(App.D_LEFT);//cambio el sentido de la cabeza de la serpiente                                
@@ -137,12 +159,40 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                                 snake1.setHead(App.D_UP);//cambio el sentido de la cabeza de la serpiente
                                 break;
                         }
-                        //System.out.println("Direccion: " + direccion + " X: " + snake1.getLayoutX()+" Y: " + snake1.getLayoutY());                        
+                        //System.out.println("1. Direccion ACTUAL: " + direccion);                        
                     }
                 })
         );
         timelineSnake.setCycleCount(App.TAM_PIEZA_SNAKE);//Llama al método setCycleCount(Timeline.INDEFINITE)
         timelineSnake.play(); //Llama al método Play para echar a andar la animación       
+        timelineSnake.setOnFinished(event -> {//CUANDO TERMINE EL TIMELINE
+            direccionActual = siguienteDireccion;//Sel a he pasado por el método next Direction desde el App            
+            try {
+                //Hacer el movimiento lógico en la matriz en SnakeGame (nos pasará si se come la manzana o no)
+                boolean eaten = this.snakeGame.matrixMovement(direccionActual);
+                this.snakeMovement(direccionActual);//Hacer el movimiento de la snake1 en el Tablero
+                if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
+                    this.setImageApple();
+                }
+                               
+            } catch(ArrayIndexOutOfBoundsException e) { //SI choca con los llímites MUERE******
+                System.out.println("HAS MUERTO");
+                timelineSnake.stop();
+                this.panelVisible();//Oculta el panel principal y muestra el panel de continuar
+                
+                App.botonYes.setOnAction((ActionEvent en) -> {//SI PULSAMOS EL BOTÓN SÍ
+                    panelInvisible();//Muestra el panel principal y oculta el panel de continuar
+                    System.out.println("Vamos a Continuar");
+                    this.reiniciar();
+                    timelineSnake.play();
+                });
+                App.botonNO.setOnAction((ActionEvent en) -> {
+                    System.exit(0);
+                });
+            } 
+                     
+	});
+ 
     }
 }
            

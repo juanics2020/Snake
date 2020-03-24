@@ -102,7 +102,7 @@ public class SnakeGame {
         //La cabeza es 1, el cuerpo es 2 y la cola es 3
         
         this.matrizTablero[appleFil][appleCol]=App.NUM_APPLE;//*********Pongo un 4 en la matriz donde esté la manzana    
-        this.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
+        //this.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
         //Ponemos la manzana gráficamente en el tablero
         //En la matriz es una fila menos(0 a 12) y una columna menos (0-20)
         System.out.println("POSICIÓN ALEATORIA MANZANA: "+"(fila)"+(appleFil+1)+"(columna)"+(appleCol+1)+"-----MATRIZ UNO MENOS -> FILA (0-12) Y COLUMNA (0-20)");           
@@ -112,9 +112,10 @@ public class SnakeGame {
     
     public void appleEatenM(){
         App.puntuacion++;
-        App.textScore.setText(String.valueOf(App.puntuacion));
+        App.textScore.setText(String.valueOf(App.puntuacion));       
+        this.setAppleRandom();       
         System.out.println("Puntuación: "+App.puntuacion);
-        this.setAppleRandom();    
+        System.out.println("SE HA COMIDO LA MANZANA");           
     }
     
     public void emptyApple(){//Cuando reinicie hay que vaciar la celda de la manzana en la matriz
@@ -183,7 +184,7 @@ public class SnakeGame {
                 //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN               
                 matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
-        }          
+        }
         this.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola
         return eaten;
     }

@@ -5,14 +5,12 @@
 
 package es.juanics.snake;
 
-import java.util.Optional;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -46,23 +44,31 @@ public class App extends Application {
     public static final int NUM_TAIL = 3;
     public static final int NUM_APPLE = 4;
     
-    private int direccion = 0;
+    private int direccion = 2; //La serpiente comienza yendo hacia abajo
     public static int puntuacion = 0;
     VBox panePuntuacion;
     public static Text textScore;
     
+    public static VBox paneContinuar;
+    public static Button botonYes;
+    public static Button botonNO;
+    
+    
     @Override
     public void start(Stage stage) {
+               
         StackPane root = new StackPane();//contenedor principal(stackpane)
         var scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT_MAS_VBOX);
         stage.setScene(scene);
         stage.setResizable(false);//Para que el usuario no pueda cambiar el tamaño de la pantalla
         stage.show();
         stage.setTitle("SNAKE");
-        scene.setFill(Color.LIGHTYELLOW);
+        
         
         //VOBOX (HBOX  con text + puntuacion) + (Tablero)
-        panePuntuacion = new VBox();        
+        panePuntuacion = new VBox();
+        String style = "-fx-background-color: lightyellow;"; //COLOR QUE LE VOY A DAR AL VBOX
+        panePuntuacion.setStyle(style);
         root.getChildren().add(panePuntuacion);
         
         HBox panePuntHor = new HBox();
@@ -88,62 +94,86 @@ public class App extends Application {
         Tablero tablero = new Tablero(SCENE_WIDTH, SCENE_HEIGHT);//Le paso las medidas al tablero
         panePuntuacion.getChildren().add(tablero);
         
-        
-       
+        tablero.snakeMovement(direccion);//para que arranque la serpiente al iniciar el juego
+  
         //NO CREARÉ UN SNAKEGAME NUEVO. SÓLO USARÉ EL QUE HE CREADO EN TABLERO PARA PORQUE SI NO TENDRÍA DOS SNAKEGAMES QUE NO COINCIDEN
         //SnakeGame snakeGame = new SnakeGame();
         
         
+        
+        //Layout principal para VBOX (MENSAJE CONTINUAR)
+        //**********************************************************************
+        paneContinuar = new VBox();
+        paneContinuar.setMinHeight(SCENE_HEIGHT);
+        paneContinuar.setTranslateY(0);       
+        paneContinuar.setMinWidth(SCENE_WIDTH);
+        paneContinuar.setTranslateX(0);
+        paneContinuar.setAlignment(Pos.CENTER);
+        paneContinuar.setSpacing(100);
+        paneContinuar.setStyle("-fx-background-color: #fff980;");
+        root.getChildren().add(paneContinuar);
+        //Texto de etiqueta para la continuar
+        Text textTitleCon = new Text("¿Do you want to continue?");
+        textTitleCon.setFont(Font.font("Arial Black", 24));
+        textTitleCon.setFill(Color.BLACK);
+        paneContinuar.getChildren().add(textTitleCon);
+        
+        //AÑADIR LOS DOS BOTONES HORIZONTALES EN UN HBOX(DENTRO DEL VBOX)
+        HBox paneBotones = new HBox();
+        paneBotones.setAlignment(Pos.CENTER);
+        paneBotones.setSpacing(20);
+        //DOS BOTONES
+        ButtonBar buttonBar = new ButtonBar();
+        botonYes = new Button();
+        ButtonBar.setButtonData(botonYes, ButtonBar.ButtonData.YES);
+        botonYes.setText("YES");
+        //botonYes.getOnMouseClicked();
+        // Create the ButtonBar instance
+        botonNO = new Button();
+        ButtonBar.setButtonData(botonNO, ButtonBar.ButtonData.NO);
+        botonNO.setText("NO");
+        buttonBar.getButtons().addAll(botonYes, botonNO);
+        //paneBotones.getChildren().add(botonYes);
+        //paneBotones.getChildren().add(botonNO);
+        paneBotones.getChildren().add(buttonBar);
+        paneContinuar.getChildren().add(paneBotones);
+        paneContinuar.setVisible(false);
+        //**********************************************************************
+
+
+
+        
        
-            //CUANDO LAS TECLAS SON PULSADAS
-            //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
-            scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                public void handle(final KeyEvent keyEvent) {
+        //CUANDO LAS TECLAS SON PULSADAS
+        //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            public void handle(final KeyEvent keyEvent) {
 
-                    switch (keyEvent.getCode()) {//Según la tecla pulsada
-                        //¡¡¡LEFT, RIGHT, DOWN Y UP ES COMO SE LLAMAN LAS TECLAS (NO LAS DIRECCIONES DIRECTAMENTE)!!!!
-                        case LEFT:// el dinosaurio se moverá a la izquierda
-                            direccion=-1;
-                            break;
-                        case RIGHT:// el dinosaurio se moverá a la izquierda
-                            direccion=1;
-                            break;
-                        case DOWN:// el dinosaurio se moverá a la izquierda
-                            direccion=2;
-                            break;
-                        case UP:// el dinosaurio se moverá a la izquierda
-                            direccion=-2;
-                            break;
-                    } 
-                    
-                    
-                    try {
-                        boolean eaten = tablero.snakeGame.matrixMovement(direccion);//Hacer el movimiento lógico en la matriz en SnakeGame
-                        tablero.snakeMovement(direccion);//Hacer el movimiento de la snake1 en el Tablero
-                        if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
-                            tablero.setImageApple();
-                        }
-                        direccion=0;//Si no se pone se pisa
-                    } catch(ArrayIndexOutOfBoundsException e) { //SI MUERE******
-                        System.out.println("HAS MUERTO");
-                        //ALERTA SI MUERE
-                        Alert alert = new Alert(AlertType.CONFIRMATION, "Has muerto");                                         
-                        alert.setTitle("CONTINUAR");
-                        alert.setHeaderText(null);
-                        alert.setContentText("¿QUIERES CONTINUAR?");
-                        Optional<ButtonType> result  = alert.showAndWait();
-                        
-                        if (result.isPresent() && result.get() == ButtonType.OK) { //DESEA CONTINUAR
-                            System.out.println("Vamos a Continuar");
-                            tablero.reiniciar();                           
-                        }else{//NO DESEA CONTINUAR
-                            System.exit(0);
-                        }
-                    }
+                switch (keyEvent.getCode()) {//Según la tecla pulsada
+                    //¡¡¡LEFT, RIGHT, DOWN Y UP ES COMO SE LLAMAN LAS TECLAS (NO LAS DIRECCIONES DIRECTAMENTE)!!!!
+                    case LEFT:// el dinosaurio se moverá a la izquierda
+                        direccion = D_LEFT;
+
+                        break;
+                    case RIGHT:// el dinosaurio se moverá a la izquierda
+                        direccion = D_RIGHT;
+                        break;
+                    case DOWN:// el dinosaurio se moverá a la izquierda
+                        direccion = D_DOWN;
+                        break;
+                    case UP:// el dinosaurio se moverá a la izquierda
+                        direccion = D_UP;
+                        break;
                 }
-            });                              
+                tablero.nextDirection(direccion); 
+                System.out.println("APP.DIRECCION: "+direccion);
+            }
+        });                              
     }
-
+    
+   
+    
+    
     public static void main(String[] args) {
         launch();
     }
