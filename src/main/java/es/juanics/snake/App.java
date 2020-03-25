@@ -1,16 +1,30 @@
-/*LA SERPIENTE SE DESCUADRA CUANDO SE PULSAN DOS TECLAS JUNTAS O MUY SEGUIDAS
-(NO DA TIEMPO DE QUE TERMINE EL MOVIMIENTO DE LA PULSACIÓN DE UNA TECLA CUANDO LE DAMOS A OTRA)*/
+/*REGLAS DEL JUEGO:
 
-//CUANDO REINICIA EL JUEGO EL PANEL SE QUEDA EN GRIS
+1º EL JUGADOR ELIGE EL NIVEL DE DIFICULTAD QUE DESEA DE 1 A 5 (VELOCIDAD DE MOVIEMIENTO DE LA SERPIENTE
+2º SI CHOCA (SALE DE LOS LÍMITES) SE LE PREGUNTA QUE SI QUIERE CONTINUAR:
+    - SI QUIERE CONTINUAR, VUELVE A EMPEZAR CON DIFICULTAD 1 Y PUNTUACIÓN 0
+    - SI NO QUIERE CONTINUAR, SALE DE LA APLICACIÓN
+3º A MEDIDA QUE COME MANZANAS SUBEN LOS PUNTOS Y SUBE DE NIVEL:
+    NIVEL INICIAL: DIFICULTAD QUE ELIJA EL JUGADOR
+    CADA 10 MANZANAS SUBE UN NIVEL DE DIFICULTAD
+    SI COME 50 MANZANAS GANA EL JUEGO Y SALE UNA PANTALLA PARA FELICITARLO
+
+*****SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR
+
+*/
 
 package es.juanics.snake;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -44,14 +58,37 @@ public class App extends Application {
     public static final int NUM_TAIL = 3;
     public static final int NUM_APPLE = 4;
     
+    
     private int direccion = 2; //La serpiente comienza yendo hacia abajo
     public static int puntuacion = 0;
-    VBox panePuntuacion;
-    public static Text textScore;
+    
+    
+    VBox panePuntuacion;   
+    public static Text textScore; //muestra puntuación en el VBOX
+    public static Text textDificulty;//muestra dificultad en el VBOX
     
     public static VBox paneContinuar;
     public static Button botonYes;
     public static Button botonNO;
+    
+    public static VBox paneWin;
+    public static Text textP;
+    public static Text textD;
+    
+    //Para diálogo de opciones (DIFICULTAD)
+    //USAREMOS UN ARRAYLIST PARA EL DIÁLOGO DE ELEGIR LA DIFICULTAD.
+    //EL ARRAYLIST LO CONVERTIREMOS EN UNA LISTA Y LA LISTA SE LA PASAREMOS AL DIÁLOGO
+    private final String [] arrayDificultad = {"1", "2", "3", "4", "5"};
+    //(DIFICULTAD 1: Velocidad 1)
+    //(DIFICULTAD 2: Velocidad 1.5)
+    //(DIFICULTAD 3: Velocidad 2)
+    //(DIFICULTAD 4: Velocidad 2.5)
+    //(DIFICULTAD 5: Velocidad 3)
+    //La velocidad se usará en el timelineSnake de Tablero
+    public static String dificultad;//La elige el usuario
+    public static double velocidad = 1; 
+    
+    
     
     
     @Override
@@ -65,7 +102,30 @@ public class App extends Application {
         stage.setTitle("SNAKE");
         
         
-        //VOBOX (HBOX  con text + puntuacion) + (Tablero)
+        //DIÁLOGO DE OPCIONES (CHOICE DIALOG)
+        //**********************************************************************
+        List<String> listaDificultad = Arrays.asList(arrayDificultad);
+        
+        ChoiceDialog dialog = new ChoiceDialog(listaDificultad.get(0), listaDificultad);
+        dialog.setTitle("DIFICULTAD");
+        dialog.setHeaderText("Elige la dificultad");
+
+        Optional<String> result = dialog.showAndWait();
+        dificultad = "cancelled.";
+
+        if (result.isPresent()) {//Si elije una opción se guardará la velocidad
+            dificultad = result.get();
+            velocidad = ((Double.valueOf(dificultad)*0.5)+0.5);
+        }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
+        System.out.println("");
+        System.out.println("Dificultad: " + dificultad+" ----- Velocidad: "+velocidad);
+        System.out.println("");
+        //**********************************************************************
+        
+     
+        
+        //VOBOX (HBOX  con text + puntuacion + text + dificultad) + (Tablero)
+        //**********************************************************************
         panePuntuacion = new VBox();
         String style = "-fx-background-color: lightyellow;"; //COLOR QUE LE VOY A DAR AL VBOX
         panePuntuacion.setStyle(style);
@@ -73,14 +133,24 @@ public class App extends Application {
         
         HBox panePuntHor = new HBox();
         panePuntHor.setSpacing(10);
+        //---
         //Texto de etiqueta para la puntuación
-        Text textTitleScore = new Text("Score:");
+        Text textTitleScore = new Text("Puntuación: ");
         textTitleScore.setFont(Font.font("Arial Black", 20));
         textTitleScore.setFill(Color.BLACK);
         //Texto para la puntuación
         textScore = new Text(String.valueOf(puntuacion));
         textScore.setFont(Font.font("Arial Black", 20));
-        textScore.setFill(Color.BLACK);
+        textScore.setFill(Color.RED);
+        //---
+        Text textTitleDificulty = new Text("Dificultad: ");
+        textTitleDificulty.setFont(Font.font("Arial Black", 20));
+        textTitleDificulty.setFill(Color.BLACK);
+        //Texto para la puntuación
+        textDificulty = new Text(dificultad);//la dificultad que selecciona el usuario en el diálogo
+        textDificulty.setFont(Font.font("Arial Black", 20));
+        textDificulty.setFill(Color.RED);             
+        //---
         
         panePuntHor.setAlignment(Pos.CENTER);
         panePuntHor.setMinHeight(HBOX_HEIGHT);
@@ -88,13 +158,19 @@ public class App extends Application {
         
         panePuntHor.getChildren().add(textTitleScore);
         panePuntHor.getChildren().add(textScore);
+        panePuntHor.getChildren().add(textTitleDificulty);
+        panePuntHor.getChildren().add(textDificulty);
         panePuntuacion.getChildren().add(panePuntHor);
-        
+        //**********************************************************************
+              
+        //Tablero incluído en VBOX
         //el tablero ya contiene la cabeza de la serpiente y la manzana
         Tablero tablero = new Tablero(SCENE_WIDTH, SCENE_HEIGHT);//Le paso las medidas al tablero
         panePuntuacion.getChildren().add(tablero);
+        // Primero hacemos un retardo para que el usuario esté preparado y después se moverá la serpiente
+        tablero.reatrdoInicioPartida(direccion);
         
-        tablero.snakeMovement(direccion);//para que arranque la serpiente al iniciar el juego
+        //tablero.snakeMovement(direccion);//para que arranque la serpiente al iniciar el juego
   
         //NO CREARÉ UN SNAKEGAME NUEVO. SÓLO USARÉ EL QUE HE CREADO EN TABLERO PARA PORQUE SI NO TENDRÍA DOS SNAKEGAMES QUE NO COINCIDEN
         //SnakeGame snakeGame = new SnakeGame();
@@ -139,11 +215,55 @@ public class App extends Application {
         paneContinuar.getChildren().add(paneBotones);
         paneContinuar.setVisible(false);
         //**********************************************************************
-
-
-
         
-       
+        
+        //Layout principal para VBOX (MENSAJE HAS GANADO)
+        //**********************************************************************
+        paneWin = new VBox();
+        paneWin.setMinHeight(SCENE_HEIGHT);
+        paneWin.setTranslateY(0);       
+        paneWin.setMinWidth(SCENE_WIDTH);
+        paneWin.setTranslateX(0);
+        paneWin.setAlignment(Pos.CENTER);
+        paneWin.setSpacing(100);
+        paneWin.setStyle("-fx-background-color: #76cdd6;");
+        root.getChildren().add(paneWin);
+        //Texto de etiqueta de HAS GANADO
+        Text textTitleWin = new Text("ENHORA BUENA, HAS GANADO");
+        textTitleWin.setFont(Font.font("Cooper Black", 30));
+        textTitleWin.setFill(Color.BLUE);
+        paneWin.getChildren().add(textTitleWin);
+        
+        //HBOX PUNTUACIÓN
+        HBox panePFW = new HBox();
+        panePFW.setAlignment(Pos.CENTER);
+        panePFW.setSpacing(20);
+         //Texto de etiqueta de PUNTUACIÓN
+        Text textTitlePuntW = new Text("Puntuación: ");
+        textTitlePuntW.setFont(Font.font("Cooper Black", 25));
+        textTitlePuntW.setFill(Color.BLACK);
+        panePFW.getChildren().add(textTitlePuntW);
+        //Texto PUNTUACIÓN
+        textP = new Text(String.valueOf(puntuacion));//la dificultad que selecciona el usuario en el diálogo
+        textP.setFont(Font.font("Cooper Black", 25));
+        textP.setFill(Color.YELLOW);
+        panePFW.getChildren().add(textP);
+        
+         //Texto de etiqueta de PUNTUACIÓN
+        Text textTitleDifW = new Text("Dificultad: ");
+        textTitleDifW.setFont(Font.font("Cooper Black", 25));
+        textTitleDifW.setFill(Color.BLACK);
+        panePFW.getChildren().add(textTitleDifW);
+        //Texto PUNTUACIÓN
+        textD = new Text(dificultad);//la dificultad que selecciona el usuario en el diálogo
+        textD.setFont(Font.font("Cooper Black", 25));
+        textD.setFill(Color.YELLOW);
+        panePFW.getChildren().add(textD);
+            
+        paneWin.getChildren().add(panePFW);
+        paneWin.setVisible(false);
+        //**********************************************************************
+              
         //CUANDO LAS TECLAS SON PULSADAS
         //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
         scene.setOnKeyReleased(new EventHandler<KeyEvent>() {

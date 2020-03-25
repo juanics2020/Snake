@@ -24,7 +24,7 @@ public class SnakeGame {
     public static int appleFil;//Fila aleatoria de la manzana 
     
     //public static int puntuacion = 0;
-    private static boolean eaten = false;
+    private static boolean eaten = false; //static para que no cambie (si no, crearía una variable nueva cada vez que se use)
    
     
     
@@ -131,7 +131,7 @@ public class SnakeGame {
                 columnaActual --;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    this.appleEatenM();
+                    //this.appleEatenM();
                     eaten = true;
                 }else{
                     eaten = false;
@@ -146,7 +146,7 @@ public class SnakeGame {
                 columnaActual ++;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    this.appleEatenM();                   
+                    //this.appleEatenM();                   
                     eaten = true;
                 }else{
                     eaten = false;
@@ -161,7 +161,7 @@ public class SnakeGame {
                 filaActual ++;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    this.appleEatenM();                   
+                    //this.appleEatenM();                   
                     eaten = true;
                 }else{
                     eaten = false;
@@ -176,7 +176,7 @@ public class SnakeGame {
                 filaActual --;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    this.appleEatenM();                   
+                    //this.appleEatenM();                   
                     eaten = true;
                 }else{
                     eaten = false;
