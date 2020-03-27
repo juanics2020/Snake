@@ -176,12 +176,12 @@ public class SnakeGame {
         //La cabeza(0) la dejo para lo último porque le pondremos la posición fila y columna actual.Empiezo en 1 (el segundo puntero).
        
         
-        //Pongo la posición donde estaba la cola antes de moverla a 0 en la matriz
-        
-        arrayXvacia=arrayListCuerpo.get(arrayListCuerpo.size()-1).getX();
+        //Pongo la posición que se queda vacia (donde estaba la cola antes de moverla) a 0 en la matriz
+        //tamaño -1 sería el último elemento del array. Si tiene 3 de tamaño, el último elemento es el 2 (0-2)
+        arrayXvacia=arrayListCuerpo.get(arrayListCuerpo.size()-1).getX(); 
         arrayYvacia=arrayListCuerpo.get(arrayListCuerpo.size()-1).getY();
         
-        matrizTablero[(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getX()][(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getY()] = App.NUM_EMPTY;
+        matrizTablero[(int)arrayXvacia][(int)arrayYvacia] = App.NUM_EMPTY;
         
         for(int c=(arrayListCuerpo.size()-1); c>0; c--){ 
             //Pongo las nuevas posiciones en el ARRAYLIST
