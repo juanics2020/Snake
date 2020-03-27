@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.effect.Light.Point;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -40,6 +41,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         snake1 = new Snake(1);
         this.getChildren().add(snake1);
         
+        
         //Le paso las medidas de la escena y el tablero a SnakeGame para que calcule el tamaño de la Matriz
         snakeGame.tamañoMatriz(width, height);
                     
@@ -73,7 +75,11 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                 
         snakeGame.matrizTablero[matFilaIni][matColumnaIni] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente      
         snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
-               
+        
+        //Llamos al método para meter el primer puntero de la cabeza en el ArrayList de la serpiente en la posición inicial de la cabeza
+        snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni);
+
+        
         //Colocar Imagen de la cabeza de la serpiente a la mitad de la matriz
         snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
         snake1.setLayoutY((App.TAM_PIEZA_SNAKE*matFilaIni)-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior

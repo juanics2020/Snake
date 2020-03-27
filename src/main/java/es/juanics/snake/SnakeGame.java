@@ -1,6 +1,8 @@
 package es.juanics.snake;
 
+import java.util.ArrayList;
 import java.util.Random;
+import javafx.scene.effect.Light.Point;
 
 
 public class SnakeGame {
@@ -26,8 +28,11 @@ public class SnakeGame {
     //public static int puntuacion = 0;
     private static boolean eaten = false; //static para que no cambie (si no, crearía una variable nueva cada vez que se use)
    
+    public static ArrayList<Point>arrayListCuerpo = new ArrayList();//ArrayList que guardará dos punteros (posición fila, posición columna) del cuerpo
+    private static double arrayXvacia = 0;
+    private static double arrayYvacia = 0;
     
-    
+ 
     //Calcula cuantas FILAS Y COLUMNAS tiene la Matriz usando el ancho y alto de la escena y el tamaño del visor de la serpiente
     public void tamañoMatriz(int sceneWidth, int sceneHeight){
         //Llamamos a la función dentro de Snake que le pasa el tamaño que tendrán los visores para calcular el tamaño de la matriz 
@@ -42,12 +47,13 @@ public class SnakeGame {
         System.out.println("Tamaño Snake: "+App.TAM_PIEZA_SNAKE+", Nº FILAS TOTALES: "+filas+", Nº COLUMNAS TOTALES: "+columnas);              
     }
     
+    
     //Al inicio del juego rellenaremos la matriz de 0 escepto la mitad de la matriz que será un 1 donde está la cabeza de la serpiente  
     //(1º Rellenamos las celdas de la matriz de 0)
     public SnakeGame (){
         for(int f=0; f<filas; f++){
             for(int c=0; c<columnas; c++){
-                matrizTablero[f][c] = App.NUM_EMPTY;//Ponemos la cel de la matriz vacía
+                matrizTablero[f][c] = App.NUM_EMPTY;//Ponemos la cel de la matriz vacía a 0
             }        
         }
     } 
@@ -64,14 +70,12 @@ public class SnakeGame {
         System.out.println("");//PARA QUE DEJE UN SALTO DE LÍNEA EN LA CONSOLA ANTES DE LA MATRIZ       
         for(int f=0; f<filas; f++){
             for(int c=0; c<columnas; c++){
-                System.out.print(matrizTablero[f][c]); // mostraría en consola los puntitos
+                System.out.print(matrizTablero[f][c]); // mostraría en consola los 0
             }
             System.out.println("");//Salto de columna
         }
         System.out.println("");//PARA QUE DEJE UN SALTO DE LÍNEA EN LA CONSOLA DESPUÉS DE LA MATRIZ
     }  
-    
-    
     
     public int getNumFilasMatriz(){//Método para devolver Nº de Filas de la Matriz
         return filas;
@@ -122,7 +126,90 @@ public class SnakeGame {
         matrizTablero[appleFil][appleCol] = App.NUM_EMPTY;
     }
     
+    
+    
+    //(Mostramos lo que tiene el arraylist de la serpiente en la consola)
+    public void mostrarArrayListConsola(){
+        //PARA QUE pinte **** SALTO DE LÍNEA EN LA CONSOLA ANTES DEL ARRAYLIST 
+        System.out.println("******************************************************");
+        for(int c=0; c<arrayListCuerpo.size(); c++){
+            System.out.println("Tamaño ArrayList(nº punteros): "+arrayListCuerpo.size());
+            System.out.println("Puntero ("+c+") Y (FILA): "+arrayListCuerpo.get(c).getY()); 
+            System.out.println("Puntero ("+c+") X (COLUMNA): "+arrayListCuerpo.get(c).getX());           
+        }
+        System.out.println("******************************************************");              
+    }
+    
+    
+    public void setPunteroArrayList(int fila, int columna){
+                
+        //OJO!!!! LA Y GUARDA LAS FILAS Y LA X LAS COLUMNAS!!!!!<------------
+        //Añado las posiciones de la cabeza de la serpiente al Arraylist que representará la serpiente
+        Point p = new Point();
+             
+        if(arrayListCuerpo.isEmpty()==true){//Si está vacío no ha comenzado
+            //Si no ha comenzado el juego es para la cabeza de la serpiente y será fila y columna
+            p.setX(columna);         
+            p.setY(fila);  
+        }else{ 
+            //Antes de añadir uno nuevo, ordeno los punteros que ya tengo
+            cambioPunteros(fila,columna);
+            //Si ya ha comenzado el juego las nuevas posiciones serán las posiciones del último puntero
+            p.setX(arrayXvacia);         
+            p.setY(arrayYvacia);           
+        }       
+        arrayListCuerpo.add(p);       
+        System.out.println("********************************************************");
+        System.out.println("NUEVO PUNTERO p Y("+p.getY()+") [FILA] - X("+p.getX()+") [COLUMNA]");    
+      
+    }
+    
+    
+    public void cambioPunteros(int filaActual, int columnaActual){
+        //La COLA en el arrayList me da igual, será en la MATRIZ (3) y en el TABLERO gráficamente donde tendré que ir pasando la cola al final
+        
+        //Según la dirección, cada vez que se mueva la serpiente, las posiciones de los punteros X e Y se irán sumando o restando (posición X o Y = posición X o Y +1 o -1)
+        
+        //A partir de la cabeza, pongo el puntero en la posición del anterior.
+        //Por último, la cabeza la pongo en fila y columna actual
+        
+        //La cabeza(0) la dejo para lo último porque le pondremos la posición fila y columna actual.Empiezo en 1 (el segundo puntero).
+       
+        
+        //Pongo la posición donde estaba la cola antes de moverla a 0 en la matriz
+        
+        arrayXvacia=arrayListCuerpo.get(arrayListCuerpo.size()-1).getX();
+        arrayYvacia=arrayListCuerpo.get(arrayListCuerpo.size()-1).getY();
+        
+        matrizTablero[(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getX()][(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getY()] = App.NUM_EMPTY;
+        
+        for(int c=(arrayListCuerpo.size()-1); c>0; c--){ 
+            //Pongo las nuevas posiciones en el ARRAYLIST
+            arrayListCuerpo.get(c).setX(arrayListCuerpo.get(c-1).getX());
+            arrayListCuerpo.get(c).setY(arrayListCuerpo.get(c-1).getY()); 
+            
+            //Pongo los 2 y el 3 en la MATRIZ (2:cuerpo, 3:cola) **El 1 de la cabeza se pone abajo enmatrizMovement
+            //la posición en la matriz en la que estaba la cola la pongo a 0
+          
+            if(c==(arrayListCuerpo.size()-1)){    //COLA            
+                matrizTablero[(int)arrayListCuerpo.get(c).getX()][(int)arrayListCuerpo.get(c).getY()] = App.NUM_TAIL;
+            }else{ //CUERPO
+                matrizTablero[(int)arrayListCuerpo.get(c).getX()][(int)arrayListCuerpo.get(c).getY()] = App.NUM_BODY;
+            }
+            
+        }           
+        //Una vez que todos los punteros se han cambiado a la posición del anterior, pongo la cabeza a la posición actual, que es donde se ha movido en la matriz
+        arrayListCuerpo.get(0).setX(filaActual);
+        arrayListCuerpo.get(0).setY(columnaActual);
+        
+    //-->OTRO MÉTODO Cuando se coma la manzana el nuevo puntero(cola)(le pongo un 3 en matriz) lo pongo donde estaba el último puntero(poniéndole también un 2 en la matriz).
+    
+    }
+    
+    
+    
     public boolean matrixMovement(int direccion) {  //MOVIEMIENTO LÓGICO DE LA SERPIENTE EN LA MATRIZ
+        //CUANDO SE COMA LA MANZANA TIENE QUE APARECE UN NUEVO PUNTERO EN EL ARRAY LIST
         System.out.println("DENTRO SWITCH ----> FILA ACTUAL: "+filaActual+", COLUMNA ACTUAL: "+columnaActual);
                     
         switch (direccion) {//Según la tecla pulsada
@@ -131,13 +218,11 @@ public class SnakeGame {
                 columnaActual --;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    //this.appleEatenM();
                     eaten = true;
+                    setPunteroArrayList(filaActual, columnaActual);
                 }else{
                     eaten = false;
-                }                
-                //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN                                              
-                matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1                                           
+                }                                                        
                 break;
 
 
@@ -145,14 +230,12 @@ public class SnakeGame {
                 matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0               
                 columnaActual ++;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
-                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    //this.appleEatenM();                   
+                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///                   
                     eaten = true;
+                    setPunteroArrayList(filaActual, columnaActual);
                 }else{
                     eaten = false;
                 }               
-                //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN              
-                matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
 
 
@@ -160,14 +243,12 @@ public class SnakeGame {
                 matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0               
                 filaActual ++;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
-                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    //this.appleEatenM();                   
+                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///                 
                     eaten = true;
+                    setPunteroArrayList(filaActual, columnaActual);
                 }else{
                     eaten = false;
                 }               
-                //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN                
-                matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
 
 
@@ -175,17 +256,19 @@ public class SnakeGame {
                 matrizTablero[filaActual][columnaActual] = App.NUM_EMPTY;//Pongo la posición actual a 0                
                 filaActual --;//Movemos una posición 
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
-                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
-                    //this.appleEatenM();                   
+                if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///                  
                     eaten = true;
+                    setPunteroArrayList(filaActual, columnaActual);
                 }else{
                     eaten = false;
                 }               
-                //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN               
-                matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
                 break;
         }
-        this.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola
+        //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN 
+        matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
+        cambioPunteros(filaActual,columnaActual);
+        mostrarArrayListConsola();
+        this.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola       
         return eaten;
     }
 }

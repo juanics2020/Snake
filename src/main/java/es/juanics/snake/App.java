@@ -1,3 +1,8 @@
+//QUEDA PONER LAS IMÁGENES DEL CUERPO Y LA COLA
+//Y QUE MUERA SI SE MUERDE ELLA MISMA
+
+
+
 /*REGLAS DEL JUEGO:
 
 1º EL JUGADOR ELIGE EL NIVEL DE DIFICULTAD QUE DESEA DE 1 A 5 (VELOCIDAD DE MOVIEMIENTO DE LA SERPIENTE
@@ -11,7 +16,19 @@
 
 *****SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR
 
+
+Cada vez que se coma una manzana se añadirá una pieza al cuerpo,la primera piza tendrá la imagen de la cola
+la segunda piza intercambiará la cola por el cuerpo
+
 */
+
+
+//Static -> poniendo el nombre de la clase, no el nombre del objeto
+//******** ORDENAR LLAVES Y FORMATOS: SOURCE, FORMAT!!!!!!!!!***** ORGANIZA TODAS LAS CLASES
+//En algún lugar hay que almacenarlas posiciones del cuerpo. Los arrays tienen un tamaño fijo.
+//Hay que usar los ArrayList(para que vaya creciendo (posiciones fila y columna). 
+
+
 
 package es.juanics.snake;
 

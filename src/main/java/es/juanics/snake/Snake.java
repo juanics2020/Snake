@@ -18,7 +18,19 @@ public class Snake extends Group{
     Image snakeHeadIz;
     Image snakeHeadDer;
     Image snakeHeadArr;
+    
+    Image snakeBodyVer;
+    Image snakeBodyHor;
+        
+    Image snakeTailAb;
+    Image snakeTailArr;
+    Image snakeTailIz;
+    Image snakeTailDer;   
+    
+    
     ImageView snakeHeadView;
+    ImageView snakeBodyView;
+    ImageView snakeTailView;
     
     
     public Snake(int parte){// parte 1 es cabeza, parte 2 es cuerpo, parte 3 es cola
@@ -28,8 +40,14 @@ public class Snake extends Group{
         snakeHeadDer = new Image(getClass().getResourceAsStream("/images/Snakehead - der.png"));
         snakeHeadArr = new Image(getClass().getResourceAsStream("/images/Snakehead - arr.png"));
         
-        Image snakeBody = new Image(getClass().getResourceAsStream("/images/Snakebody.png"));        
-        Image snakeTail = new Image(getClass().getResourceAsStream("/images/Snaketail.png"));
+        snakeBodyVer = new Image(getClass().getResourceAsStream("/images/Snakebody-Ver.png"));
+        snakeBodyHor = new Image(getClass().getResourceAsStream("/images/Snakebody-Hor.png"));
+        
+        snakeTailAb = new Image(getClass().getResourceAsStream("/images/Snaketail-ab.png"));
+        snakeTailArr = new Image(getClass().getResourceAsStream("/images/Snaketail-arr.png"));
+        snakeTailIz = new Image(getClass().getResourceAsStream("/images/Snaketail-iz.png"));
+        snakeTailDer = new Image(getClass().getResourceAsStream("/images/Snaketail-der.png"));
+        
         
         //Haré que los visores midan 42 para poder establecer el tamaño de la matriz del tablero según tamño de escena    
         if(parte==App.NUM_HEAD){//CABEZA SNAKE en matriz será 1
@@ -39,18 +57,20 @@ public class Snake extends Group{
             this.getChildren().add(snakeHeadView);
                         
         }else if(parte==App.NUM_BODY){//CUERPO SNAKE en matriz será 2
-            ImageView snakeBodyView = new ImageView(snakeBody);
+            snakeBodyView = new ImageView(snakeBodyVer);
             snakeBodyView.setFitHeight(App.TAM_PIEZA_SNAKE);
             snakeBodyView.setFitWidth(App.TAM_PIEZA_SNAKE);
             this.getChildren().add(snakeBodyView);
             
         }else if(parte==App.NUM_TAIL){//COLA SNAKE en matriz será 3
-            ImageView snakeTailView = new ImageView(snakeTail);
+            snakeTailView = new ImageView(snakeTailAb);
             snakeTailView.setFitHeight(App.TAM_PIEZA_SNAKE);
             snakeTailView.setFitWidth(App.TAM_PIEZA_SNAKE);            
             this.getChildren().add(snakeTailView);            
         }
     }
+    
+    
     
     //Poner la imagen de la CABEZA según la dirección
     public void setHead (int direccion){
@@ -62,13 +82,52 @@ public class Snake extends Group{
                 snakeHeadView.setImage(snakeHeadIz);
                 break;
             case App.D_DOWN:// la serpiente se moverá abajo
-                snakeHeadView.setImage(snakeHeadAb);;
+                snakeHeadView.setImage(snakeHeadAb);
                 break;
             case App.D_UP:// la serpiente se moverá arriba
-                snakeHeadView.setImage(snakeHeadArr);;
+                snakeHeadView.setImage(snakeHeadArr);
                 break;
         }
     }
-  
+ 
+    
+     
+    //Poner la imagen del CUERPO según la dirección
+    public void setBody (int direccion){
+        switch (direccion) {//Según la tecla pulsada
+            case App.D_RIGHT:// la serpiente se moverá a la derecha
+                snakeBodyView.setImage(snakeBodyVer);
+                break;
+            case App.D_LEFT:// la serpiente se moverá a la izquierda
+                snakeHeadView.setImage(snakeBodyVer);
+                break;
+            case App.D_DOWN:// la serpiente se moverá abajo
+                snakeHeadView.setImage(snakeBodyHor);
+                break;
+            case App.D_UP:// la serpiente se moverá arriba
+                snakeHeadView.setImage(snakeBodyHor);
+                break;
+        }
+    }   
+    
+
+    
+    //Poner la imagen de la COLA según la dirección
+    public void setTail (int direccion){
+        switch (direccion) {//Según la tecla pulsada
+            case App.D_RIGHT:// la serpiente se moverá a la derecha
+                snakeTailView.setImage(snakeTailDer);
+                break;
+            case App.D_LEFT:// la serpiente se moverá a la izquierda
+                snakeTailView.setImage(snakeTailIz);
+                break;
+            case App.D_DOWN:// la serpiente se moverá abajo
+                snakeTailView.setImage(snakeTailAb);
+                break;
+            case App.D_UP:// la serpiente se moverá arriba
+                snakeTailView.setImage(snakeTailArr);
+                break;
+        }
+    }      
     
 }
