@@ -157,7 +157,7 @@ public class SnakeGame {
             cambioPunteros(fila,columna);
             //Si ya ha comenzado el juego las nuevas posiciones serán las posiciones del último puntero
             p.setX(arrayXvacia);         
-            p.setY(arrayYvacia);           
+            p.setY(arrayYvacia);
         }       
         arrayListCuerpo.add(p);       
         System.out.println("********************************************************");
@@ -221,7 +221,6 @@ public class SnakeGame {
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///
                     eaten = true;
-                    setPunteroArrayList(filaActual, columnaActual);
                 }else if(matrizTablero[filaActual][columnaActual] == App.NUM_BODY || matrizTablero[filaActual][columnaActual] == App.NUM_TAIL){
                     eaten = false;
                     dead = true;
@@ -238,7 +237,6 @@ public class SnakeGame {
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///                   
                     eaten = true;
-                    setPunteroArrayList(filaActual, columnaActual);
                 }else if(matrizTablero[filaActual][columnaActual] == App.NUM_BODY || matrizTablero[filaActual][columnaActual] == App.NUM_TAIL){
                     eaten = false;
                     dead = true;
@@ -255,7 +253,6 @@ public class SnakeGame {
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///                 
                     eaten = true;
-                    setPunteroArrayList(filaActual, columnaActual);
                 }else if(matrizTablero[filaActual][columnaActual] == App.NUM_BODY || matrizTablero[filaActual][columnaActual] == App.NUM_TAIL){
                     eaten = false;
                     dead = true;
@@ -272,7 +269,6 @@ public class SnakeGame {
                 //SI LA SERPIENTE ESTÁ ENCIMA DE LA MANZANA
                 if (matrizTablero[filaActual][columnaActual] == App.NUM_APPLE){//Está encima de la manzana, se la come///                  
                     eaten = true;
-                    setPunteroArrayList(filaActual, columnaActual);
                 }else if(matrizTablero[filaActual][columnaActual] == App.NUM_BODY || matrizTablero[filaActual][columnaActual] == App.NUM_TAIL){
                     eaten = false;
                     dead = true;
@@ -289,7 +285,9 @@ public class SnakeGame {
             //Pero si el puntero se acaba de crear porque se ha comidola manzana
             //no hay que cambiar la posición de los punteros porque éste método  ya está incluído en setPunteroArrayList.
             cambioPunteros(filaActual,columnaActual);  
-        }       
+        }else{
+            setPunteroArrayList(filaActual, columnaActual);
+        }      
         return eaten;
     }
 }
