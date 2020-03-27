@@ -253,7 +253,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         timelineSnake.setCycleCount(App.TAM_PIEZA_SNAKE);
         timelineSnake.play(); //Llama al método Play para echar a andar la animación       
         //CUANDO TERMINE EL TIMELINE COMPROBAMOS LÍMITES, SI SE HA COMIDO LA MANZANA Y LO VOLVEMOS A ARRANCAR
-        timelineSnake.setOnFinished(event -> { 
+        timelineSnake.setOnFinished(event -> {
+            
             //MOSTRAMOS PUNTEROS ARRAYLIST Y MATRIZ
             snakeGame.mostrarArrayListConsola();
             snakeGame.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola 
@@ -271,6 +272,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                 }else{//Si no muere               
                     this.snakeMovement(direccionActual);//Hacer el movimiento de la snake1 en el Tablero
                     if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
+                        snakeGame.setPunteroArrayList(snakeGame.filaActual, snakeGame.columnaActual);
                         timelineSnake.stop();
                         apple1.setImage(apple1.appleImageBitten); //Cambiar imagen manzana mordida
                         timelineSnake.setDelay(Duration.seconds(0.3));
@@ -289,6 +291,11 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                             App.paneWin.setVisible(true);
                             System.out.println("¡¡¡ENHORABUENA HAS GANADO!!!");
                         }
+                    }else{
+                        //Cada vez que se mueve la serpiente hay que ir actualizando los punteros del arraylist del cuerpo de la serpiente.
+                        //Pero si el puntero se acaba de crear porque se ha comidola manzana
+                        //no hay que cambiar la posición de los punteros porque éste método  ya está incluído en setPunteroArrayList.
+                        snakeGame.cambioPunteros(snakeGame.filaActual,snakeGame.columnaActual); 
                     }
                 }
                                
