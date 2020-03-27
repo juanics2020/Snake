@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.effect.Light.Point;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -74,17 +73,14 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         System.out.println("Mitad columnas: "+matColumnaIni);
                 
         snakeGame.matrizTablero[matFilaIni][matColumnaIni] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente      
-        snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
         
         //Llamos al método para meter el primer puntero de la cabeza en el ArrayList de la serpiente en la posición inicial de la cabeza
         snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni);
-
         
         //Colocar Imagen de la cabeza de la serpiente a la mitad de la matriz
         snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
         snake1.setLayoutY((App.TAM_PIEZA_SNAKE*matFilaIni)-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
-        
-        
+               
         //--------------MANZANA
         //Colocar la manzana en un sitio aleatorio donde no esté la serpiente
         //La X corresponde a las columnas y la Y corresponde a las filas   
@@ -92,7 +88,10 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         snakeGame.setAppleRandom();//Calculamos posición de la manzana y la colocamos en la matriz con un 4 sin pisar la serpiente
         apple1 = new Apple();
         this.setImageApple();
-        this.getChildren().add(apple1);   
+        this.getChildren().add(apple1); 
+              
+        
+        snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
     }   
     
     public void setImageApple(){
@@ -114,8 +113,27 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         //LE PASO LA POSICIÓN INICIAL DE LA MATRIZ A SnakeGame para que vaya cambiando posicones Actuales de fila y columna al pulsar teclas
         snakeGame.inicioFilaColActual(matFilaIni, matColumnaIni);
         snakeGame.matrizTablero[matFilaIni][matColumnaIni] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente      
+        
+        
+        //PONGO LA MATRIZ A 0 EN TODAS LAS POSICIONES DE LA CABEZA, EL CUERPO Y COLA DE LA SERPIENTE
+        for(int c=(snakeGame.arrayListCuerpo.size()-1); c>=0; c--){                               
+            snakeGame.matrizTablero[(int)snakeGame.arrayListCuerpo.get(c).getX()][(int)snakeGame.arrayListCuerpo.get(c).getY()] = App.NUM_EMPTY;            
+        } 
+                    
+        //ELIMINO TODOS LOS PUNTEROS DEL ARRAYLIST DE LA SERPIENTE ESCEPTO LA CABEZA
+        for(int c=(snakeGame.arrayListCuerpo.size()-1); c>0; c--){                               
+            snakeGame.arrayListCuerpo.remove(c);              
+        }                  
+       
+        //COLOCAR LAS POSICIONES INICIALES EN EL PUNTERO DE LA CABEZA EN ARRAYLIST
+        snakeGame.arrayListCuerpo.get(0).setX(matFilaIni);
+        snakeGame.arrayListCuerpo.get(0).setY(matColumnaIni);
+        
+        
+        snakeGame.mostrarArrayListConsola();
         snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
-            
+        
+        
         //Colocar Imagen de la cabeza de la serpiente a la mitad de la matriz
         snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
         snake1.setLayoutY((App.TAM_PIEZA_SNAKE*matFilaIni)-App.TAM_PIEZA_SNAKE);
@@ -181,6 +199,19 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
 	});
     }
     
+    public void deadSnake(){
+        System.out.println("HAS MUERTO");
+        this.panelVisible();//Oculta el panel principal y muestra el panel de continuar
+
+        App.botonYes.setOnAction((ActionEvent en) -> {//SI PULSAMOS EL BOTÓN SÍ
+            panelInvisible();//Muestra el panel principal y oculta el panel de continuar
+            System.out.println("-----------------------------------------------------------------------------------Vamos a Continuar");
+            this.reiniciar();
+        });
+        App.botonNO.setOnAction((ActionEvent en) -> {
+            System.exit(0);
+        });
+    }
     
     public void snakeMovement(int direccion) {// MOVIMIENTO GRÁFICO DE LA SERPIENTE
         direccionActual = direccion; //La dirección que le digamos por teclado. Comienza hacia abajo
@@ -215,55 +246,55 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                         snake1.setLayoutY(snake1.getLayoutY() + 1);                        
                     }else if(direccionActual==App.D_UP){
                         snake1.setLayoutY(snake1.getLayoutY() - 1);                       
-                    }                                    
+                    }                     
                 }
             })
         );
         timelineSnake.setCycleCount(App.TAM_PIEZA_SNAKE);
         timelineSnake.play(); //Llama al método Play para echar a andar la animación       
         //CUANDO TERMINE EL TIMELINE COMPROBAMOS LÍMITES, SI SE HA COMIDO LA MANZANA Y LO VOLVEMOS A ARRANCAR
-        timelineSnake.setOnFinished(event -> {          
+        timelineSnake.setOnFinished(event -> { 
+            //MOSTRAMOS PUNTEROS ARRAYLIST Y MATRIZ
+            snakeGame.mostrarArrayListConsola();
+            snakeGame.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola 
+            
             direccionActual = siguienteDireccion;//Sel a he pasado por el método next Direction desde el App
             //HAGO ESTE SWITCH PARA QUE CUANDO HAGA LA PAUSA QUEDE MIRANDO A DONDE ESTABA LA MANZANA CUANDO SE LA HA COMIDO
             this.switchImagenSnake(direccionActual);                                  
             try {//Si no choca con los límites
                 //Hacer el movimiento lógico en la matriz en SnakeGame (nos pasará si se come la manzana o no)
-                eaten = this.snakeGame.matrixMovement(direccionActual);
-                this.snakeMovement(direccionActual);//Hacer el movimiento de la snake1 en el Tablero
-                if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
-                    timelineSnake.stop();
-                    apple1.setImage(apple1.appleImageBitten); //Cambiar imagen manzana mordida
-                    timelineSnake.setDelay(Duration.seconds(0.3));
-                    timelineSnake.play(); 
-                    snakeGame.appleEatenM();
-                    //SUBIR DE NIVEL
-                    if(App.puntuacion==10 || App.puntuacion==20 || App.puntuacion==30 || App.puntuacion==40){ //SI COME 10 MANZANAS SUBE LA DIFICULTAD Y LA VELOCIDAD
-                        App.dificultad=  Integer.toString(Integer.valueOf(App.dificultad)+1);
-                        App.textDificulty.setText(App.dificultad);
-                        App.velocidad = App.velocidad+0.5;
-                        System.out.println("HAS SUBIDO DE NIVEL: "+" [DIFICULTAD: "+App.dificultad+"] "+"[VELOCIDAD: "+App.velocidad+"]");
-                    }else if(App.puntuacion==50){
+                eaten = this.snakeGame.matrixMovement(direccionActual);               
+                //SI MUERE TIENE QUE SALTAR CONTINUAR
+                if(snakeGame.dead){                    
+                    System.out.println("TE HAS MORDIDO!!!! --- :(");
+                    this.deadSnake();
+                }else{//Si no muere               
+                    this.snakeMovement(direccionActual);//Hacer el movimiento de la snake1 en el Tablero
+                    if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
                         timelineSnake.stop();
-                        App.textP.setText(String.valueOf(App.puntuacion));//Actualizo marcador puntuación de la ventana ganar
-                        App.textD.setText(App.dificultad);//Actualizo marcador dificultad de la ventana ganar                        
-                        App.paneWin.setVisible(true);
-                        System.out.println("¡¡¡ENHORABUENA HAS GANADO!!!");
+                        apple1.setImage(apple1.appleImageBitten); //Cambiar imagen manzana mordida
+                        timelineSnake.setDelay(Duration.seconds(0.3));
+                        timelineSnake.play(); 
+                        snakeGame.appleEatenM();
+                        //SUBIR DE NIVEL
+                        if(App.puntuacion==10 || App.puntuacion==20 || App.puntuacion==30 || App.puntuacion==40){ //SI COME 10 MANZANAS SUBE LA DIFICULTAD Y LA VELOCIDAD
+                            App.dificultad=  Integer.toString(Integer.valueOf(App.dificultad)+1);
+                            App.textDificulty.setText(App.dificultad);
+                            App.velocidad = App.velocidad+0.5;
+                            System.out.println("HAS SUBIDO DE NIVEL: "+" [DIFICULTAD: "+App.dificultad+"] "+"[VELOCIDAD: "+App.velocidad+"]");
+                        }else if(App.puntuacion==50){
+                            timelineSnake.stop();
+                            App.textP.setText(String.valueOf(App.puntuacion));//Actualizo marcador puntuación de la ventana ganar
+                            App.textD.setText(App.dificultad);//Actualizo marcador dificultad de la ventana ganar                        
+                            App.paneWin.setVisible(true);
+                            System.out.println("¡¡¡ENHORABUENA HAS GANADO!!!");
+                        }
                     }
                 }
                                
             } catch(ArrayIndexOutOfBoundsException e) { //SI choca con los llímites MUERE******
-                System.out.println("HAS MUERTO");
                 timelineSnake.stop();
-                this.panelVisible();//Oculta el panel principal y muestra el panel de continuar
-                
-                App.botonYes.setOnAction((ActionEvent en) -> {//SI PULSAMOS EL BOTÓN SÍ
-                    panelInvisible();//Muestra el panel principal y oculta el panel de continuar
-                    System.out.println("Vamos a Continuar");
-                    this.reiniciar();
-                });
-                App.botonNO.setOnAction((ActionEvent en) -> {
-                    System.exit(0);
-                });
+                this.deadSnake();
             }                      
 	});
     }

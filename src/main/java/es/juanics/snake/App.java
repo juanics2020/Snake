@@ -1,5 +1,9 @@
 //QUEDA PONER LAS IMÁGENES DEL CUERPO Y LA COLA
-//Y QUE MUERA SI SE MUERDE ELLA MISMA
+//CUANDO MUERA AL DARLE AL CONTINUAR DEBEMOS QUITAR LAS IMÁGENES
+//Cuando muerde la manzana no se ven bien los punteros hasta que no da un paso
+
+
+//Revisar public y private
 
 
 
@@ -23,7 +27,15 @@ la segunda piza intercambiará la cola por el cuerpo
 */
 
 
-//Static -> poniendo el nombre de la clase, no el nombre del objeto
+//Static -> Se puede usar la variable o constante en otras clases, poniendo el nombre de la clase, no el nombre del objeto.
+//Cuando no depende de cada objeto. Se crea una vez nada más, no se crea varias veces en el objeto.
+//Lo mismo para los métodos haciéndolos estáticos
+
+//Si no le pongo PUBLIC en la declaración de una clase ej: Label puntuacion; sólo lo vería en las clases que estén dentro de la carpeta (en el mismo paquete/proyecto)
+//Si le pongo PUBLIC se vería en cualquier paquete (otros proyectos)
+
+//Para App no puedo crear un objeto porque crearíamos otra aplicación nueva, no la que estamos usando
+
 //******** ORDENAR LLAVES Y FORMATOS: SOURCE, FORMAT!!!!!!!!!***** ORGANIZA TODAS LAS CLASES
 //En algún lugar hay que almacenarlas posiciones del cuerpo. Los arrays tienen un tamaño fijo.
 //Hay que usar los ArrayList(para que vaya creciendo (posiciones fila y columna). 
