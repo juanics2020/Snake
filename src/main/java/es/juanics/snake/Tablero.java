@@ -24,7 +24,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     private static Apple apple1;//Crear un objeto de tipo Apple  
     private int siguienteDireccion = App.D_DOWN; //Cuando pulse las teclas guardará la siguiente direccion (comenzará hacia abajo)
     private int direccionActual = App.D_DOWN;//Cogerá la nueva dirección que le den las teclas (comenzará hacia abajo)
-    private boolean eaten  = false; //Guardará la variable eaten de la clase SnakeGame que nos devuelve el método matrixMovement
+
     
     
     
@@ -101,15 +101,13 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     
     
     public void reiniciar(){
+        snakeGame.eaten = false;
         App.puntuacion = 0;
         App.dificultad = "1";
         App.velocidad = ((Double.valueOf(App.dificultad)*0.5)+0.5);
         App.textScore.setText(String.valueOf(App.puntuacion));
         App.textDificulty.setText(App.dificultad);
-        snakeGame.emptyApple();
-        snakeGame.setAppleRandom();
-        this.setImageApple();
-        
+              
         //LE PASO LA POSICIÓN INICIAL DE LA MATRIZ A SnakeGame para que vaya cambiando posicones Actuales de fila y columna al pulsar teclas
         snakeGame.inicioFilaColActual(matFilaIni, matColumnaIni);
         snakeGame.matrizTablero[matFilaIni][matColumnaIni] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente      
@@ -120,15 +118,20 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
             snakeGame.matrizTablero[(int)snakeGame.arrayListCuerpo.get(c).getX()][(int)snakeGame.arrayListCuerpo.get(c).getY()] = App.NUM_EMPTY;            
         } 
                     
-        //ELIMINO TODOS LOS PUNTEROS DEL ARRAYLIST DE LA SERPIENTE ESCEPTO LA CABEZA
-        for(int c=(snakeGame.arrayListCuerpo.size()-1); c>0; c--){                               
-            snakeGame.arrayListCuerpo.remove(c);              
-        }                  
-       
-        //COLOCAR LAS POSICIONES INICIALES EN EL PUNTERO DE LA CABEZA EN ARRAYLIST
-        snakeGame.arrayListCuerpo.get(0).setX(matFilaIni);
-        snakeGame.arrayListCuerpo.get(0).setY(matColumnaIni);
+//        //ELIMINO TODOS LOS PUNTEROS DEL ARRAYLIST DE LA SERPIENTE ESCEPTO LA CABEZA
+//        for(int c=(snakeGame.arrayListCuerpo.size()-1); c>0; c--){                               
+//            snakeGame.arrayListCuerpo.remove(c);              
+//        }                  
         
+        snakeGame.arrayListCuerpo.clear();
+        snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni);
+
+        //COLOCAR LAS POSICIONES INICIALES EN EL PUNTERO DE LA CABEZA EN ARRAYLIST
+        snakeGame.arrayListCuerpo.get(0).setX(matColumnaIni);//OJO, que la X guarda la columna y la Y la fila
+        snakeGame.arrayListCuerpo.get(0).setY(matFilaIni);
+        snakeGame.arrayListCuerpo.get(0).setZ(App.D_DOWN);
+                
+        snakeGame.contadorArray=1;//El contador para hacer cambios en punteros a 1 (porque la cabeza no la borro del array)
         
         snakeGame.mostrarArrayListConsola();
         snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
@@ -136,12 +139,17 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         
         //Colocar Imagen de la cabeza de la serpiente a la mitad de la matriz
         snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
-        snake1.setLayoutY((App.TAM_PIEZA_SNAKE*matFilaIni)-App.TAM_PIEZA_SNAKE);
+        snake1.setLayoutY((App.TAM_PIEZA_SNAKE*matFilaIni)-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
         snake1.setHead(App.D_DOWN);
         
         direccionActual = App.D_DOWN;
         siguienteDireccion= App.D_DOWN;
         //Para comenzar primero el retardo al comenzar la partida y después salta automáticamente a mover la serpiente
+        
+        snakeGame.emptyApple();
+        snakeGame.setAppleRandom();
+        this.setImageApple();
+        
         this.reatrdoInicioPartida(direccionActual);
     }
     
@@ -205,7 +213,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
 
         App.botonYes.setOnAction((ActionEvent en) -> {//SI PULSAMOS EL BOTÓN SÍ
             panelInvisible();//Muestra el panel principal y oculta el panel de continuar
-            System.out.println("-----------------------------------------------------------------------------------Vamos a Continuar");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------Vamos a Continuar");
             this.reiniciar();
         });
         App.botonNO.setOnAction((ActionEvent en) -> {
@@ -228,7 +236,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                 public void handle(ActionEvent ae) {//Sólo puede haber un handle en el timeline
                     //Si se ha comido la manzana la vuelvo a colocar la imagen en su lugar correspondiente
                     //Si no coloco la imagen cuando llega aquí, quita la manzana antes de hacer la pausa y no se nota el efecto
-                    if(eaten== true){
+                    if(snakeGame.eaten == true){
                         apple1.setImage(apple1.appleImage);// Ponemos la manzana normal otra vez
                         setImageApple(); //colocamos la manzana en su nuevo sitio
                     }
@@ -264,14 +272,15 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
             this.switchImagenSnake(direccionActual);                                  
             try {//Si no choca con los límites
                 //Hacer el movimiento lógico en la matriz en SnakeGame (nos pasará si se come la manzana o no)
-                eaten = this.snakeGame.matrixMovement(direccionActual);               
+                snakeGame.matrixMovement(direccionActual);               
                 //SI MUERE TIENE QUE SALTAR CONTINUAR
                 if(snakeGame.dead){                    
                     System.out.println("TE HAS MORDIDO!!!! --- :(");
                     this.deadSnake();
-                }else{//Si no muere               
+                }else{//Si no muere
+                    
                     this.snakeMovement(direccionActual);//Hacer el movimiento de la snake1 en el Tablero
-                    if (eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
+                    if (snakeGame.eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
                         snakeGame.setPunteroArrayList(snakeGame.filaActual, snakeGame.columnaActual);
                         timelineSnake.stop();
                         apple1.setImage(apple1.appleImageBitten); //Cambiar imagen manzana mordida

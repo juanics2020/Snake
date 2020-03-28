@@ -1,6 +1,8 @@
 //QUEDA PONER LAS IMÁGENES DEL CUERPO Y LA COLA
 //CUANDO MUERA AL DARLE AL CONTINUAR DEBEMOS QUITAR LAS IMÁGENES
-//Cuando muerde la manzana no se ven bien los punteros hasta que no da un paso
+
+
+//Cuando se reinicia la partida el puntero de la cabeza no se actualiza
 
 
 //Revisar public y private
