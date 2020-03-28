@@ -17,8 +17,8 @@ public class SnakeGame {
     static int [][] matrizTablero;//matrizTablero[6][10] = 1; //Poner un 1 en la posición fila 6, columna 10
         
     public static int filaActual;//posición actual de la cabeza en la FILA dentro de la matriz //PARA QUE SÓLO LAS CREE UNA VEZ PONEMOS ESTÁTICA (si no las crea de 0 siempre que entra)
-    public static int columnaActual;//posición actual de la cabeza en la COLUMNA dentro de la matriz //PARA QUE SÓLO LAS CREE UNA VEZ PONEMOS ESTÁTICA (si no las crea de 0 siempre que entra)  
-                 
+    public static int columnaActual;//posición actual de la cabeza en la COLUMNA dentro de la matriz //PARA QUE SÓLO LAS CREE UNA VEZ PONEMOS ESTÁTICA (si no las crea de 0 siempre que entra)     
+    
     public static int appleCol;//Columna aleatoria de la manzana
     public static int appleFil;//Fila aleatoria de la manzana 
     
@@ -142,7 +142,7 @@ public class SnakeGame {
     }
     
     
-    public void setPunteroArrayList(int fila, int columna){
+    public int setPunteroArrayList(int fila, int columna){
                 
         //OJO!!!! LA Y GUARDA LAS FILAS Y LA X LAS COLUMNAS!!!!!<------------
         //Añado las posiciones de la cabeza de la serpiente al Arraylist que representará la serpiente
@@ -164,14 +164,15 @@ public class SnakeGame {
             p.setZ(arrayDireccion);
             //VARIABLE QUE SERVIRÁ DE CONTADOR EN LOS PASOS QUE DE LA SERPIENTE, PARA PODER GUARDAR LAS DIRECCIONES 
             contadorArray++; //Tendrá siempre el tamaño del array -1 (Nº de array -1 porque empieza en 0)
-            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<< contadorArray "+contadorArray+" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
       
         arrayListCuerpo.add(p);
-        System.out.println("************************************************************************************************");
-        System.out.println("NUEVO PUNTERO p Y("+p.getY()+") [FILA] - X("+p.getX()+") [COLUMNA] - Z("+(int)p.getZ()+") <DIRECCIÓN>");
-        System.out.println("************************************************************************************************");
-      
+        System.out.println("*****************************************************************************************************");
+        System.out.println("NUEVO PUNTERO "+(arrayListCuerpo.size()-1)+", Y("+p.getY()+") [FILA] - X("+p.getX()+") [COLUMNA] - Z("+(int)p.getZ()+") <DIRECCIÓN>");
+        System.out.println("*****************************************************************************************************");
+        
+        
+        return (arrayListCuerpo.size()-1);//devuelve el número de puntero que se ha creado (índice)
     }
     
     
