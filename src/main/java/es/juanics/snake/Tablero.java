@@ -102,6 +102,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M√
     
     public void reiniciar(){
         snakeGame.eaten = false;
+        snakeGame.dead = false;
         App.puntuacion = 0;
         App.dificultad = "1";
         App.velocidad = ((Double.valueOf(App.dificultad)*0.5)+0.5);
@@ -118,25 +119,24 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M√
             snakeGame.matrizTablero[(int)snakeGame.arrayListCuerpo.get(c).getX()][(int)snakeGame.arrayListCuerpo.get(c).getY()] = App.NUM_EMPTY;            
         } 
                     
-//        //ELIMINO TODOS LOS PUNTEROS DEL ARRAYLIST DE LA SERPIENTE ESCEPTO LA CABEZA
-//        for(int c=(snakeGame.arrayListCuerpo.size()-1); c>0; c--){                               
-//            snakeGame.arrayListCuerpo.remove(c);              
-//        }                  
-        
-        snakeGame.arrayListCuerpo.clear();
-        snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni);
+        //ELIMINO TODOS LOS PUNTEROS DEL ARRAYLIST DE LA SERPIENTE ESCEPTO LA CABEZA
+        for(int c=(snakeGame.arrayListCuerpo.size()-1); c>0; c--){                               
+            snakeGame.arrayListCuerpo.remove(c);              
+        }                  
+
+//        //OTRA FORMA DE VACIAR EL ARRAYLIST        
+//        snakeGame.arrayListCuerpo.clear();
+//        snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni);
 
         //COLOCAR LAS POSICIONES INICIALES EN EL PUNTERO DE LA CABEZA EN ARRAYLIST
         snakeGame.arrayListCuerpo.get(0).setX(matColumnaIni);//OJO, que la X guarda la columna y la Y la fila
         snakeGame.arrayListCuerpo.get(0).setY(matFilaIni);
         snakeGame.arrayListCuerpo.get(0).setZ(App.D_DOWN);
-                
-        snakeGame.contadorArray=1;//El contador para hacer cambios en punteros a 1 (porque la cabeza no la borro del array)
         
-        snakeGame.mostrarArrayListConsola();
-        snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
-        
-        
+        //El contador para hacer cambios en punteros a 0 (porque la cabeza no la borro del array)
+        //Siempre 1 menos que el tama√±o del arrayListCuerpo
+        snakeGame.contadorArray=0;
+          
         //Colocar Imagen de la cabeza de la serpiente a la mitad de la matriz
         snake1.setLayoutX(App.TAM_PIEZA_SNAKE*matColumnaIni);
         snake1.setLayoutY((App.TAM_PIEZA_SNAKE*matFilaIni)-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
@@ -149,6 +149,9 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M√
         snakeGame.emptyApple();
         snakeGame.setAppleRandom();
         this.setImageApple();
+        
+        snakeGame.mostrarArrayListConsola();
+        snakeGame.mostrarMatrizConsola();//Muestro la matriz del tablero en la consola
         
         this.reatrdoInicioPartida(direccionActual);
     }

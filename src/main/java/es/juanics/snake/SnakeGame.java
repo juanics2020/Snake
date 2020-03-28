@@ -164,6 +164,7 @@ public class SnakeGame {
             p.setZ(arrayDireccion);
             //VARIABLE QUE SERVIRÁ DE CONTADOR EN LOS PASOS QUE DE LA SERPIENTE, PARA PODER GUARDAR LAS DIRECCIONES 
             contadorArray++; //Tendrá siempre el tamaño del array -1 (Nº de array -1 porque empieza en 0)
+            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<< contadorArray "+contadorArray+" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
       
         arrayListCuerpo.add(p);
