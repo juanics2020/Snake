@@ -2,7 +2,7 @@
 //CUANDO MUERA AL DARLE AL CONTINUAR DEBEMOS QUITAR LAS IMÁGENES
 
 
-//Cuando se reinicia la partida el puntero de la cabeza no se actualiza
+//Cuando se reinicia la partida no cambia entra en setPunteroArrayList ni en cambioPunteros
 
 
 //Revisar public y private
