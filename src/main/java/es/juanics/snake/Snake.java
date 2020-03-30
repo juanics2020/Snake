@@ -96,16 +96,16 @@ public class Snake extends Group{
     public void setBody (int direccion){
         switch (direccion) {//Según la tecla pulsada
             case App.D_RIGHT:// la serpiente se moverá a la derecha
-                snakeBodyView.setImage(snakeBodyVer);
+                snakeBodyView.setImage(snakeBodyHor);
                 break;
             case App.D_LEFT:// la serpiente se moverá a la izquierda
-                snakeHeadView.setImage(snakeBodyVer);
+                snakeBodyView.setImage(snakeBodyHor);
                 break;
             case App.D_DOWN:// la serpiente se moverá abajo
-                snakeHeadView.setImage(snakeBodyHor);
+                snakeBodyView.setImage(snakeBodyVer);
                 break;
             case App.D_UP:// la serpiente se moverá arriba
-                snakeHeadView.setImage(snakeBodyHor);
+                snakeBodyView.setImage(snakeBodyVer);
                 break;
         }
     }   

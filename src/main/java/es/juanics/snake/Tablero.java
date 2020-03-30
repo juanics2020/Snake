@@ -128,6 +128,13 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
             snakeGame.arrayListCuerpo.remove(c);              
         }                  
 
+        //ELIMINO TODOS LOS PUNTEROS DEL ARRAYLIST DEL CUERPO DE LA SERPIENTE COMPLETO
+        for(int c=(arrayListImagenes.size()-1); c>=0; c--){                                                
+            this.getChildren().remove(arrayListImagenes.get(c));//primero quito el elemento del tablero
+            arrayListImagenes.remove(c);//y luegoo lo quito del arraylist
+        }  
+        
+        
 //        //OTRA FORMA DE VACIAR EL ARRAYLIST        
 //        snakeGame.arrayListCuerpo.clear();
 //        snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni);
@@ -234,40 +241,43 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     public void setNewSnakeIntoArray(int parte, int puntero){
         //arrayListImagenes siempre tiene un elemento menos que arrayListCuerpo(la cabeza)
         
+        cambiarImagenesCuerpo();
+        
         //pone la nueva parte en el array de las imágenes de la serpiente
         //El array 0 será la cola la primera vez. La cabeza no entra dentro del array de imágenes
         //Después intercambiaremos la cola por el cuerpo y ya permanecerá en último lugar (arrayListImagenes.size()-1)
         Snake snakeV = new Snake(parte);
         //Ponemos la parte en la posición que le corresponde a su puntero
         snakeV.setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getY());
-        snakeV.setLayoutY((App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getX())-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
+        snakeV.setLayoutY(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getX());//-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
         
       
-        arrayListImagenes.add(snakeV);
-        this.getChildren().add(arrayListImagenes.get(arrayListImagenes.size()-1));//Añado el elemento al tablero
+        arrayListImagenes.add(0, snakeV);//los nuevos elementos los voy añadiendo detrás de la cabeza y así la cola simpre queda la última***
+        this.getChildren().add(arrayListImagenes.get(0));//Añado el elemento al tablero
         
+        //cambiarImagenesCuerpo();
         
         mostrarCuerpoConsola();
     }
     
     
     
-//    //Pintará en el tablero todo el cuerpo de la serpiente y cambiará la cola a la última posición
-//    public void cambiarImagenesCuerpo(){      
-//        for(int c=0; c<arrayListImagenes.size(); c++){
-//            arrayListImagenes.get(c).setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(c+1).getY());
-//            arrayListImagenes.get(c).setLayoutY((App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(c+1).getX())-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
-//            
-//            //SEGÚN LA DIRECCIÓN PONGO LA IMAGEN EN SU SENTIDO CORRESPONDIENTE
-//            if(c==(arrayListImagenes.size()-1)){//si está en el último elemento es la cola
-//                //Si la parte es la cola. La imágen es la cola
-//                arrayListImagenes.get(c).setTail((int)snakeGame.arrayListCuerpo.get(c+1).getZ());
-//            }else{//si no está en el último elemento es el cuerpo
-//                //Si la parte es el cuerpo
-//                arrayListImagenes.get(c).setBody((int)snakeGame.arrayListCuerpo.get(c+1).getZ());
-//            }
-//        }    
-//    }
+    //Pintará en el tablero todo el cuerpo de la serpiente y cambiará la cola a la última posición
+    public void cambiarImagenesCuerpo(){      
+        for(int c=0; c<arrayListImagenes.size(); c++){
+            arrayListImagenes.get(c).setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(c+1).getY());
+            arrayListImagenes.get(c).setLayoutY(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(c+1).getX());//-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
+            
+            //SEGÚN LA DIRECCIÓN PONGO LA IMAGEN EN SU SENTIDO CORRESPONDIENTE
+            if(c==(arrayListImagenes.size()-1)){//si está en el último elemento es la cola
+                //Si la parte es la cola. La imágen es la cola
+                arrayListImagenes.get(c).setTail((int)snakeGame.arrayListCuerpo.get(c+1).getZ());
+            }else{//si no está en el último elemento es el cuerpo
+                //Si la parte es el cuerpo
+                arrayListImagenes.get(c).setBody((int)snakeGame.arrayListCuerpo.get(c+1).getZ());
+            }
+        }    
+    }
     
     
     
@@ -406,7 +416,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
 
         //CUANDO TERMINE EL TIMELINE COMPROBAMOS LÍMITES, SI SE HA COMIDO LA MANZANA Y LO VOLVEMOS A ARRANCAR
         timelineSnake.setOnFinished(event -> {
-            
+            cambiarImagenesCuerpo();
             //MOSTRAMOS PUNTEROS ARRAYLIST Y MATRIZ
             snakeGame.mostrarArrayListConsola();
             snakeGame.mostrarMatrizConsola();//Cada vez que se mueva muestro la matriz actualizada en la consola 
@@ -428,9 +438,9 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                         //una vez que ha creado el nuevo puntero de la nueva parte lógica de la serpiente en el arrayLisCuerpo
                         //creamos la parte gráfica de las imágenes de la serpiente en el arrayListImagenes (la cabeza no hay que crear la imagen porque está desde el inicio)
                         if(snakeGame.arrayListCuerpo.size()==2){//Si el tamaño es 2 la parte que acaba de crear es la cola si es mayor es el cuerpo
-                            setNewSnakeIntoArray(App.NUM_TAIL, puntero);
+                            setNewSnakeIntoArray(App.NUM_TAIL, (puntero-1));
                         }else if(snakeGame.arrayListCuerpo.size()>2){
-                            setNewSnakeIntoArray(App.NUM_BODY, puntero);    
+                            setNewSnakeIntoArray(App.NUM_BODY, (puntero-1));    
                         }        
  
                         timelineSnake.stop();
@@ -450,7 +460,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                             System.out.println("HAS SUBIDO DE NIVEL: "+" [DIFICULTAD: "+App.dificultad+"] "+"[VELOCIDAD: "+App.velocidad+"]");
                         }else if(App.puntuacion==50){
                             timelineSnake.stop();
-                            timelineBody.stop();
+//                            timelineBody.stop();
                             App.textP.setText(String.valueOf(App.puntuacion));//Actualizo marcador puntuación de la ventana ganar
                             App.textD.setText(App.dificultad);//Actualizo marcador dificultad de la ventana ganar                        
                             App.paneWin.setVisible(true);
