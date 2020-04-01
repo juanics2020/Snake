@@ -64,6 +64,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
+//GUARDAR EM EL PUNTERO LAS POSICIONES ANTES DE QUE LA SERPINTE SE MUEVA DONDE ESTA LA MANZANA
+
 public class App extends Application {
     //CONSTANTES GENERALES
     
