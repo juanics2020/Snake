@@ -142,7 +142,7 @@ public class SnakeGame {
     }
     
     
-    public int setPunteroArrayList(int fila, int columna){
+    public int setPunteroArrayList(int fila, int columna, int direccion){
                 
         //OJO!!!! LA Y GUARDA LAS FILAS Y LA X LAS COLUMNAS!!!!!<------------
         //Añado las posiciones de la cabeza de la serpiente al Arraylist que representará la serpiente
@@ -156,7 +156,7 @@ public class SnakeGame {
                      
         }else{ 
             //Antes de añadir uno nuevo, ordeno los punteros que ya tengo
-            cambioPunteros(fila,columna);
+            cambioPunteros(fila,columna, direccion);
             
             //SI EL TAMAÑO DEL ARRAY ES 2, (1) COJA POSICIONES filaCrecer y columnacrecer
             System.out.println("setPunteroArrayList: FILA "+columna+", COLUMNA "+fila);//hay que tener en cuanta que la X es COLUMNA y la Y es FILA           
@@ -178,7 +178,7 @@ public class SnakeGame {
     }
     
     
-    public void cambioPunteros(int filaActual, int columnaActual){
+    public void cambioPunteros(int filaActual, int columnaActual, int direccion){
         //La COLA en el arrayList me da igual, será en la MATRIZ (3) y en el TABLERO gráficamente donde tendré que ir pasando la cola al final
         
         //Según la dirección, cada vez que se mueva la serpiente, las posiciones de los punteros X e Y se irán sumando o restando (posición X o Y = posición X o Y +1 o -1)
@@ -215,11 +215,10 @@ public class SnakeGame {
         //Una vez que todos los punteros se han cambiado a la posición del anterior, pongo la cabeza a la posición actual, que es donde se ha movido en la matriz
         arrayListCuerpo.get(0).setX(filaActual);
         arrayListCuerpo.get(0).setY(columnaActual);
+        arrayListCuerpo.get(0).setZ(direccion);
         //La dirección la guarda en matrixMovement
         System.out.println("cambioPunteros: FILA ACTUAL "+columnaActual+", COLUMNA ACTUAL "+filaActual);//hay que tener en cuanta que la X es COLUMNA y la Y es FILA
-        
-    //-->OTRO MÉTODO Cuando se coma la manzana el nuevo puntero(cola)(le pongo un 3 en matriz) lo pongo donde estaba el último puntero(poniéndole también un 2 en la matriz).
-    
+            
     }
     
     
@@ -292,8 +291,6 @@ public class SnakeGame {
                 }              
                 break;
         }
-        //Pongo el puntero del array de la cabeza con la dirección actual
-        arrayListCuerpo.get(0).setZ(direccion);
         //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN 
         matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
         System.out.println("DENTRO SWITCH segundo**** ----> FILA ACTUAL: "+filaActual+", COLUMNA ACTUAL: "+columnaActual);

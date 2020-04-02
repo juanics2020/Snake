@@ -4,7 +4,7 @@
 
 
 //Revisar public y private
-
+//FILA * TAMAÑO_SNAKE = TAMAÑO TABLERO (EN VEZ DE DIVIDIR HEIGHT O WIDHT /TAMAÑO_SNAKE
 
 
 /*REGLAS DEL JUEGO:
@@ -39,7 +39,6 @@ la segunda piza intercambiará la cola por el cuerpo
 //******** ORDENAR LLAVES Y FORMATOS: SOURCE, FORMAT!!!!!!!!!***** ORGANIZA TODAS LAS CLASES
 //En algún lugar hay que almacenarlas posiciones del cuerpo. Los arrays tienen un tamaño fijo.
 //Hay que usar los ArrayList(para que vaya creciendo (posiciones fila y columna). 
-
 
 
 package es.juanics.snake;

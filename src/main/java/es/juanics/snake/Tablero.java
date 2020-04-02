@@ -79,7 +79,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         snakeGame.matrizTablero[matFilaIni][matColumnaIni] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente      
         
         //Llamos al método para meter el primer puntero de la cabeza en el ArrayList de la serpiente en la posición inicial de la cabeza
-        int punt  = snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni);
+        int punt  = snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni, App.D_DOWN);
         System.out.println("Puntero Cabeza Serpiente: "+punt);
         
         //Colocar Imagen de la cabeza de la serpiente a la mitad de la matriz
@@ -255,44 +255,13 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         this.getChildren().add(snakeV);//Añado el elemento al tablero
         //this.getChildren().add(arrayListImagenes.get(arrayListImagenes.size()-1));//Añado el elemento al tablero
         
-//        for(int c=0; c<arrayListImagenes.size(); c++){
-//            arrayListImagenes.get(c).setLayoutX(snakeGame.arrayListCuerpo.get(c+1).getY());
-//            arrayListImagenes.get(c).setLayoutY(snakeGame.arrayListCuerpo.get(c+1).getX());
-//        }
-        
-        
-        //mostrarCuerpoConsola();
     }
-    
-    
-    
-//    //Pintará en el tablero todo el cuerpo de la serpiente y cambiará la cola a la última posición
-//    public void cambiarImagenesCuerpo(){      
-//        for(int c=0; c<arrayListImagenes.size(); c++){
-//            arrayListImagenes.get(c).setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(c+1).getY());
-//            arrayListImagenes.get(c).setLayoutY((App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(c+1).getX())-App.TAM_PIEZA_SNAKE);//Le resto la imagen porque la Y de la imgaen es la esquina superior
-//            
-//            //SEGÚN LA DIRECCIÓN PONGO LA IMAGEN EN SU SENTIDO CORRESPONDIENTE
-//            if(c==(arrayListImagenes.size()-1)){//si está en el último elemento es la cola
-//                //Si la parte es la cola. La imágen es la cola
-//                arrayListImagenes.get(c).setTail((int)snakeGame.arrayListCuerpo.get(c+1).getZ());
-//            }else{//si no está en el último elemento es el cuerpo
-//                //Si la parte es el cuerpo
-//                arrayListImagenes.get(c).setBody((int)snakeGame.arrayListCuerpo.get(c+1).getZ());
-//            }
-//        }    
-//    }
-    
-    
-    
+  
     
     //(Mostramos lo que tiene el arraylist de el cuerpo en la consola)
-    public void mostrarCuerpoConsola(){
-//        //PARA QUE pinte **** SALTO DE LÍNEA EN LA CONSOLA ANTES DEL ARRAYLIST 
-//        System.out.println("******************************************************");
-//        System.out.println("Imagen Cabeza X: "+arrayListImagenes.get(0).getLayoutX()); 
-//        System.out.println("Imagen Cabeza Y: "+arrayListImagenes.get(0).getLayoutY());        
+    public void mostrarCuerpoConsola(){       
         
+        System.out.println("******************************************************"); 
         for(int c=0; c<arrayListImagenes.size(); c++){
             System.out.println("-----Tamaño ArrayList(NºPARTES CUERPO): "+arrayListImagenes.size());
             System.out.println("Imagen Parte ("+c+") X: "+arrayListImagenes.get(c).getLayoutX()); 
@@ -323,10 +292,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                         apple1.setImage(apple1.appleImage);// Ponemos la manzana normal otra vez
                         setImageApple(); //colocamos la manzana en su nuevo sitio                                               
                     }
-                    //***DENTRO DEL TIMELINE NO DEJA LLAMAR A LOS MÉTODOS CON THIS***
-                    //**OJO!!!!!
+                    //***DENTRO DEL TIMELINE NO DEJA LLAMAR A LOS MÉTODOS CON THIS*****OJO!!!!!
 
-                    //Pongo la imagen en la dirección actual
                     //arrayListImagenes tine los mismos elementos que Cuerpo
                     for(int c=0; c<arrayListImagenes.size(); c++){
                         //muevo la cola según la posición de la parte anterior
@@ -356,7 +323,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         timelineSnake.setOnFinished(event -> {
             if(pendienteCrecimiento){               
                 if(snakeGame.arrayListCuerpo.size()>=1){
-                    setNewSnakeIntoArray(App.NUM_BODY, puntero);    
+                    setNewSnakeIntoArray(App.NUM_BODY, puntero);                    
                 }
                 pendienteCrecimiento = false;
             }
@@ -379,9 +346,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                     this.snakeMovement(direccionActual);//Hacer el movimiento de la snake1 en el Tablero
                     if (snakeGame.eaten == true){//Si se come la manzana movemos la imagen a la posición nueva
                         pendienteCrecimiento = true;
-                        puntero = snakeGame.setPunteroArrayList(snakeGame.filaActual, snakeGame.columnaActual);                        
-                        //una vez que ha creado el nuevo puntero de la nueva parte lógica de la serpiente en el arrayLisCuerpo
-                        //creamos la parte gráfica de las imágenes de la serpiente en el arrayListImagenes      
+                        puntero = snakeGame.setPunteroArrayList(snakeGame.filaActual, snakeGame.columnaActual, direccionActual);                            
  
                         timelineSnake.stop();
                         apple1.setImage(apple1.appleImageBitten); //Cambiar imagen manzana mordida
@@ -403,11 +368,10 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                             App.paneWin.setVisible(true);
                             System.out.println("¡¡¡ENHORABUENA HAS GANADO!!!");
                         }
+
                     }else{
                         //Cada vez que se mueve la serpiente hay que ir actualizando los punteros del arraylist del cuerpo de la serpiente.
-                        //Pero si el puntero se acaba de crear porque se ha comidola manzana
-                        //no hay que cambiar la posición de los punteros porque éste método  ya está incluído en setPunteroArrayList.
-                        snakeGame.cambioPunteros(snakeGame.filaActual,snakeGame.columnaActual); 
+                        snakeGame.cambioPunteros(snakeGame.filaActual,snakeGame.columnaActual, direccionActual); 
                     }
                 }
                                
@@ -416,10 +380,6 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                 this.deadSnake();
             }            
         });    
-           
-
-    }
- 
-    
+    }  
 }
            
