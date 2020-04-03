@@ -292,9 +292,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                 public void handle(ActionEvent ae) {//Sólo puede haber un handle en el timeline
                     //Si se ha comido la manzana la vuelvo a colocar la imagen en su lugar correspondiente
                     //Si no coloco la imagen cuando llega aquí, quita la manzana antes de hacer la pausa y no se nota el efecto
-                    if(snakeGame.eaten == true){
-                        apple1.setImage(apple1.appleImage);// Ponemos la manzana normal otra vez
-                        setImageApple(); //colocamos la manzana en su nuevo sitio                                               
+                    if(snakeGame.eaten == true){//La manzana desaparece
+                        apple1.setVisible(false);
                     }
                     //***DENTRO DEL TIMELINE NO DEJA LLAMAR A LOS MÉTODOS CON THIS*****OJO!!!!!
 
@@ -327,7 +326,12 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         timelineSnake.setOnFinished(event -> {
             if(pendienteCrecimiento){               
                 if(snakeGame.arrayListCuerpo.size()>=1){
-                    setNewSnakeIntoArray(App.NUM_BODY, puntero);                    
+                    setNewSnakeIntoArray(App.NUM_BODY, puntero);
+                    //hay que asignarle posición a la manzana aquí, porque si le damos posición antes el nuevo puntero puede salir donde estaba la manzana
+                    snakeGame.setAppleRandom();
+                    apple1.setImage(apple1.appleImage);// Ponemos la manzana normal otra vez
+                    apple1.setVisible(true);
+                    setImageApple(); //colocamos la manzana en su nuevo sitio  
                 }
                 pendienteCrecimiento = false;
             }
@@ -356,10 +360,10 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                         apple1.setImage(apple1.appleImageBitten); //Cambiar imagen manzana mordida
                         timelineSnake.setDelay(Duration.seconds(0.3));
                         timelineSnake.play();
-
                         
                         snakeGame.appleEatenM();
                         App.textScore.setText(String.valueOf(snakeGame.puntuacion)); 
+                        
                         //SUBIR DE NIVEL
                         if(snakeGame.puntuacion==10 || snakeGame.puntuacion==20 || snakeGame.puntuacion==30 || snakeGame.puntuacion==40){ //SI COME 10 MANZANAS SUBE LA DIFICULTAD Y LA VELOCIDAD
                             dificultad=  Integer.toString(Integer.valueOf(dificultad)+1);

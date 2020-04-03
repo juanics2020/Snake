@@ -104,8 +104,7 @@ public class SnakeGame {
         puntuacion++;              
         System.out.println("SE HA COMIDO LA MANZANA ----- OOOOOOOO");
         System.out.println("Puntuación: "+puntuacion);
-        System.out.println("*****************************************************");
-        this.setAppleRandom(); 
+        System.out.println("*****************************************************"); 
     }
     
     public void emptyApple(){//Cuando reinicie hay que vaciar la celda de la manzana en la matriz

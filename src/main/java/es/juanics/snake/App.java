@@ -1,11 +1,15 @@
 //Revisar public y private
 
 /*REGLAS DEL JUEGO:
+--------------------
 
-1º EL JUGADOR ELIGE EL NIVEL DE DIFICULTAD QUE DESEA DE 1 A 5 (VELOCIDAD DE MOVIEMIENTO DE LA SERPIENTE
+1º EL JUGADOR ELIGE EL NIVEL DE DIFICULTAD QUE DESEA DE 1 A 5 (VELOCIDAD DE MOVIEMIENTO DE LA SERPIENTE),
+EL NÚMERO DE FILAS Y COLUMNAS QUE QUIERE (para que el juego se adapte automáticamente a estas medidas)
+
 2º SI CHOCA (SALE DE LOS LÍMITES) SE LE PREGUNTA QUE SI QUIERE CONTINUAR:
     - SI QUIERE CONTINUAR, VUELVE A EMPEZAR CON DIFICULTAD 1 Y PUNTUACIÓN 0
     - SI NO QUIERE CONTINUAR, SALE DE LA APLICACIÓN
+
 3º A MEDIDA QUE COME MANZANAS SUBEN LOS PUNTOS Y SUBE DE NIVEL:
     NIVEL INICIAL: DIFICULTAD QUE ELIJA EL JUGADOR
     CADA 10 MANZANAS SUBE UN NIVEL DE DIFICULTAD
@@ -14,9 +18,7 @@
 *****SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR
 
 
-Cada vez que se coma una manzana se añadirá una pieza al cuerpo,la primera piza tendrá la imagen de la cola
-la segunda piza intercambiará la cola por el cuerpo
-
+Cada vez que se coma una manzana se añadirá una pieza al cuerpo
 */
 
 
