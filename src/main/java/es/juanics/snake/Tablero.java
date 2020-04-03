@@ -13,12 +13,16 @@ import javafx.util.Duration;
 public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, MÉTODOS,... DE LA CLASE PANE (extends)
 //*****La clase en sí es el panel
     
+    
+    private int filas = 0;//variable para total filas matriz   
+    private int columnas = 0;//variable para total columnas matriz
 
+    private String dificultad;
+    private double velocidad;
+    
     private Snake snake1;//Crear un objeto de tipo Snake
     private Timeline timelineSnake;//Moverá la cabeza
     public SnakeGame snakeGame;   //objeto de tipo SnakeGame para poder usar todos los métodos y parámetros de SnakeGame
-    private int filas;//Guardará filas totales de la Matriz(desde SnakeGame)
-    private int columnas;//Guardará columnas totales de la Matriz(desde SnakeGame)
     private int matFilaIni;//posición inicial de la cabeza en la FILA dentro de la matriz
     private int matColumnaIni;//posición inicial de la cabeza en la COLUMNA dentro de la matriz    
      
@@ -31,35 +35,33 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     private boolean pendienteCrecimiento = false;
     private int puntero;
     
-    public Tablero(int width, int height) {//pone la serpiente en el tablero //Método constructor (new Tablero)
-      
+    
+    
+    public Tablero(int width, int height, int filas, int columnas, String dificultad, double velocidad) {//pone la serpiente en el tablero //Método constructor (new Tablero)
+        this.filas = filas; //****le ponemos this para que distinga que es la variable de esta clase, no la que le paso que se llama igual
+        this.columnas = columnas;
+        this.dificultad = dificultad;
+        this.velocidad = velocidad;
         //Pongo el tablero al ancho y alto de la escena
         this.setWidth(width);
         this.setHeight(height);      
         
-        snakeGame = new SnakeGame();//Objeto SnakeGame para crear la matriz del tablero
+        snakeGame = new SnakeGame(this.filas,this.columnas);//Objeto SnakeGame para crear la matriz del tablero
         
         //pone la serpiente en el tablero
         snake1 = new Snake(1);
         arrayListImagenes.add(snake1);
         this.getChildren().add(snake1);
         
-        
-        //Le paso las medidas de la escena y el tablero a SnakeGame para que calcule el tamaño de la Matriz
-        snakeGame.tamañoMatriz(width, height);
                     
-        //PINTAR LA CUADRÍCULA DEL TABLERO SEGÚN LAS FILAS Y COLUMNAS DE LA MATRIZ
-        //Primero obtengo los datos que necesito de las otras Clases
-        filas = snakeGame.getNumFilasMatriz();
-        columnas = snakeGame.getNumColumnasMatriz();
-        
-        for(int i=0;i<=columnas;i++){
-            Line line = new Line(App.TAM_PIEZA_SNAKE*i, 0, App.TAM_PIEZA_SNAKE*i, App.TAM_PIEZA_SNAKE*filas);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
+        //PINTAR LA CUADRÍCULA DEL TABLERO SEGÚN LAS FILAS Y COLUMNAS DE LA MATRIZ       
+        for(int i=0;i<=this.columnas;i++){
+            Line line = new Line(App.TAM_PIEZA_SNAKE*i, 0, App.TAM_PIEZA_SNAKE*i, App.TAM_PIEZA_SNAKE*this.filas);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
             line.setStroke(Color.DARKGOLDENROD);
             this.getChildren().add(line); //añade la linea a esta misma clase Tablero (que es el panel)
         }
-        for(int i=0;i<=filas;i++){
-            Line line = new Line(0, App.TAM_PIEZA_SNAKE*i, App.TAM_PIEZA_SNAKE*columnas, App.TAM_PIEZA_SNAKE*i);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
+        for(int i=0;i<=this.filas;i++){
+            Line line = new Line(0, App.TAM_PIEZA_SNAKE*i, App.TAM_PIEZA_SNAKE*this.columnas, App.TAM_PIEZA_SNAKE*i);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
             line.setStroke(Color.DARKGOLDENROD);
             this.getChildren().add(line); //añade la linea a esta misma clase Tablero (que es el panel)
         }
@@ -67,8 +69,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         
         
         //pongo a 1 la posición que corresponde lógicamente a la cabeza de la serpiente en la matriz          
-        matFilaIni = (int)(filas/2);//Calculo la fila que cae a la mitad de la Matriz
-        matColumnaIni = (int)(columnas/2);//Calculo la columna que cae a la mitad de la Matriz
+        matFilaIni = (int)(this.filas/2);//Calculo la fila que cae a la mitad de la Matriz
+        matColumnaIni = (int)(this.columnas/2);//Calculo la columna que cae a la mitad de la Matriz
         
         //LE PASO LA POSICIÓN INICIAL DE LA MATRIZ A SnakeGame para que vaya cambiando posicones Actuales de fila y columna al pulsar teclas
         snakeGame.inicioFilaColActual(matFilaIni, matColumnaIni);
@@ -107,11 +109,11 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     public void reiniciar(){
         snakeGame.eaten = false;
         snakeGame.dead = false;
-        App.puntuacion = 0;
-        App.dificultad = "1";
-        App.velocidad = ((Double.valueOf(App.dificultad)*0.5)+0.5);
-        App.textScore.setText(String.valueOf(App.puntuacion));
-        App.textDificulty.setText(App.dificultad);
+        snakeGame.puntuacion = 0;
+        dificultad = "1";
+        velocidad = ((Double.valueOf(dificultad)*0.5)+0.5);
+        App.textScore.setText(String.valueOf(snakeGame.puntuacion));
+        App.textDificulty.setText(dificultad);
               
         //LE PASO LA POSICIÓN INICIAL DE LA MATRIZ A SnakeGame para que vaya cambiando posicones Actuales de fila y columna al pulsar teclas
         snakeGame.inicioFilaColActual(matFilaIni, matColumnaIni);
@@ -204,6 +206,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         }           
     } 
     
+    
+    
     //AL INICIAR SIEMPRE LA PARTIDA HAY QUE HACER UN RETARDO ANTES DE QUE EMPIECE A MOVERSE LA SERPIENTE
     public void reatrdoInicioPartida(int direccion){
         Timeline timelineRetardo = new Timeline(//Sirve para lo que lo que metamos aquí. Podemos utilizar varios TimeLine con diferentes velocidades para diferentes cosas
@@ -284,7 +288,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         }
         timelineSnake = new Timeline(//Sirve para lo que lo que metamos aquí. Podemos utilizar varios TimeLine con diferentes velocidades para diferentes cosas
                 // 0.017 ~= 60 FPS (equivalencia de segundos a Frames por Segundo)
-            new KeyFrame(Duration.seconds(0.008/App.velocidad), new EventHandler<ActionEvent>() {
+            new KeyFrame(Duration.seconds(0.008/velocidad), new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent ae) {//Sólo puede haber un handle en el timeline
                     //Si se ha comido la manzana la vuelvo a colocar la imagen en su lugar correspondiente
                     //Si no coloco la imagen cuando llega aquí, quita la manzana antes de hacer la pausa y no se nota el efecto
@@ -355,16 +359,17 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
 
                         
                         snakeGame.appleEatenM();
+                        App.textScore.setText(String.valueOf(snakeGame.puntuacion)); 
                         //SUBIR DE NIVEL
-                        if(App.puntuacion==10 || App.puntuacion==20 || App.puntuacion==30 || App.puntuacion==40){ //SI COME 10 MANZANAS SUBE LA DIFICULTAD Y LA VELOCIDAD
-                            App.dificultad=  Integer.toString(Integer.valueOf(App.dificultad)+1);
-                            App.textDificulty.setText(App.dificultad);
-                            App.velocidad = App.velocidad+0.5;
-                            System.out.println("HAS SUBIDO DE NIVEL: "+" [DIFICULTAD: "+App.dificultad+"] "+"[VELOCIDAD: "+App.velocidad+"]");
-                        }else if(App.puntuacion==50){
+                        if(snakeGame.puntuacion==10 || snakeGame.puntuacion==20 || snakeGame.puntuacion==30 || snakeGame.puntuacion==40){ //SI COME 10 MANZANAS SUBE LA DIFICULTAD Y LA VELOCIDAD
+                            dificultad=  Integer.toString(Integer.valueOf(dificultad)+1);
+                            App.textDificulty.setText(dificultad);
+                            velocidad = velocidad+0.5;
+                            System.out.println("HAS SUBIDO DE NIVEL: "+" [DIFICULTAD: "+dificultad+"] "+"[VELOCIDAD: "+velocidad+"]");
+                        }else if(snakeGame.puntuacion==50){
                             timelineSnake.stop();
-                            App.textP.setText(String.valueOf(App.puntuacion));//Actualizo marcador puntuación de la ventana ganar
-                            App.textD.setText(App.dificultad);//Actualizo marcador dificultad de la ventana ganar                        
+                            App.textP.setText(String.valueOf(snakeGame.puntuacion));//Actualizo marcador puntuación de la ventana ganar
+                            App.textD.setText(dificultad);//Actualizo marcador dificultad de la ventana ganar                        
                             App.paneWin.setVisible(true);
                             System.out.println("¡¡¡ENHORABUENA HAS GANADO!!!");
                         }

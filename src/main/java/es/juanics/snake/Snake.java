@@ -20,19 +20,11 @@ public class Snake extends Group{
     Image snakeHeadArr;
     
     Image snakeBody;
-    
-//    Image snakeBodyVer;
-//    Image snakeBodyHor;
-//        
-//    Image snakeTailAb;
-//    Image snakeTailArr;
-//    Image snakeTailIz;
-//    Image snakeTailDer;   
-    
+       
     
     ImageView snakeHeadView;
     ImageView snakeBodyView;
-//    ImageView snakeTailView;
+
     
     
     public Snake(int parte){// parte 1 es cabeza, parte 2 es cuerpo, parte 3 es cola

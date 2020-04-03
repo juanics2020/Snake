@@ -1,11 +1,4 @@
-//QUEDA PONER LAS IMÁGENES DEL CUERPO Y LA COLA
-//CUANDO MUERA AL DARLE AL CONTINUAR DEBEMOS QUITAR LAS IMÁGENES
-
-
-
 //Revisar public y private
-//FILA * TAMAÑO_SNAKE = TAMAÑO TABLERO (EN VEZ DE DIVIDIR HEIGHT O WIDHT /TAMAÑO_SNAKE
-
 
 /*REGLAS DEL JUEGO:
 
@@ -40,6 +33,12 @@ la segunda piza intercambiará la cola por el cuerpo
 //En algún lugar hay que almacenarlas posiciones del cuerpo. Los arrays tienen un tamaño fijo.
 //Hay que usar los ArrayList(para que vaya creciendo (posiciones fila y columna). 
 
+//Siempore es mejor hacer las clases independientes de las demás.
+//Por ejemplo: Pasarle las variables por parámetros desde una clase a otra, sin usar el nombre de la otra clase delante (App.filas_totales)
+//Mejor se lo paso por parámetros y lo guardo en una variable general
+
+
+//****le ponemos this para que distinga que es la variable de esta clase, no la que le paso que se llama igual
 
 package es.juanics.snake;
 
@@ -63,18 +62,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
-//GUARDAR EM EL PUNTERO LAS POSICIONES ANTES DE QUE LA SERPINTE SE MUEVA DONDE ESTA LA MANZANA
-
 public class App extends Application {
     //CONSTANTES GENERALES
     
-    public final int SCENE_WIDTH = 882;//SEGÚN TAMAÑO MATRIZ
-    public final int SCENE_HEIGHT = 546;
-    public static final int TAM_PIEZA_SNAKE = 42;//Tamaño que tendrán los visores de las imágenes (Tamaño grafico de cada celda)
-    private final int HBOX_HEIGHT = 29; 
-    private final int SCENE_HEIGHT_MAS_VBOX = SCENE_HEIGHT + HBOX_HEIGHT;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX(29). VBOX = TABLERO+HBOX
+    
+    //Alto y Ancho de la imagen de una parte de la serpiente
+    public static final int TAM_PIEZA_SNAKE = 42;//Tamaño que tendrán los visores de las imágenes (Tamaño grafico de cada celda) TAMAÑO RECOMENDADO: 42
            
-            
     //CONSTANTES PARA DIRECCIONES
     public static final int D_RIGHT = 1;//Constantes que para comparar la direcciones en switch
     public static final int D_LEFT = -1;//Ponemos static para poder usarlas en otras clases
@@ -89,8 +83,18 @@ public class App extends Application {
     public static final int NUM_APPLE = 4;
     
     
+        //TAMAÑO RECOMENDADO MATRIZ: FILAS TOTALES 13 (0-12), COLUMNAS TOTALES 21 (0-20)
+    public static int filas_totales = 13;
+    public static int columnas_totales = 21;
+    public static int scene_width = columnas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 882. SERÍA EL TAMAÑO DE LAS COLUMNAS DEL TABLERO * TAM_PIEZA_SNAKE
+    public static int scene_height = filas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 546. SERÍA EL TAMAÑO DE LAS FILAS DEL TABLERO * TAM_PIEZA_SNAKE
+    private static int hbox_height = (int)(scene_height/18.82758620689655); //TAMAÑO RECOMENDADO 29 : (SECENE_HEIGHT/18,82758620689655)
+    private static int scene_height_mas_vbox = scene_height + hbox_height;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
+           
+    
+    
     private int direccion = 2; //La serpiente comienza yendo hacia abajo
-    public static int puntuacion = 0;
+    
     
     
     VBox panePuntuacion;   
@@ -108,7 +112,10 @@ public class App extends Application {
     //Para diálogo de opciones (DIFICULTAD)
     //USAREMOS UN ARRAYLIST PARA EL DIÁLOGO DE ELEGIR LA DIFICULTAD.
     //EL ARRAYLIST LO CONVERTIREMOS EN UNA LISTA Y LA LISTA SE LA PASAREMOS AL DIÁLOGO
-    private final String [] arrayDificultad = {"1", "2", "3", "4", "5"};
+    private final String [] ARRAY_DIFICULTAD = {"1", "2", "3", "4", "5"};
+    private final String [] ARRAY_FILAS = {"8", "9", "10", "11", "12","13","14","15","16","17","18","19","20"};
+    private final String [] ARRAY_COLUMNAS = {"10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35"};
+    
     //(DIFICULTAD 1: Velocidad 1)
     //(DIFICULTAD 2: Velocidad 1.5)
     //(DIFICULTAD 3: Velocidad 2)
@@ -116,25 +123,26 @@ public class App extends Application {
     //(DIFICULTAD 5: Velocidad 3)
     //La velocidad se usará en el timelineSnake de Tablero
     public static String dificultad;//La elige el usuario
-    public static double velocidad = 1; 
-    
+    public static double velocidad = 1; //PARA EL TIMELINE DE LA SERPIENTE
+    public static String filasList;//La elije el usuario
+    public static String columnasList;//La elije el usuario
     
     
     
     @Override
     public void start(Stage stage) {
                
-        StackPane root = new StackPane();//contenedor principal(stackpane)
-        var scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT_MAS_VBOX);
-        stage.setScene(scene);
-        stage.setResizable(false);//Para que el usuario no pueda cambiar el tamaño de la pantalla
-        stage.show();
-        stage.setTitle("SNAKE");
+//        StackPane root = new StackPane();//contenedor principal(stackpane)
+//        var scene = new Scene(root, scene_width, scene_height_mas_vbox);
+//        stage.setScene(scene);
+//        stage.setResizable(false);//Para que el usuario no pueda cambiar el tamaño de la pantalla
+//        stage.show();
+//        stage.setTitle("SNAKE");
         
         
-        //DIÁLOGO DE OPCIONES (CHOICE DIALOG)
+        //DIÁLOGO DE OPCIONES (CHOICE DIALOG) DIFICULTAD
         //**********************************************************************
-        List<String> listaDificultad = Arrays.asList(arrayDificultad);
+        List<String> listaDificultad = Arrays.asList(ARRAY_DIFICULTAD);
         
         ChoiceDialog dialog = new ChoiceDialog(listaDificultad.get(0), listaDificultad);
         dialog.setTitle("DIFICULTAD");
@@ -152,6 +160,59 @@ public class App extends Application {
         System.out.println("");
         //**********************************************************************
         
+        
+        //DIÁLOGO DE OPCIONES (CHOICE DIALOG) FILAS
+        //**********************************************************************
+        List<String> listaFilas = Arrays.asList(ARRAY_FILAS);
+        
+        ChoiceDialog dialogF = new ChoiceDialog(listaFilas.get(0), listaFilas);
+        dialogF.setTitle("FILAS");
+        dialogF.setHeaderText("Elige las filas");
+
+        Optional<String> result2 = dialogF.showAndWait();
+        filasList = "cancelled.";
+
+        if (result2.isPresent()) {//Si elije una opción se guardará la velocidad
+            filasList = result2.get();
+            filas_totales = Integer.parseInt(filasList);
+        }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
+        System.out.println("");
+        System.out.println("Filas: "+filas_totales);
+        System.out.println("");
+        scene_height = filas_totales*TAM_PIEZA_SNAKE;
+        //**********************************************************************
+        
+        //DIÁLOGO DE OPCIONES (CHOICE DIALOG) COLUMNAS
+        //**********************************************************************
+        List<String> listaColumnas = Arrays.asList(ARRAY_COLUMNAS);
+        
+        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(0), listaColumnas);
+        dialogC.setTitle("COLUMNAS");
+        dialogC.setHeaderText("Elige las columnas");
+
+        Optional<String> result3 = dialogC.showAndWait();
+        columnasList = "cancelled.";
+
+        if (result3.isPresent()) {//Si elije una opción se guardará la velocidad
+            columnasList = result3.get();
+            columnas_totales = Integer.parseInt(columnasList);
+        }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
+        System.out.println("");
+        System.out.println("Columnas: "+columnas_totales);
+        System.out.println("");
+        scene_width = columnas_totales*TAM_PIEZA_SNAKE;
+        //**********************************************************************
+        hbox_height = (int)(scene_height/18.82758620689655); //TAMAÑO RECOMENDADO 29 : (SECENE_HEIGHT/18,82758620689655)
+        scene_height_mas_vbox = scene_height + hbox_height;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
+        
+        StackPane root = new StackPane();//contenedor principal(stackpane)
+        var scene = new Scene(root, scene_width, scene_height_mas_vbox);
+        stage.setScene(scene);
+        stage.setResizable(false);//Para que el usuario no pueda cambiar el tamaño de la pantalla
+        stage.show();
+        stage.setTitle("SNAKE");
+        
+             
      
         
         //VOBOX (HBOX  con text + puntuacion + text + dificultad) + (Tablero)
@@ -169,7 +230,7 @@ public class App extends Application {
         textTitleScore.setFont(Font.font("Arial Black", 20));
         textTitleScore.setFill(Color.BLACK);
         //Texto para la puntuación
-        textScore = new Text(String.valueOf(puntuacion));
+        textScore = new Text(String.valueOf(0));
         textScore.setFont(Font.font("Arial Black", 20));
         textScore.setFill(Color.RED);
         //---
@@ -183,8 +244,8 @@ public class App extends Application {
         //---
         
         panePuntHor.setAlignment(Pos.CENTER);
-        panePuntHor.setMinHeight(HBOX_HEIGHT);
-        panePuntHor.setMaxHeight(HBOX_HEIGHT);
+        panePuntHor.setMinHeight(hbox_height);
+        panePuntHor.setMaxHeight(hbox_height);
         
         panePuntHor.getChildren().add(textTitleScore);
         panePuntHor.getChildren().add(textScore);
@@ -195,7 +256,7 @@ public class App extends Application {
               
         //Tablero incluído en VBOX
         //el tablero ya contiene la cabeza de la serpiente y la manzana
-        Tablero tablero = new Tablero(SCENE_WIDTH, SCENE_HEIGHT);//Le paso las medidas al tablero
+        Tablero tablero = new Tablero(scene_width, scene_height, filas_totales, columnas_totales,dificultad, velocidad);//Le paso las variables al tablero
         panePuntuacion.getChildren().add(tablero);
         // Primero hacemos un retardo para que el usuario esté preparado y después se moverá la serpiente
         tablero.reatrdoInicioPartida(direccion);
@@ -210,9 +271,9 @@ public class App extends Application {
         //Layout principal para VBOX (MENSAJE CONTINUAR)
         //**********************************************************************
         paneContinuar = new VBox();
-        paneContinuar.setMinHeight(SCENE_HEIGHT);
+        paneContinuar.setMinHeight(scene_height);
         paneContinuar.setTranslateY(0);       
-        paneContinuar.setMinWidth(SCENE_WIDTH);
+        paneContinuar.setMinWidth(scene_width);
         paneContinuar.setTranslateX(0);
         paneContinuar.setAlignment(Pos.CENTER);
         paneContinuar.setSpacing(100);
@@ -250,9 +311,9 @@ public class App extends Application {
         //Layout principal para VBOX (MENSAJE HAS GANADO)
         //**********************************************************************
         paneWin = new VBox();
-        paneWin.setMinHeight(SCENE_HEIGHT);
+        paneWin.setMinHeight(scene_height);
         paneWin.setTranslateY(0);       
-        paneWin.setMinWidth(SCENE_WIDTH);
+        paneWin.setMinWidth(scene_width);
         paneWin.setTranslateX(0);
         paneWin.setAlignment(Pos.CENTER);
         paneWin.setSpacing(100);
@@ -260,7 +321,7 @@ public class App extends Application {
         root.getChildren().add(paneWin);
         //Texto de etiqueta de HAS GANADO
         Text textTitleWin = new Text("ENHORA BUENA, HAS GANADO");
-        textTitleWin.setFont(Font.font("Cooper Black", 30));
+        textTitleWin.setFont(Font.font("Cooper Black", (filas_totales*3)));//Para que el título grandre tenga una proporción con la medida de la pantalla
         textTitleWin.setFill(Color.BLUE);
         paneWin.getChildren().add(textTitleWin);
         
@@ -274,7 +335,7 @@ public class App extends Application {
         textTitlePuntW.setFill(Color.BLACK);
         panePFW.getChildren().add(textTitlePuntW);
         //Texto PUNTUACIÓN
-        textP = new Text(String.valueOf(puntuacion));//la dificultad que selecciona el usuario en el diálogo
+        textP = new Text(String.valueOf(0));//la dificultad que selecciona el usuario en el diálogo
         textP.setFont(Font.font("Cooper Black", 25));
         textP.setFill(Color.YELLOW);
         panePFW.getChildren().add(textP);

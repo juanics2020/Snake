@@ -10,9 +10,9 @@ public class SnakeGame {
     //TENIENDO EN CUENTA EL TAMAÑO DE LA ESCENA Y EL TAMAÑO DE LOS VISORES DE LA SERPIENTE
     //SE CALCULARÁN LAS FILAS Y COLUMNAS PARA QUE COINCIDA EL MOVIMIENTO GRÁFICO DE LA SERPIENTE CON EL MOVIMIENTO DE LA MATRIZ
     
-    
-    private static int filas = 0;//variable para total filas matriz   
-    private static int columnas = 0;//variable para total columnas matriz
+    public int puntuacion = 0;
+    private int filas = 0;//variable para total filas matriz   
+    private int columnas = 0;//variable para total columnas matriz
     //Declaro la matriz del tablero por ahora sin filas ni columnas]
     static int [][] matrizTablero;//matrizTablero[6][10] = 1; //Poner un 1 en la posición fila 6, columna 10
         
@@ -31,25 +31,19 @@ public class SnakeGame {
     private static double arrayDireccion =  App.D_DOWN;
     public static int contadorArray = 0;
 
- 
-    //Calcula cuantas FILAS Y COLUMNAS tiene la Matriz usando el ancho y alto de la escena y el tamaño del visor de la serpiente
-    public void tamañoMatriz(int sceneWidth, int sceneHeight){
-        //Llamamos a la función dentro de Snake que le pasa el tamaño que tendrán los visores para calcular el tamaño de la matriz 
-        
-        //Calculamos filas y columnas según alto y ancho de la escena
-        filas = (int)(sceneHeight/App.TAM_PIEZA_SNAKE);
-        columnas = (int)(sceneWidth/App.TAM_PIEZA_SNAKE);
-        //Declaro la matriz del tablero  ej [13 filas hacia abajo][21 columnas hacia la derecha]
-        matrizTablero = new int [filas][columnas];//FILAS Y COLUMNAS TOTALES QUE TENDRÁ LA MATRIZ
-        
-        System.out.println("");
-        System.out.println("Tamaño Snake: "+App.TAM_PIEZA_SNAKE+", Nº FILAS TOTALES: "+filas+", Nº COLUMNAS TOTALES: "+columnas);              
-    }
     
     
     //Al inicio del juego rellenaremos la matriz de 0 escepto la mitad de la matriz que será un 1 donde está la cabeza de la serpiente  
     //(1º Rellenamos las celdas de la matriz de 0)
-    public SnakeGame (){
+    public SnakeGame (int filas, int columnas){ //******NO DEJA USAR DIRECTAMENTE App.filas_totales ni App.columnas_totales
+        this.filas = filas;
+        this.columnas = columnas;
+        
+        matrizTablero = new int [this.filas][this.columnas];//FILAS Y COLUMNAS TOTALES QUE TENDRÁ LA MATRIZ
+        
+        System.out.println("");
+        System.out.println("Nº FILAS TOTALES: "+this.filas+", Nº COLUMNAS TOTALES: "+this.columnas);
+        
         for(int f=0; f<filas; f++){
             for(int c=0; c<columnas; c++){
                 matrizTablero[f][c] = App.NUM_EMPTY;//Ponemos la cel de la matriz vacía a 0
@@ -76,13 +70,6 @@ public class SnakeGame {
         System.out.println("");//PARA QUE DEJE UN SALTO DE LÍNEA EN LA CONSOLA DESPUÉS DE LA MATRIZ
     }  
     
-    public int getNumFilasMatriz(){//Método para devolver Nº de Filas de la Matriz
-        return filas;
-    }
-    public int getNumColumnasMatriz(){//Método para devolver Nº de Columnas de la Matriz
-        return columnas;
-    }
-
     
     //POSICIONES ALEATORIA PARA LA MANZANA
     public int setRandomAppleCol(){//Obtener una columna de la matriz aleatoria
@@ -114,10 +101,9 @@ public class SnakeGame {
     
     
     public void appleEatenM(){
-        App.puntuacion++;
-        App.textScore.setText(String.valueOf(App.puntuacion));       
+        puntuacion++;              
         System.out.println("SE HA COMIDO LA MANZANA ----- OOOOOOOO");
-        System.out.println("Puntuación: "+App.puntuacion);
+        System.out.println("Puntuación: "+puntuacion);
         System.out.println("*****************************************************");
         this.setAppleRandom(); 
     }
