@@ -76,9 +76,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         snakeGame.inicioFilaColActual(matFilaIni, matColumnaIni);
         
         System.out.println("Mitad filas: "+matFilaIni);
-        System.out.println("Mitad columnas: "+matColumnaIni);
-                
-        snakeGame.matrizTablero[matFilaIni][matColumnaIni] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente      
+        System.out.println("Mitad columnas: "+matColumnaIni);   
         
         //Llamos al método para meter el primer puntero de la cabeza en el ArrayList de la serpiente en la posición inicial de la cabeza
         int punt  = snakeGame.setPunteroArrayList(matFilaIni, matColumnaIni, App.D_DOWN);

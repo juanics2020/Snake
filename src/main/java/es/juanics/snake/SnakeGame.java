@@ -127,8 +127,7 @@ public class SnakeGame {
     }
     
     
-    public int setPunteroArrayList(int fila, int columna, int direccion){
-                
+    public int setPunteroArrayList(int fila, int columna, int direccion){                
         //OJO!!!! LA Y GUARDA LAS FILAS Y LA X LAS COLUMNAS!!!!!<------------
         //Añado las posiciones de la cabeza de la serpiente al Arraylist que representará la serpiente
         Point p = new Point();
@@ -138,7 +137,7 @@ public class SnakeGame {
             p.setX(columna);         
             p.setY(fila);
             p.setZ(App.D_DOWN);
-                     
+            
         }else{ 
             //Antes de añadir uno nuevo, ordeno los punteros que ya tengo
             cambioPunteros(fila,columna, direccion);
@@ -149,31 +148,40 @@ public class SnakeGame {
             p.setX(arrayXvacia);         
             p.setY(arrayYvacia);
             p.setZ(arrayDireccion);
+                       
             //VARIABLE QUE SERVIRÁ DE CONTADOR EN LOS PASOS QUE DE LA SERPIENTE, PARA PODER GUARDAR LAS DIRECCIONES 
             contadorArray++; //Tendrá siempre el tamaño del array -1 (Nº de array -1 porque empieza en 0)
         }
       
         arrayListCuerpo.add(p);
+        //Si la serpiente tiene ya 3 partes incluída la cabeza, la que era la última parte antes del nuevo puntero la pongo en la matriz a 2.
+        //Y el nuevo puntero que es la cola la pongo a 3
+
+        //El nuevo puntero siempre es la cola en la matriz (escepto si es la cabeza)
+        if(arrayListCuerpo.size()>1){
+            if(arrayListCuerpo.size()>2){//Tiene al menos 3 partes ya. La pieza anterior a la cola la pongo a 2 en la matriz
+                matrizTablero[(int)arrayListCuerpo.get(arrayListCuerpo.size()-2).getX()][(int)arrayListCuerpo.get(arrayListCuerpo.size()-2).getY()] = App.NUM_BODY;
+        }
+            matrizTablero[(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getX()][(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getY()] = App.NUM_TAIL;
+        }else{//si no es la cabeza
+            matrizTablero[fila][columna] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente 
+        }
+               
         System.out.println("*****************************************************************************************************");
         System.out.println("NUEVO PUNTERO "+(arrayListCuerpo.size()-1)+", X("+p.getY()+") [COLUMNA] - Y("+p.getX()+") [FILA] - Z("+(int)p.getZ()+") <DIRECCIÓN>");
         System.out.println("*****************************************************************************************************");
-        
-        
+                
         return (contadorArray);//devuelve el número de puntero que se ha creado (índice)
     }
     
     
     public void cambioPunteros(int filaActual, int columnaActual, int direccion){
-        //La COLA en el arrayList me da igual, será en la MATRIZ (3) y en el TABLERO gráficamente donde tendré que ir pasando la cola al final
-        
-        //Según la dirección, cada vez que se mueva la serpiente, las posiciones de los punteros X e Y se irán sumando o restando (posición X o Y = posición X o Y +1 o -1)
-        
+        //La COLA en el arrayList me da igual, será en la MATRIZ (3) donde tendré que ir pasando la cola al final        
+        //Según la dirección, cada vez que se mueva la serpiente, las posiciones de los punteros X e Y se irán sumando o restando (posición X o Y = posición X o Y +1 o -1)        
         //A partir de la cabeza, pongo el puntero en la posición del anterior.
         //Por último, la cabeza la pongo en fila y columna actual
-        
         //La cabeza(0) la dejo para lo último porque le pondremos la posición fila y columna actual.Empiezo en 1 (el segundo puntero).
-       
-        
+              
         //Pongo la posición que se queda vacia (donde estaba la cola antes de moverla) a 0 en la matriz
         //tamaño -1 sería el último elemento del array. Si tiene 3 de tamaño, el último elemento es el 2 (0-2)
         arrayXvacia=arrayListCuerpo.get(arrayListCuerpo.size()-1).getX(); 
@@ -202,8 +210,7 @@ public class SnakeGame {
         arrayListCuerpo.get(0).setY(columnaActual);
         arrayListCuerpo.get(0).setZ(direccion);
         //La dirección la guarda en matrixMovement
-        System.out.println("cambioPunteros: FILA ACTUAL "+columnaActual+", COLUMNA ACTUAL "+filaActual);//hay que tener en cuanta que la X es COLUMNA y la Y es FILA
-            
+        System.out.println("cambioPunteros: FILA ACTUAL "+columnaActual+", COLUMNA ACTUAL "+filaActual);//hay que tener en cuanta que la X es COLUMNA y la Y es FILA           
     }
     
     
@@ -279,6 +286,5 @@ public class SnakeGame {
         //SERPIENTE EN LA MATRIZ A LA NUEVA POSICIÓN 
         matrizTablero[filaActual][columnaActual] = App.NUM_HEAD;//La nueva posición la pongo en 1
         System.out.println("DENTRO SWITCH segundo**** ----> FILA ACTUAL: "+filaActual+", COLUMNA ACTUAL: "+columnaActual);
-
     }
 }

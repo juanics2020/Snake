@@ -54,6 +54,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -92,13 +94,9 @@ public class App extends Application {
     public static int scene_height = filas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 546. SERÍA EL TAMAÑO DE LAS FILAS DEL TABLERO * TAM_PIEZA_SNAKE
     private static int hbox_height = (int)(scene_height/18.82758620689655); //TAMAÑO RECOMENDADO 29 : (SECENE_HEIGHT/18,82758620689655)
     private static int scene_height_mas_vbox = scene_height + hbox_height;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
-           
-    
-    
+          
     private int direccion = 2; //La serpiente comienza yendo hacia abajo
-    
-    
-    
+     
     VBox panePuntuacion;   
     public static Text textScore; //muestra puntuación en el VBOX
     public static Text textDificulty;//muestra dificultad en el VBOX
@@ -133,13 +131,6 @@ public class App extends Application {
     
     @Override
     public void start(Stage stage) {
-               
-//        StackPane root = new StackPane();//contenedor principal(stackpane)
-//        var scene = new Scene(root, scene_width, scene_height_mas_vbox);
-//        stage.setScene(scene);
-//        stage.setResizable(false);//Para que el usuario no pueda cambiar el tamaño de la pantalla
-//        stage.show();
-//        stage.setTitle("SNAKE");
         
         
         //DIÁLOGO DE OPCIONES (CHOICE DIALOG) DIFICULTAD
@@ -149,6 +140,13 @@ public class App extends Application {
         ChoiceDialog dialog = new ChoiceDialog(listaDificultad.get(0), listaDificultad);
         dialog.setTitle("DIFICULTAD");
         dialog.setHeaderText("Elige la dificultad");
+       
+        // Crear un icono para la imagen del diálogo
+        ImageView serp = new ImageView("/images/Snakehead - iz.png");
+        serp.setFitHeight(31.5);
+        serp.setFitWidth(31.5);
+        // Cambiar la imagen
+        dialog.getDialogPane().setGraphic(serp);
 
         Optional<String> result = dialog.showAndWait();
         dificultad = "cancelled.";
@@ -159,7 +157,6 @@ public class App extends Application {
         }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
         System.out.println("");
         System.out.println("Dificultad: " + dificultad+" ----- Velocidad: "+velocidad);
-        System.out.println("");
         //**********************************************************************
         
         
@@ -167,10 +164,17 @@ public class App extends Application {
         //**********************************************************************
         List<String> listaFilas = Arrays.asList(ARRAY_FILAS);
         
-        ChoiceDialog dialogF = new ChoiceDialog(listaFilas.get(0), listaFilas);
+        ChoiceDialog dialogF = new ChoiceDialog(listaFilas.get(5), listaFilas);
         dialogF.setTitle("FILAS");
         dialogF.setHeaderText("Elige las filas");
 
+        // Crear un icono para la imagen del diálogo
+        ImageView filasImage = new ImageView("/images/filas.png");
+        filasImage.setFitHeight(22);
+        filasImage.setFitWidth(70);
+        // Cambiar la imagen
+        dialogF.getDialogPane().setGraphic(filasImage);
+        
         Optional<String> result2 = dialogF.showAndWait();
         filasList = "cancelled.";
 
@@ -178,9 +182,7 @@ public class App extends Application {
             filasList = result2.get();
             filas_totales = Integer.parseInt(filasList);
         }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
-        System.out.println("");
         System.out.println("Filas: "+filas_totales);
-        System.out.println("");
         scene_height = filas_totales*TAM_PIEZA_SNAKE;
         //**********************************************************************
         
@@ -188,10 +190,17 @@ public class App extends Application {
         //**********************************************************************
         List<String> listaColumnas = Arrays.asList(ARRAY_COLUMNAS);
         
-        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(0), listaColumnas);
+        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(11), listaColumnas);
         dialogC.setTitle("COLUMNAS");
         dialogC.setHeaderText("Elige las columnas");
 
+        // Crear un icono para la imagen del diálogo
+        ImageView columnasImage = new ImageView("/images/columnas.png");
+        columnasImage.setFitHeight(70);
+        columnasImage.setFitWidth(22);
+        // Cambiar la imagen
+        dialogC.getDialogPane().setGraphic(columnasImage);
+        
         Optional<String> result3 = dialogC.showAndWait();
         columnasList = "cancelled.";
 
@@ -199,33 +208,40 @@ public class App extends Application {
             columnasList = result3.get();
             columnas_totales = Integer.parseInt(columnasList);
         }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
-        System.out.println("");
         System.out.println("Columnas: "+columnas_totales);
         System.out.println("");
         scene_width = columnas_totales*TAM_PIEZA_SNAKE;
         //**********************************************************************
+        
         hbox_height = (int)(scene_height/18.82758620689655); //TAMAÑO RECOMENDADO 29 : (SECENE_HEIGHT/18,82758620689655)
         scene_height_mas_vbox = scene_height + hbox_height;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
         
+                
+        
         StackPane root = new StackPane();//contenedor principal(stackpane)
-        var scene = new Scene(root, scene_width, scene_height_mas_vbox);
+        var scene = new Scene(root, scene_width, scene_height_mas_vbox);//*********************<--------------------------ME HACEN FALTA LOS DIALOGOS ANTES
         stage.setScene(scene);
         stage.setResizable(false);//Para que el usuario no pueda cambiar el tamaño de la pantalla
         stage.show();
         stage.setTitle("SNAKE");
         
-             
-     
+        //CAMBIARLE EL ICONO A LA STAGE.
+        //CUANDO SE ABRA EL JUEGO SALDRÁ EL ICONO DE LA CABEZA DE LA SERPIENTE EN LA BARRA DE TAREAS Y EL DIBUJITO AL LADO DEL TÍTULO
+        stage.getIcons().add(new Image("/images/Snakehead - iz.png"));
+        
+        String style = "-fx-background-color: lightblue;"; //COLOR QUE LE VOY A DAR AL STACKPANE
+        root.setStyle(style);
+        
+        System.out.println("WINDOW: "+scene.getFocusOwner());
         
         //VOBOX (HBOX  con text + puntuacion + text + dificultad) + (Tablero)
         //**********************************************************************
-        panePuntuacion = new VBox();
-        String style = "-fx-background-color: lightyellow;"; //COLOR QUE LE VOY A DAR AL VBOX
-        panePuntuacion.setStyle(style);
+        panePuntuacion = new VBox();       
         root.getChildren().add(panePuntuacion);
-        
+    
         HBox panePuntHor = new HBox();
         panePuntHor.setSpacing(10);
+        
         //---
         //Texto de etiqueta para la puntuación
         Text textTitleScore = new Text("Puntuación: ");
@@ -259,15 +275,23 @@ public class App extends Application {
         //Tablero incluído en VBOX
         //el tablero ya contiene la cabeza de la serpiente y la manzana
         Tablero tablero = new Tablero(scene_width, scene_height, filas_totales, columnas_totales,dificultad, velocidad);//Le paso las variables al tablero
+        
+        ImageView tabImage = new ImageView("/images/laser-588995_960_720.jpg");//Fondo del tablero
+        tabImage.setFitHeight(scene_height);
+        tabImage.setFitWidth(scene_width);               
+        tablero.getChildren().add(tabImage);
+        tabImage.toBack();//Para poner la imagen de fondo
+        
+        
         panePuntuacion.getChildren().add(tablero);
         // Primero hacemos un retardo para que el usuario esté preparado y después se moverá la serpiente
-        tablero.reatrdoInicioPartida(direccion);
+        tablero.reatrdoInicioPartida(direccion);      
         
-        //tablero.snakeMovement(direccion);//para que arranque la serpiente al iniciar el juego
-  
+        
+        
         //NO CREARÉ UN SNAKEGAME NUEVO. SÓLO USARÉ EL QUE HE CREADO EN TABLERO PARA PORQUE SI NO TENDRÍA DOS SNAKEGAMES QUE NO COINCIDEN
         //SnakeGame snakeGame = new SnakeGame();
-        
+         
         
         
         //Layout principal para VBOX (MENSAJE CONTINUAR)
@@ -308,6 +332,7 @@ public class App extends Application {
         paneContinuar.getChildren().add(paneBotones);
         paneContinuar.setVisible(false);
         //**********************************************************************
+        
         
         
         //Layout principal para VBOX (MENSAJE HAS GANADO)
@@ -357,6 +382,9 @@ public class App extends Application {
         paneWin.setVisible(false);
         //**********************************************************************
               
+        
+        
+        
         //CUANDO LAS TECLAS SON PULSADAS
         //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
         scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
