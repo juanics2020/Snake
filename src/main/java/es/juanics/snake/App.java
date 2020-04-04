@@ -51,6 +51,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ChoiceDialog;
@@ -133,6 +134,25 @@ public class App extends Application {
     public void start(Stage stage) {
         
         
+        //ALERATA INFORMATIVA CON COPYRIGHT MÍO Y IMÁGENES USADAS
+        //**********************************************************************
+        Alert informacion = new Alert(Alert.AlertType.INFORMATION);
+        informacion.setTitle("WELCOME");
+        informacion.setHeaderText(null);//Sin cabecera
+                
+        ImageView welcome = new ImageView("/images/pantalla_welcome.png");
+        informacion.getDialogPane().setGraphic(welcome);
+       
+        String styleWelcome = "-fx-background-color: #ECF2FF;";// #2E665F;"; //COLOR QUE LE VOY A DAR AL STACKPANE
+        informacion.getDialogPane().setStyle(styleWelcome);
+        informacion.getGraphic().setTranslateX(120);
+        
+        informacion.showAndWait();
+        //**********************************************************************
+
+
+
+        
         //DIÁLOGO DE OPCIONES (CHOICE DIALOG) DIFICULTAD
         //**********************************************************************
         List<String> listaDificultad = Arrays.asList(ARRAY_DIFICULTAD);
@@ -149,7 +169,7 @@ public class App extends Application {
         dialog.getDialogPane().setGraphic(serp);
 
         Optional<String> result = dialog.showAndWait();
-        dificultad = "cancelled.";
+        dificultad = "1";
 
         if (result.isPresent()) {//Si elije una opción se guardará la velocidad
             dificultad = result.get();
@@ -164,7 +184,7 @@ public class App extends Application {
         //**********************************************************************
         List<String> listaFilas = Arrays.asList(ARRAY_FILAS);
         
-        ChoiceDialog dialogF = new ChoiceDialog(listaFilas.get(5), listaFilas);
+        ChoiceDialog dialogF = new ChoiceDialog(listaFilas.get(5), listaFilas);//Quiero que salga mostrando el 13
         dialogF.setTitle("FILAS");
         dialogF.setHeaderText("Elige las filas");
 
@@ -190,7 +210,7 @@ public class App extends Application {
         //**********************************************************************
         List<String> listaColumnas = Arrays.asList(ARRAY_COLUMNAS);
         
-        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(11), listaColumnas);
+        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(11), listaColumnas);//Quiero que salga mostrando el 21
         dialogC.setTitle("COLUMNAS");
         dialogC.setHeaderText("Elige las columnas");
 
@@ -250,7 +270,7 @@ public class App extends Application {
         //Texto para la puntuación
         textScore = new Text(String.valueOf(0));
         textScore.setFont(Font.font("Arial Black", 20));
-        textScore.setFill(Color.RED);
+        textScore.setFill(Color.BLUE);
         //---
         Text textTitleDificulty = new Text("Dificultad: ");
         textTitleDificulty.setFont(Font.font("Arial Black", 20));
@@ -258,7 +278,7 @@ public class App extends Application {
         //Texto para la puntuación
         textDificulty = new Text(dificultad);//la dificultad que selecciona el usuario en el diálogo
         textDificulty.setFont(Font.font("Arial Black", 20));
-        textDificulty.setFill(Color.RED);             
+        textDificulty.setFill(Color.BLUE);             
         //---
         
         panePuntHor.setAlignment(Pos.CENTER);
