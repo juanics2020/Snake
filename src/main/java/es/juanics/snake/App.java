@@ -1,5 +1,6 @@
 //Revisar public y private
 
+
 /*REGLAS DEL JUEGO:
 --------------------
 
