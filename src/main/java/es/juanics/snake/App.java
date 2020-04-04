@@ -227,7 +227,7 @@ public class App extends Application {
         
         //CAMBIARLE EL ICONO A LA STAGE.
         //CUANDO SE ABRA EL JUEGO SALDRÁ EL ICONO DE LA CABEZA DE LA SERPIENTE EN LA BARRA DE TAREAS Y EL DIBUJITO AL LADO DEL TÍTULO
-        stage.getIcons().add(new Image("/images/Snakehead - iz.png"));
+        stage.getIcons().add(new Image("/images/Snakehead.png"));
         
         String style = "-fx-background-color: lightblue;"; //COLOR QUE LE VOY A DAR AL STACKPANE
         root.setStyle(style);
