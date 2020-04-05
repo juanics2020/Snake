@@ -1,15 +1,8 @@
 package es.juanics.snake;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.util.Duration;
 
 
 public class Snake extends Group{
@@ -27,8 +20,8 @@ public class Snake extends Group{
 
     
     
-    public Snake(int parte){// parte 1 es cabeza, parte 2 es cuerpo, parte 3 es cola
-        //CARGO IMÁGENES DE LA SERPIENTE Y HAGO TRES CLASES DE SERPIENTE CON TRES VISORES PARA CADA PARTE DEL CUERPO
+    public Snake(int parte){// parte 1 es cabeza y parte 2 es cuerpo
+        //CARGO IMÁGENES DE LA SERPIENTE Y HAGO DOS CLASES DE SERPIENTE CON DOS VISORES (UNO PARA CADA PARTE DEL CUERPO)
         snakeHeadAb = new Image(getClass().getResourceAsStream("/images/Snakehead.png"));
         snakeHeadIz = new Image(getClass().getResourceAsStream("/images/Snakehead - iz.png"));
         snakeHeadDer = new Image(getClass().getResourceAsStream("/images/Snakehead - der.png"));
@@ -36,9 +29,8 @@ public class Snake extends Group{
         
         snakeBody = new Image(getClass().getResourceAsStream("/images/Cuerpo.png"));
         
-        
-        
-        //Haré que los visores midan 42 para poder establecer el tamaño de la matriz del tablero según tamño de escena    
+
+        //Haré que los visores midan 42 para poder establecer el tamaño de la matriz del tablero según tamaño de escena    
         if(parte==App.NUM_HEAD){//CABEZA SNAKE en matriz será 1
             snakeHeadView = new ImageView(snakeHeadAb);
             snakeHeadView.setFitHeight(App.TAM_PIEZA_SNAKE);
@@ -49,9 +41,8 @@ public class Snake extends Group{
             snakeBodyView = new ImageView(snakeBody);
             snakeBodyView.setFitHeight(App.TAM_PIEZA_SNAKE);
             snakeBodyView.setFitWidth(App.TAM_PIEZA_SNAKE);
-            this.getChildren().add(snakeBodyView);
-                    
-        }
+            this.getChildren().add(snakeBodyView);                   
+        }//La cola será un 3 en la matriz pero será una imagen del cuerpo normal
     }
     
     

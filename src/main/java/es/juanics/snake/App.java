@@ -1,5 +1,6 @@
-//Revisar public y private
-
+//CAMBIAR DIFICULTAD. QUE GANE SI CONSIGUE TANTAS MANZANAS COMO ((FILAS * COLUMNAS TOTALES /2)-COLUMNAS*3) para que se rellene todo de partes de serpiente menos tres filas
+//ej: 20 filas * 23 columnas = 460 celdas máximas, 460/2= 230, 23*3= 69, 230-69 = 161 celdas ocupará la serpiente como máximo
+//QUE VAYA SUBIENDO LA VELOCIDAD SEGÚN LAS FILAS Y COLUMNAS TAMBIÉN ((FILAS * COLUMNAS TOTALES /2)/10)
 
 /*REGLAS DEL JUEGO:
 --------------------
@@ -12,23 +13,24 @@ EL NÚMERO DE FILAS Y COLUMNAS QUE QUIERE (para que el juego se adapte automáti
     - SI NO QUIERE CONTINUAR, SALE DE LA APLICACIÓN
 
 3º A MEDIDA QUE COME MANZANAS SUBEN LOS PUNTOS Y SUBE DE NIVEL:
-    NIVEL INICIAL: DIFICULTAD QUE ELIJA EL JUGADOR
-    CADA 10 MANZANAS SUBE UN NIVEL DE DIFICULTAD
+    NIVEL INICIAL: DIFICULTAD QUE ELIJA EL JUGADOR,
+    CADA 10 MANZANAS SUBE UN NIVEL DE DIFICULTAD,
     SI COME 50 MANZANAS GANA EL JUEGO Y SALE UNA PANTALLA PARA FELICITARLO
 
-*****SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR
-
+SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR
 
 Cada vez que se coma una manzana se añadirá una pieza al cuerpo
 */
 
 
+// *****APUNTES*********
 //Static -> Se puede usar la variable o constante en otras clases, poniendo el nombre de la clase, no el nombre del objeto.
 //Cuando no depende de cada objeto. Se crea una vez nada más, no se crea varias veces en el objeto.
 //Lo mismo para los métodos haciéndolos estáticos
 
-//Si no le pongo PUBLIC en la declaración de una clase ej: Label puntuacion; sólo lo vería en las clases que estén dentro de la carpeta (en el mismo paquete/proyecto)
+//Si no le pongo PUBLIC en la declaración de una clase ej: Label puntuacion; sólo lo vería en esa clase que esté dentro de la carpeta (en el mismo paquete/proyecto)
 //Si le pongo PUBLIC se vería en cualquier paquete (otros proyectos)
+//Necesito ponerle public para verlo en otras clases también (Si se usa en más de una clase es Public, si se usa en sólo una clase es Private)
 
 //Para App no puedo crear un objeto porque crearíamos otra aplicación nueva, no la que estamos usando
 
@@ -40,8 +42,11 @@ Cada vez que se coma una manzana se añadirá una pieza al cuerpo
 //Por ejemplo: Pasarle las variables por parámetros desde una clase a otra, sin usar el nombre de la otra clase delante (App.filas_totales)
 //Mejor se lo paso por parámetros y lo guardo en una variable general
 
+//le ponemos this para que distinga que es la variable de esta clase, no la que le paso que se llama igual
 
-//****le ponemos this para que distinga que es la variable de esta clase, no la que le paso que se llama igual
+
+
+
 
 package es.juanics.snake;
 
@@ -70,8 +75,6 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     //CONSTANTES GENERALES
-    
-    
     //Alto y Ancho de la imagen de una parte de la serpiente
     public static final int TAM_PIEZA_SNAKE = 42;//Tamaño que tendrán los visores de las imágenes (Tamaño grafico de cada celda) TAMAÑO RECOMENDADO: 42
            
@@ -88,14 +91,23 @@ public class App extends Application {
     public static final int NUM_TAIL = 3;
     public static final int NUM_APPLE = 4;
     
+    //Para diálogo de opciones (DIFICULTAD)
+    //USAREMOS UN ARRAYLIST PARA EL DIÁLOGO DE ELEGIR LA DIFICULTAD.
+    //EL ARRAYLIST LO CONVERTIREMOS EN UNA LISTA Y LA LISTA SE LA PASAREMOS AL DIÁLOGO
+    private final String [] ARRAY_DIFICULTAD = {"1", "2", "3", "4", "5"};
+    private final String [] ARRAY_FILAS = {"8", "9", "10", "11", "12","13","14","15","16","17","18","19","20"};
+    private final String [] ARRAY_COLUMNAS = {"10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35"};
     
-        //TAMAÑO RECOMENDADO MATRIZ: FILAS TOTALES 13 (0-12), COLUMNAS TOTALES 21 (0-20)
-    public static int filas_totales = 13;
-    public static int columnas_totales = 21;
-    public static int scene_width = columnas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 882. SERÍA EL TAMAÑO DE LAS COLUMNAS DEL TABLERO * TAM_PIEZA_SNAKE
-    public static int scene_height = filas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 546. SERÍA EL TAMAÑO DE LAS FILAS DEL TABLERO * TAM_PIEZA_SNAKE
-    private static int hbox_height = (int)(scene_height/18.82758620689655); //TAMAÑO RECOMENDADO 29 : (SECENE_HEIGHT/18,82758620689655)
-    private static int scene_height_mas_vbox = scene_height + hbox_height;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
+    
+    //VARIABLES GENERALES
+    //TAMAÑO RECOMENDADO MATRIZ: FILAS TOTALES 13 (0-12), COLUMNAS TOTALES 21 (0-20)
+    private int filas_totales = 13;
+    private int columnas_totales = 21;
+    
+    private int scene_width = columnas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 882. SERÍA EL TAMAÑO DE LAS COLUMNAS DEL TABLERO * TAM_PIEZA_SNAKE
+    private int scene_height = filas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 546. SERÍA EL TAMAÑO DE LAS FILAS DEL TABLERO * TAM_PIEZA_SNAKE
+    private int hbox_height = (int)(scene_height/18.82758620689655); //TAMAÑO RECOMENDADO 29 : (SECENE_HEIGHT/18,82758620689655)
+    private int scene_height_mas_vbox = scene_height + hbox_height;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
           
     private int direccion = 2; //La serpiente comienza yendo hacia abajo
      
@@ -111,12 +123,6 @@ public class App extends Application {
     public static Text textP;
     public static Text textD;
     
-    //Para diálogo de opciones (DIFICULTAD)
-    //USAREMOS UN ARRAYLIST PARA EL DIÁLOGO DE ELEGIR LA DIFICULTAD.
-    //EL ARRAYLIST LO CONVERTIREMOS EN UNA LISTA Y LA LISTA SE LA PASAREMOS AL DIÁLOGO
-    private final String [] ARRAY_DIFICULTAD = {"1", "2", "3", "4", "5"};
-    private final String [] ARRAY_FILAS = {"8", "9", "10", "11", "12","13","14","15","16","17","18","19","20"};
-    private final String [] ARRAY_COLUMNAS = {"10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35"};
     
     //(DIFICULTAD 1: Velocidad 1)
     //(DIFICULTAD 2: Velocidad 1.5)
@@ -124,10 +130,10 @@ public class App extends Application {
     //(DIFICULTAD 4: Velocidad 2.5)
     //(DIFICULTAD 5: Velocidad 3)
     //La velocidad se usará en el timelineSnake de Tablero
-    public static String dificultad;//La elige el usuario
-    public static double velocidad = 1; //PARA EL TIMELINE DE LA SERPIENTE
-    public static String filasList;//La elije el usuario
-    public static String columnasList;//La elije el usuario
+    private String dificultad;//La elige el usuario
+    private double velocidad = 1; //PARA EL TIMELINE DE LA SERPIENTE EN RELACIÓN A LA DIFICULTAD
+    private String filasList;//La elije el usuario
+    private String columnasList;//La elije el usuario
     
     
     
@@ -144,14 +150,12 @@ public class App extends Application {
         ImageView welcome = new ImageView("/images/pantalla_welcome.png");
         informacion.getDialogPane().setGraphic(welcome);
        
-        String styleWelcome = "-fx-background-color: #ECF2FF;";// #2E665F;"; //COLOR QUE LE VOY A DAR AL STACKPANE
+        String styleWelcome = "-fx-background-color: #ECF2FF;";//COLOR QUE LE VOY A DAR AL STACKPANE
         informacion.getDialogPane().setStyle(styleWelcome);
         informacion.getGraphic().setTranslateX(120);
         
         informacion.showAndWait();
         //**********************************************************************
-
-
 
         
         //DIÁLOGO DE OPCIONES (CHOICE DIALOG) DIFICULTAD
@@ -166,7 +170,7 @@ public class App extends Application {
         ImageView serp = new ImageView("/images/Snakehead - iz.png");
         serp.setFitHeight(31.5);
         serp.setFitWidth(31.5);
-        // Cambiar la imagen
+        // Ponerle la imágen del icono
         dialog.getDialogPane().setGraphic(serp);
 
         Optional<String> result = dialog.showAndWait();
@@ -193,7 +197,7 @@ public class App extends Application {
         ImageView filasImage = new ImageView("/images/filas.png");
         filasImage.setFitHeight(22);
         filasImage.setFitWidth(70);
-        // Cambiar la imagen
+        // Ponerle la imágen del icono
         dialogF.getDialogPane().setGraphic(filasImage);
         
         Optional<String> result2 = dialogF.showAndWait();
@@ -202,7 +206,7 @@ public class App extends Application {
         if (result2.isPresent()) {//Si elije una opción se guardará la velocidad
             filasList = result2.get();
             filas_totales = Integer.parseInt(filasList);
-        }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
+        }//Si no elije nada la fila será la que se mostraba inicialmente      
         System.out.println("Filas: "+filas_totales);
         scene_height = filas_totales*TAM_PIEZA_SNAKE;
         //**********************************************************************
@@ -219,7 +223,7 @@ public class App extends Application {
         ImageView columnasImage = new ImageView("/images/columnas.png");
         columnasImage.setFitHeight(70);
         columnasImage.setFitWidth(22);
-        // Cambiar la imagen
+        // Ponerle la imágen del icono
         dialogC.getDialogPane().setGraphic(columnasImage);
         
         Optional<String> result3 = dialogC.showAndWait();
@@ -228,7 +232,7 @@ public class App extends Application {
         if (result3.isPresent()) {//Si elije una opción se guardará la velocidad
             columnasList = result3.get();
             columnas_totales = Integer.parseInt(columnasList);
-        }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
+        }//Si no elije nada la columna será la que se mostraba inicialmente       
         System.out.println("Columnas: "+columnas_totales);
         System.out.println("");
         scene_width = columnas_totales*TAM_PIEZA_SNAKE;
@@ -240,20 +244,18 @@ public class App extends Application {
                 
         
         StackPane root = new StackPane();//contenedor principal(stackpane)
-        var scene = new Scene(root, scene_width, scene_height_mas_vbox);//*********************<--------------------------ME HACEN FALTA LOS DIALOGOS ANTES
+        var scene = new Scene(root, scene_width, scene_height_mas_vbox);//*****HACEN FALTA LOS DIALOGOS ANTES PARA COGER LO VALORES
         stage.setScene(scene);
         stage.setResizable(false);//Para que el usuario no pueda cambiar el tamaño de la pantalla
         stage.show();
         stage.setTitle("SNAKE");
         
-        //CAMBIARLE EL ICONO A LA STAGE.
-        //CUANDO SE ABRA EL JUEGO SALDRÁ EL ICONO DE LA CABEZA DE LA SERPIENTE EN LA BARRA DE TAREAS Y EL DIBUJITO AL LADO DEL TÍTULO
+        //CAMBIARLE EL ICONO A LA STAGE
+        //CUANDO SE ABRA EL JUEGO SALDRÁ EL ICONO DE LA CABEZA DE LA SERPIENTE EN LA BARRA DE TAREAS Y EL ICONO AL LADO DEL TÍTULO
         stage.getIcons().add(new Image("/images/Snakehead.png"));
         
-        String style = "-fx-background-color: #96b5c7;";//COLOR QUE LE VOY A DAR AL STACKPANE
+        String style = "-fx-background-color: #96b5c7;";//COLOR QUE LE VOY A DAR AL STACKPANE ROOT
         root.setStyle(style);
-        
-        System.out.println("WINDOW: "+scene.getFocusOwner());
         
         //VOBOX (HBOX  con text + puntuacion + text + dificultad) + (Tablero)
         //**********************************************************************
@@ -268,20 +270,21 @@ public class App extends Application {
         Text textTitleScore = new Text("Puntuación: ");
         textTitleScore.setFont(Font.font("Arial Black", 20));
         textTitleScore.setFill(Color.BLACK);
-        //Texto para la puntuación
+        //Texto para la puntuación (valor)
         textScore = new Text(String.valueOf(0));
         textScore.setFont(Font.font("Arial Black", 20));
         textScore.setFill(Color.BLUE);
         //---
+        //Texto de etiqueta para la dificultad
         Text textTitleDificulty = new Text("Dificultad: ");
         textTitleDificulty.setFont(Font.font("Arial Black", 20));
         textTitleDificulty.setFill(Color.BLACK);
-        //Texto para la puntuación
+        //Texto para la dificultad
         textDificulty = new Text(dificultad);//la dificultad que selecciona el usuario en el diálogo
         textDificulty.setFont(Font.font("Arial Black", 20));
         textDificulty.setFill(Color.BLUE);             
         //---
-        
+        //centro los textos y le doy altura minima y máxima
         panePuntHor.setAlignment(Pos.CENTER);
         panePuntHor.setMinHeight(hbox_height);
         panePuntHor.setMaxHeight(hbox_height);
@@ -293,27 +296,24 @@ public class App extends Application {
         panePuntuacion.getChildren().add(panePuntHor);
         //**********************************************************************
               
-        //Tablero incluído en VBOX
+        //Tablero incluído en VBOX (Debajo de la puntuación y dificultad)
         //el tablero ya contiene la cabeza de la serpiente y la manzana
-        Tablero tablero = new Tablero(scene_width, scene_height, filas_totales, columnas_totales,dificultad, velocidad);//Le paso las variables al tablero
+        //Le paso las variables al tablero (que vamos a utilizar en tablero)
+        Tablero tablero = new Tablero(scene_width, scene_height, filas_totales, columnas_totales,dificultad, velocidad);
         
         ImageView tabImage = new ImageView("/images/leaves.jpg");//Fondo del tablero
         tabImage.setFitHeight(scene_height);
         tabImage.setFitWidth(scene_width);               
         tablero.getChildren().add(tabImage);
-        tabImage.toBack();//Para poner la imagen de fondo
-        
+        tabImage.toBack();//Para poner la imagen de fondo       
         
         panePuntuacion.getChildren().add(tablero);
         // Primero hacemos un retardo para que el usuario esté preparado y después se moverá la serpiente
         tablero.reatrdoInicioPartida(direccion);      
-        
-        
-        
-        //NO CREARÉ UN SNAKEGAME NUEVO. SÓLO USARÉ EL QUE HE CREADO EN TABLERO PARA PORQUE SI NO TENDRÍA DOS SNAKEGAMES QUE NO COINCIDEN
+
+        //NO CREARÉ UN SNAKEGAME NUEVO
+        //SÓLO USARÉ EL QUE HE CREADO EN TABLERO, PARA PORQUE SI NO TENDRÍA DOS SNAKEGAMES QUE NO COINCIDEN
         //SnakeGame snakeGame = new SnakeGame();
-         
-        
         
         //Layout principal para VBOX (MENSAJE CONTINUAR)
         //**********************************************************************
@@ -327,7 +327,7 @@ public class App extends Application {
         paneContinuar.setStyle("-fx-background-color: #fff980;");
         root.getChildren().add(paneContinuar);
         //Texto de etiqueta para la continuar
-        Text textTitleCon = new Text("¿Do you want to continue?");
+        Text textTitleCon = new Text("¿Quieres continuar jugando?");
         textTitleCon.setFont(Font.font("Arial Black", 24));
         textTitleCon.setFill(Color.BLACK);
         paneContinuar.getChildren().add(textTitleCon);
@@ -340,15 +340,13 @@ public class App extends Application {
         ButtonBar buttonBar = new ButtonBar();
         botonYes = new Button();
         ButtonBar.setButtonData(botonYes, ButtonBar.ButtonData.YES);
-        botonYes.setText("YES");
+        botonYes.setText("SÍ");
         //botonYes.getOnMouseClicked();
         // Create the ButtonBar instance
         botonNO = new Button();
         ButtonBar.setButtonData(botonNO, ButtonBar.ButtonData.NO);
         botonNO.setText("NO");
         buttonBar.getButtons().addAll(botonYes, botonNO);
-        //paneBotones.getChildren().add(botonYes);
-        //paneBotones.getChildren().add(botonNO);
         paneBotones.getChildren().add(buttonBar);
         paneContinuar.getChildren().add(paneBotones);
         paneContinuar.setVisible(false);
@@ -369,7 +367,8 @@ public class App extends Application {
         root.getChildren().add(paneWin);
         //Texto de etiqueta de HAS GANADO
         Text textTitleWin = new Text("ENHORA BUENA, HAS GANADO");
-        textTitleWin.setFont(Font.font("Cooper Black", (filas_totales*3)));//Para que el título grandre tenga una proporción con la medida de la pantalla
+        //Para que el título grandre tenga una proporción con la medida de la pantalla (filas, columnas)
+        textTitleWin.setFont(Font.font("Cooper Black", (filas_totales*3)));
         textTitleWin.setFill(Color.BLUE);
         paneWin.getChildren().add(textTitleWin);
         
@@ -377,13 +376,13 @@ public class App extends Application {
         HBox panePFW = new HBox();
         panePFW.setAlignment(Pos.CENTER);
         panePFW.setSpacing(20);
-         //Texto de etiqueta de PUNTUACIÓN
+        //Texto de etiqueta de PUNTUACIÓN
         Text textTitlePuntW = new Text("Puntuación: ");
         textTitlePuntW.setFont(Font.font("Cooper Black", 25));
         textTitlePuntW.setFill(Color.BLACK);
         panePFW.getChildren().add(textTitlePuntW);
-        //Texto PUNTUACIÓN
-        textP = new Text(String.valueOf(0));//la dificultad que selecciona el usuario en el diálogo
+        //Texto PUNTUACIÓN (valor)
+        textP = new Text(String.valueOf(0));
         textP.setFont(Font.font("Cooper Black", 25));
         textP.setFill(Color.YELLOW);
         panePFW.getChildren().add(textP);
@@ -403,11 +402,11 @@ public class App extends Application {
         paneWin.setVisible(false);
         //**********************************************************************
               
-        
-        
+    
         
         //CUANDO LAS TECLAS SON PULSADAS
-        //Llama al método setOnKeyPressed. Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
+        //Llama al método setOnKeyPressed.
+        //Cuando detecte que se pulsa una tecla en la escena (se puede hacer que en vez que en la escena se detecte cuando pulse dentro de un campo de texto)
         scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             public void handle(final KeyEvent keyEvent) {
 
@@ -415,29 +414,25 @@ public class App extends Application {
                     //¡¡¡LEFT, RIGHT, DOWN Y UP ES COMO SE LLAMAN LAS TECLAS (NO LAS DIRECCIONES DIRECTAMENTE)!!!!
                     case LEFT:// el dinosaurio se moverá a la izquierda
                         direccion = D_LEFT;
-
                         break;
-                    case RIGHT:// el dinosaurio se moverá a la izquierda
+                    case RIGHT:// el dinosaurio se moverá a la derecha
                         direccion = D_RIGHT;
                         break;
-                    case DOWN:// el dinosaurio se moverá a la izquierda
+                    case DOWN:// el dinosaurio se moverá abajo
                         direccion = D_DOWN;
                         break;
-                    case UP:// el dinosaurio se moverá a la izquierda
+                    case UP:// el dinosaurio se moverá arriba
                         direccion = D_UP;
                         break;
                 }
-                tablero.nextDirection(direccion); 
                 System.out.println("APP.DIRECCION: "+direccion);
+                tablero.nextDirection(direccion);//Le paso la siguiente dirección al tablero                
             }
         });                              
     }
     
-   
-    
-    
+
     public static void main(String[] args) {
         launch();
     }
-
 }

@@ -10,7 +10,7 @@ public class Apple extends ImageView{
     public Image appleImageBitten;
     
     
-    public Apple(){//Creamos la manzana (un visor con una imagen
+    public Apple(){//Creamos la manzana (un visor con una imagen)
         //MANZANA NORMAL
         appleImage = new Image(getClass().getResourceAsStream("/images/apple.png"));
         this.setImage(appleImage);
