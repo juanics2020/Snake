@@ -57,12 +57,12 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         //PINTAR LA CUADRÍCULA DEL TABLERO SEGÚN LAS FILAS Y COLUMNAS DE LA MATRIZ       
         for(int i=0;i<=this.columnas;i++){
             Line line = new Line(App.TAM_PIEZA_SNAKE*i, 0, App.TAM_PIEZA_SNAKE*i, App.TAM_PIEZA_SNAKE*this.filas);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
-            line.setStroke(Color.DARKGOLDENROD);
+            line.setStroke(Color.LIGHTBLUE);//DARKGOLDENROD);
             this.getChildren().add(line); //añade la linea a esta misma clase Tablero (que es el panel)
         }
         for(int i=0;i<=this.filas;i++){
             Line line = new Line(0, App.TAM_PIEZA_SNAKE*i, App.TAM_PIEZA_SNAKE*this.columnas, App.TAM_PIEZA_SNAKE*i);//X inicial, Y inicial, X final, Y final) La separación será el tamaño del visor de la serpiente
-            line.setStroke(Color.DARKGOLDENROD);
+            line.setStroke(Color.LIGHTBLUE);//DARKGOLDENROD);
             this.getChildren().add(line); //añade la linea a esta misma clase Tablero (que es el panel)
         }
         

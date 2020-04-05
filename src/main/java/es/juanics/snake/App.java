@@ -250,7 +250,7 @@ public class App extends Application {
         //CUANDO SE ABRA EL JUEGO SALDRÁ EL ICONO DE LA CABEZA DE LA SERPIENTE EN LA BARRA DE TAREAS Y EL DIBUJITO AL LADO DEL TÍTULO
         stage.getIcons().add(new Image("/images/Snakehead.png"));
         
-        String style = "-fx-background-color: lightblue;"; //COLOR QUE LE VOY A DAR AL STACKPANE
+        String style = "-fx-background-color: #96b5c7;";//COLOR QUE LE VOY A DAR AL STACKPANE
         root.setStyle(style);
         
         System.out.println("WINDOW: "+scene.getFocusOwner());
@@ -297,7 +297,7 @@ public class App extends Application {
         //el tablero ya contiene la cabeza de la serpiente y la manzana
         Tablero tablero = new Tablero(scene_width, scene_height, filas_totales, columnas_totales,dificultad, velocidad);//Le paso las variables al tablero
         
-        ImageView tabImage = new ImageView("/images/laser-588995_960_720.jpg");//Fondo del tablero
+        ImageView tabImage = new ImageView("/images/leaves.jpg");//Fondo del tablero
         tabImage.setFitHeight(scene_height);
         tabImage.setFitWidth(scene_width);               
         tablero.getChildren().add(tabImage);
