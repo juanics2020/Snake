@@ -1,9 +1,4 @@
 
-//QUITAR LO DEL DIÁLOGO DE LAS COLUMNAS
-
-//CUANDO LAS FILAS SON EL DOBLE DE LAS COLUMNAS O LAS COLUMNAS SON EL DOBLE DE LAS FILAS SALE OUT OF BOUNDS
-//se puede poner que las columnas sean: (las filas + la mitad de las filas
-//      columnas = (int) filas *1.5
 
 /*REGLAS DEL JUEGO:
 --------------------
@@ -22,23 +17,24 @@ EL NÚMERO DE FILAS QUE QUIERE (para que el juego se adapte automáticamente a e
     Cada vez que se coma una manzana se añadirá una pieza al cuerpo.
 
     - ¿CUÁNTAS MANZANAS TIENE QUE COMER PARA SUBIR DE NIVEL?
-    Las manzanas para subir de nivel serán las filas (en cada nivel)
-        Ej: Si tengo 8 filas = 8
-        Ej: Si tengo 13 filas = 13
+    Las manzanas para subir de nivel serán las filas o las columnas (el que sea mayor) (en cada nivel)
+        Ej: Si tengo 8 filas y 10 columnas = 10
+        Ej: Si tengo 13 filas y 10 columnas = 13
 
     - ¿CUÁNDO SE GANA EL JUEGO?
     Cuando la serpiente se coma el total de manzanas
-    El total de manzanas a comer será o las filas * 5
-        Ej: Si tengo 8 filas = 8*5 = 45
-        Ej: Si tengo 10 filas = 10*5 = 50
+
+    El total de manzanas a comer será o las filas o columnas (el que sea mayor) * 5
+        Ej: Si tengo 8 filas  y 10 columnas = 10*5 = 50
+        Ej: Si tengo 13 filas y 10 columnas = 13*5 = 65
   
     
-    Ej: Si tenemos 10 filas:
+    Ej: Si tenemos 8 filas y 10 columnas:
         NIVEL 1: --> 10 manzanas
         NIVEL 2: --> 20 manzanas
         NIVEL 3: --> 30 manzanas
         NIVEL 4: --> 40 manzanas
-        NO HAY NIVEL 5 PORQUE GANA EL JUEGO --> 50 manzanas en total
+        EN EL NIVEL 5 GANA EL JUEGO --> 50 manzanas en total
     
    
     SI COME TODAS LAS MANZANAS GANA EL JUEGO Y SALE UNA PANTALLA PARA FELICITARLO
@@ -47,6 +43,10 @@ SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES D
 AUNQUE EL USUARIO EMPIEZE EN 5 CONTARÍA COMO NIVEL 1 PERO DIFICULTAD 5
 
 */
+
+
+//OJO!!! LAS COLUMNAS SON X Y LAS FILAS SON Y
+
 
 
 // *****APUNTES*********
@@ -159,7 +159,7 @@ public class App extends Application {
     private String dificultad;//La elige el usuario
     private double velocidad = 1; //PARA EL TIMELINE DE LA SERPIENTE EN RELACIÓN A LA DIFICULTAD
     private String filasList;//La elije el usuario
-    //private String columnasList;//La elije el usuario
+    private String columnasList;//La elije el usuario
     
     
     
@@ -238,37 +238,35 @@ public class App extends Application {
         //**********************************************************************
         
         
-//        
-//        //DIÁLOGO DE OPCIONES (CHOICE DIALOG) COLUMNAS
-//        //**********************************************************************
-//        List<String> listaColumnas = Arrays.asList(ARRAY_COLUMNAS);
-//        
-//        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(11), listaColumnas);//Quiero que salga mostrando el 21
-//        dialogC.setTitle("COLUMNAS");
-//        dialogC.setHeaderText("Elige las columnas");
-//
-//        // Crear un icono para la imagen del diálogo
-//        ImageView columnasImage = new ImageView("/images/columnas.png");
-//        columnasImage.setFitHeight(70);
-//        columnasImage.setFitWidth(22);
-//        // Ponerle la imágen del icono
-//        dialogC.getDialogPane().setGraphic(columnasImage);
-//        
-//        Optional<String> result3 = dialogC.showAndWait();
-//        columnasList = "cancelled.";
-//
-//        if (result3.isPresent()) {//Si elije una opción se guardará la velocidad
-//            columnasList = result3.get();
-//            columnas_totales = Integer.parseInt(columnasList);
-//        }//Si no elije nada la columna será la que se mostraba inicialmente       
-//        System.out.println("Columnas: "+columnas_totales);
-//        System.out.println("");
-//        scene_width = columnas_totales*TAM_PIEZA_SNAKE;
-//        //**********************************************************************
+        
+        //DIÁLOGO DE OPCIONES (CHOICE DIALOG) COLUMNAS
+        //**********************************************************************
+        List<String> listaColumnas = Arrays.asList(ARRAY_COLUMNAS);
+        
+        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(11), listaColumnas);//Quiero que salga mostrando el 21
+        dialogC.setTitle("COLUMNAS");
+        dialogC.setHeaderText("Elige las columnas");
+
+        // Crear un icono para la imagen del diálogo
+        ImageView columnasImage = new ImageView("/images/columnas.png");
+        columnasImage.setFitHeight(70);
+        columnasImage.setFitWidth(22);
+        // Ponerle la imágen del icono
+        dialogC.getDialogPane().setGraphic(columnasImage);
+        
+        Optional<String> result3 = dialogC.showAndWait();
+        columnasList = "cancelled.";
+
+        if (result3.isPresent()) {//Si elije una opción se guardará la velocidad
+            columnasList = result3.get();
+            columnas_totales = Integer.parseInt(columnasList);
+        }//Si no elije nada la columna será la que se mostraba inicialmente       
+        System.out.println("Columnas: "+columnas_totales);
+        System.out.println("");
+        scene_width = columnas_totales*TAM_PIEZA_SNAKE;
+        //**********************************************************************
                 
         scene_height_mas_vbox = scene_height + HBOX_HEIGHT;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
-        columnas_totales = (int)(filas_totales*1.5);//CALCULO LAS COLUMNAS A PARTIR DE LAS FILAS
-        scene_width = columnas_totales*TAM_PIEZA_SNAKE;//CLACULO LA ANCHURA DE LA ESCENA CON LAS COLUMNAS
                 
         
         StackPane root = new StackPane();//contenedor principal(stackpane)
@@ -346,7 +344,7 @@ public class App extends Application {
         tabImage.toBack();//Para poner la imagen de fondo       
         
         panePuntuacion.getChildren().add(tablero);
-        // Primero hacemos un retardo para que el usuario esté preparado y después se moverá la serpiente
+        //Primero hacemos un retardo para que el usuario esté preparado y después se moverá la serpiente
         tablero.reatrdoInicioPartida(direccion);      
 
         //NO CREARÉ UN SNAKEGAME NUEVO
@@ -362,7 +360,7 @@ public class App extends Application {
         paneContinuar.setTranslateX(0);
         paneContinuar.setAlignment(Pos.CENTER);
         paneContinuar.setSpacing(100);
-        paneContinuar.setStyle("-fx-background-color: #fff980;");
+        paneContinuar.setStyle(style);
         root.getChildren().add(paneContinuar);
         //Texto de etiqueta para la continuar
         Text textTitleCon = new Text("¿Quieres continuar jugando?");

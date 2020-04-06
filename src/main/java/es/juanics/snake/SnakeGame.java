@@ -122,8 +122,8 @@ public class SnakeGame {
         //Hacer con todos los elementos del arraylist. Si tiene 7 elementos (0-6)
         for(int c=0; c<arrayListCuerpo.size(); c++){
             System.out.println("-----Tamaño ArrayList(Nº PUNTEROS): "+arrayListCuerpo.size());
-            System.out.println("Puntero ("+c+") Y (FILA): "+arrayListCuerpo.get(c).getX());
-            System.out.println("Puntero ("+c+") X (COLUMNA): "+arrayListCuerpo.get(c).getY()); 
+            System.out.println("Puntero ("+c+") Y (FILA): "+arrayListCuerpo.get(c).getY());
+            System.out.println("Puntero ("+c+") X (COLUMNA): "+arrayListCuerpo.get(c).getX()); 
             System.out.println("Puntero ("+c+") Z (Dirección): "+(int)arrayListCuerpo.get(c).getZ());
         }
         System.out.println("******************************************************");             
@@ -167,16 +167,16 @@ public class SnakeGame {
         //El nuevo puntero siempre es la cola en la matriz (escepto si es la cabeza)
         if(arrayListCuerpo.size()>1){//Si no solo está la cabeza
             if(arrayListCuerpo.size()>2){//Tiene al menos 3 partes ya. La pieza anterior a la cola la pongo a 2 en la matriz
-                matrizTablero[(int)arrayListCuerpo.get(arrayListCuerpo.size()-2).getX()][(int)arrayListCuerpo.get(arrayListCuerpo.size()-2).getY()] = App.NUM_BODY;
+                matrizTablero[(int)arrayListCuerpo.get(arrayListCuerpo.size()-2).getY()][(int)arrayListCuerpo.get(arrayListCuerpo.size()-2).getX()] = App.NUM_BODY;
             }
             //La última parte la pongo a 3 porque es la cola
-            matrizTablero[(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getX()][(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getY()] = App.NUM_TAIL;
+            matrizTablero[(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getY()][(int)arrayListCuerpo.get(arrayListCuerpo.size()-1).getX()] = App.NUM_TAIL;
         }else{//si es la cabeza sóla y no hay más partes del cuerpo
             matrizTablero[fila][columna] = App.NUM_HEAD;//Pongo el 1 a mitad de la matriz que corresponde a la Cabeza de la serpiente 
         }
                
         System.out.println("*****************************************************************************************************");
-        System.out.println("NUEVO PUNTERO "+(arrayListCuerpo.size()-1)+", Y("+p.getX()+") [FILA] - X("+p.getY()+") [COLUMNA] - Z("+(int)p.getZ()+") <DIRECCIÓN>");
+        System.out.println("NUEVO PUNTERO "+(arrayListCuerpo.size()-1)+", Y("+p.getY()+") [FILA] - X("+p.getX()+") [COLUMNA] - Z("+(int)p.getZ()+") <DIRECCIÓN>");
         System.out.println("*****************************************************************************************************");
                 
         return (contadorArray);//devuelve el número de puntero que se ha creado (índice)
@@ -199,7 +199,7 @@ public class SnakeGame {
         arrayDireccion=arrayListCuerpo.get(arrayListCuerpo.size()-1).getZ();
         
         //Donde estaba la cola en la última posición se queda en 0 en la matriz
-        matrizTablero[(int)arrayXvacia][(int)arrayYvacia] = App.NUM_EMPTY;
+        matrizTablero[(int)arrayYvacia][(int)arrayXvacia] = App.NUM_EMPTY;
         
         //El 0 no porque la cabeza la asigno abajo con las posiciones actuales. Los demás punteros van cogiendo la posición del anterior
         for(int c=contadorArray; c>0; c--){
@@ -211,15 +211,15 @@ public class SnakeGame {
             //Pongo los 2 y el 3 en la MATRIZ (2:cuerpo, 3:cola) **El 1 de la cabeza se pone abajo en matrizMovement (a medida que se mueve)
             //la posición en la matriz en la que estaba la cola la pongo a 0
             if(c==contadorArray){    //COLA            
-                matrizTablero[(int)arrayListCuerpo.get(c).getX()][(int)arrayListCuerpo.get(c).getY()] = App.NUM_TAIL;
+                matrizTablero[(int)arrayListCuerpo.get(c).getY()][(int)arrayListCuerpo.get(c).getX()] = App.NUM_TAIL;
             }else{ //CUERPO
-                matrizTablero[(int)arrayListCuerpo.get(c).getX()][(int)arrayListCuerpo.get(c).getY()] = App.NUM_BODY;
+                matrizTablero[(int)arrayListCuerpo.get(c).getY()][(int)arrayListCuerpo.get(c).getX()] = App.NUM_BODY;
             }
             
         }           
         //Una vez que todos los punteros se han cambiado a la posición del anterior, pongo la cabeza a la posición actual, que es donde se ha movido en la matriz
-        arrayListCuerpo.get(0).setX(filaActual);
-        arrayListCuerpo.get(0).setY(columnaActual);
+        arrayListCuerpo.get(0).setX(columnaActual);
+        arrayListCuerpo.get(0).setY(filaActual);
         arrayListCuerpo.get(0).setZ(direccion);
         //La dirección la guarda en matrixMovement
         System.out.println("cambioPunteros: FILA ACTUAL "+filaActual+", COLUMNA ACTUAL "+columnaActual);//hay que tener en cuanta que la X es COLUMNA y la Y es FILA           

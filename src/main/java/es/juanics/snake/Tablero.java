@@ -57,11 +57,14 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         
         
         //CALCULO LAS MANZANAS A COMER POR NIVEL Y LAS MANZANAS TOTALES A COMER PARA GANAR EL JUEGO
-        // Las manzanas que tiene que comer en cada nivel para subir serán las filas
-
-        manzanasPorSubida = this.filas;
+        // Las manzanas que tiene que comer en cada nivel para subir serán las filas o las columnas (el que sea mayor)
+        if(this.filas>this.columnas){
+           manzanasPorSubida = this.filas; 
+        }else{
+           manzanasPorSubida = this.columnas;  
+        }   
         
-        totalManzanasComer = manzanasPorSubida*5;//El total de manzanas a comer serán las filas * 5 (niveles)
+        totalManzanasComer = manzanasPorSubida*5;//El total de manzanas a comer serán las filas o columnas(el que sea mayor) * 5 (niveles)
         //Muestro en el marcador las manzanas totales que tiene que comer para ganar
         App.textTotalApples.setText(String.valueOf(totalManzanasComer));
         
@@ -138,7 +141,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                                 
         //PONGO LA MATRIZ A 0 EN TODAS LAS POSICIONES DE LA CABEZA, EL CUERPO Y COLA DE LA SERPIENTE
         for(int c=(snakeGame.arrayListCuerpo.size()-1); c>=0; c--){                               
-            snakeGame.matrizTablero[(int)snakeGame.arrayListCuerpo.get(c).getX()][(int)snakeGame.arrayListCuerpo.get(c).getY()] = App.NUM_EMPTY;            
+            snakeGame.matrizTablero[(int)snakeGame.arrayListCuerpo.get(c).getY()][(int)snakeGame.arrayListCuerpo.get(c).getX()] = App.NUM_EMPTY;            
         }        
         //LE PASO LA POSICIÓN INICIAL DE LA MATRIZ A SnakeGame para que vaya cambiando posicones Actuales de fila y columna al pulsar teclas
         snakeGame.inicioFilaColActual(matFilaIni, matColumnaIni);
@@ -266,8 +269,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         //pone la nueva parte en el array de las imágenes de la serpiente
         Snake snakeV = new Snake(App.NUM_BODY);//La parte que ponemos siempre es el cuerpo, porque la cabeza se hace al principio
         //Ponemos la parte en la posición que le corresponde a su puntero
-        snakeV.setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getY());
-        snakeV.setLayoutY(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getX());
+        snakeV.setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getX());
+        snakeV.setLayoutY(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getY());
               
         arrayListImagenes.add(snakeV);//Añado la parte al arrayListImagenes
         this.getChildren().add(snakeV);//Añado el elemento al tablero        
@@ -401,6 +404,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                     }
                 }                               
             } catch(ArrayIndexOutOfBoundsException e) { //SI choca con los llímites MUERE******
+                //e.printStackTrace();
                 timelineSnake.stop();
                 this.deadSnake();
             }            

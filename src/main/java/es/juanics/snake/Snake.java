@@ -63,7 +63,5 @@ public class Snake extends Group{
                 snakeHeadView.setImage(snakeHeadArr);
                 break;
         }
-    }
-     
-    
+    }   
 }
