@@ -1,25 +1,45 @@
-//CAMBIAR DIFICULTAD. QUE GANE SI CONSIGUE TANTAS MANZANAS COMO ((FILAS * COLUMNAS TOTALES /2)-COLUMNAS*3) para que se rellene todo de partes de serpiente menos tres filas
-//ej: 20 filas * 23 columnas = 460 celdas máximas, 460/2= 230, 23*3= 69, 230-69 = 161 celdas ocupará la serpiente como máximo
-//QUE VAYA SUBIENDO LA VELOCIDAD SEGÚN LAS FILAS Y COLUMNAS TAMBIÉN ((FILAS * COLUMNAS TOTALES /2)/10)
-
 /*REGLAS DEL JUEGO:
 --------------------
 
 1º EL JUGADOR ELIGE EL NIVEL DE DIFICULTAD QUE DESEA DE 1 A 5 (VELOCIDAD DE MOVIEMIENTO DE LA SERPIENTE),
 EL NÚMERO DE FILAS Y COLUMNAS QUE QUIERE (para que el juego se adapte automáticamente a estas medidas)
 
+
+
 2º SI CHOCA (SALE DE LOS LÍMITES) SE LE PREGUNTA QUE SI QUIERE CONTINUAR:
     - SI QUIERE CONTINUAR, VUELVE A EMPEZAR CON DIFICULTAD 1 Y PUNTUACIÓN 0
     - SI NO QUIERE CONTINUAR, SALE DE LA APLICACIÓN
 
+
 3º A MEDIDA QUE COME MANZANAS SUBEN LOS PUNTOS Y SUBE DE NIVEL:
-    NIVEL INICIAL: DIFICULTAD QUE ELIJA EL JUGADOR,
-    CADA 10 MANZANAS SUBE UN NIVEL DE DIFICULTAD,
-    SI COME 50 MANZANAS GANA EL JUEGO Y SALE UNA PANTALLA PARA FELICITARLO
+    NIVEL INICIAL: DIFICULTAD QUE ELIJA EL JUGADOR.
+    Cada vez que se coma una manzana se añadirá una pieza al cuerpo.
+
+    - ¿CUÁNTAS MANZANAS TIENE QUE COMER PARA SUBIR DE NIVEL?
+    Las manzanas para subir de nivel serán las filas o las columnas (el que sea menor)(en cada nivel)
+        Ej: Si tengo 8 filas y 10 columnas = 8
+        Ej: Si tengo 13 filas y 10 columnas = 10
+
+    - ¿CUÁNDO SE GANA EL JUEGO?
+    Cuando la serpiente se coma el total de manzanas
+    El total de manzanas a comer será o las filas o las columnas (el que sea menor) * 5
+        Ej: Si tengo 8 filas y 10 columnas = 8*5 = 45
+        Ej: Si tengo 13 filas y 10 columnas = 10*5 = 50
+  
+    
+    Ej: Si tenemos 13 filas y 10 columnas:
+        NIVEL 1: --> 10 manzanas
+        NIVEL 2: --> 20 manzanas
+        NIVEL 3: --> 30 manzanas
+        NIVEL 4: --> 40 manzanas
+        NO HAY NIVEL 5 PORQUE GANA EL JUEGO --> 50 manzanas en total
+    
+   
+    SI COME TODAS LAS MANZANAS GANA EL JUEGO Y SALE UNA PANTALLA PARA FELICITARLO
 
 SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR
+AUNQUE EL USUARIO EMPIEZE EN 5 CONTARÍA COMO NIVEL 1 PERO DIFICULTAD 5
 
-Cada vez que se coma una manzana se añadirá una pieza al cuerpo
 */
 
 
@@ -97,7 +117,10 @@ public class App extends Application {
     private final String [] ARRAY_DIFICULTAD = {"1", "2", "3", "4", "5"};
     private final String [] ARRAY_FILAS = {"8", "9", "10", "11", "12","13","14","15","16","17","18","19","20"};
     private final String [] ARRAY_COLUMNAS = {"10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35"};
-    
+    //LO COGE COMO SI FUERA OUT OF BOUNDS
+    //NO FUNCIONA A PARTIR DE 8 - 16 --> Si tiene más del doble no funciona***********<---------------
+    //NO FUNCIONA A PARTIR DE 20 - 10 (ÚNICO QUE NO FUNCIONA)
+    //FUNCIONA DE 8 - (10-15) y (8-19) - 10
     
     //VARIABLES GENERALES
     //TAMAÑO RECOMENDADO MATRIZ: FILAS TOTALES 13 (0-12), COLUMNAS TOTALES 21 (0-20)
@@ -178,7 +201,7 @@ public class App extends Application {
 
         if (result.isPresent()) {//Si elije una opción se guardará la velocidad
             dificultad = result.get();
-            velocidad = ((Double.valueOf(dificultad)*0.5)+0.5);
+            velocidad = ((Double.valueOf(dificultad)*0.5)+0.5);//velocidad = ((Double.valueOf(dificultad)*0.5)+0.5);
         }//Si no elije nada la velocidad seguirá siendo 1, como estaba inicializada       
         System.out.println("");
         System.out.println("Dificultad: " + dificultad+" ----- Velocidad: "+velocidad);
