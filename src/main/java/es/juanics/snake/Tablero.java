@@ -57,13 +57,11 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         
         
         //CALCULO LAS MANZANAS A COMER POR NIVEL Y LAS MANZANAS TOTALES A COMER PARA GANAR EL JUEGO
-        // Las manzanas que tiene que comer en cada nivel para subir serán (las filas o columnas, el que sea más pequeño)
-        if(this.filas>this.columnas){//Cojo el que sea más pequeño
-            manzanasPorSubida = this.columnas;
-        }else{
-            manzanasPorSubida = this.filas;
-        }
-        totalManzanasComer = manzanasPorSubida*5;//Coincidirá con la mitad de la pantalla
+        // Las manzanas que tiene que comer en cada nivel para subir serán las filas
+
+        manzanasPorSubida = this.filas;
+        
+        totalManzanasComer = manzanasPorSubida*5;//El total de manzanas a comer serán las filas * 5 (niveles)
         //Muestro en el marcador las manzanas totales que tiene que comer para ganar
         App.textTotalApples.setText(String.valueOf(totalManzanasComer));
         

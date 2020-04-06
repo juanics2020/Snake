@@ -1,13 +1,15 @@
 
-//CUANDO LAS FILAS SON EL DOBLE DE LAS COLUMNAS O LAS COLUMNAS SON EL DOBLE DE LAS FILAS SALE OUT OF BOUNDS
+//QUITAR LO DEL DIÁLOGO DE LAS COLUMNAS
 
+//CUANDO LAS FILAS SON EL DOBLE DE LAS COLUMNAS O LAS COLUMNAS SON EL DOBLE DE LAS FILAS SALE OUT OF BOUNDS
+//se puede poner que las columnas sean: (las filas + la mitad de las filas
+//      columnas = (int) filas *1.5
 
 /*REGLAS DEL JUEGO:
 --------------------
 
 1º EL JUGADOR ELIGE EL NIVEL DE DIFICULTAD QUE DESEA DE 1 A 5 (VELOCIDAD DE MOVIEMIENTO DE LA SERPIENTE),
-EL NÚMERO DE FILAS Y COLUMNAS QUE QUIERE (para que el juego se adapte automáticamente a estas medidas)
-
+EL NÚMERO DE FILAS QUE QUIERE (para que el juego se adapte automáticamente a estas medidas)
 
 
 2º SI CHOCA (SALE DE LOS LÍMITES) SE LE PREGUNTA QUE SI QUIERE CONTINUAR:
@@ -20,18 +22,18 @@ EL NÚMERO DE FILAS Y COLUMNAS QUE QUIERE (para que el juego se adapte automáti
     Cada vez que se coma una manzana se añadirá una pieza al cuerpo.
 
     - ¿CUÁNTAS MANZANAS TIENE QUE COMER PARA SUBIR DE NIVEL?
-    Las manzanas para subir de nivel serán las filas o las columnas (el que sea menor)(en cada nivel)
-        Ej: Si tengo 8 filas y 10 columnas = 8
-        Ej: Si tengo 13 filas y 10 columnas = 10
+    Las manzanas para subir de nivel serán las filas (en cada nivel)
+        Ej: Si tengo 8 filas = 8
+        Ej: Si tengo 13 filas = 13
 
     - ¿CUÁNDO SE GANA EL JUEGO?
     Cuando la serpiente se coma el total de manzanas
-    El total de manzanas a comer será o las filas o las columnas (el que sea menor) * 5
-        Ej: Si tengo 8 filas y 10 columnas = 8*5 = 45
-        Ej: Si tengo 13 filas y 10 columnas = 10*5 = 50
+    El total de manzanas a comer será o las filas * 5
+        Ej: Si tengo 8 filas = 8*5 = 45
+        Ej: Si tengo 10 filas = 10*5 = 50
   
     
-    Ej: Si tenemos 13 filas y 10 columnas:
+    Ej: Si tenemos 10 filas:
         NIVEL 1: --> 10 manzanas
         NIVEL 2: --> 20 manzanas
         NIVEL 3: --> 30 manzanas
@@ -41,7 +43,7 @@ EL NÚMERO DE FILAS Y COLUMNAS QUE QUIERE (para que el juego se adapte automáti
    
     SI COME TODAS LAS MANZANAS GANA EL JUEGO Y SALE UNA PANTALLA PARA FELICITARLO
 
-SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR
+SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR,
 AUNQUE EL USUARIO EMPIEZE EN 5 CONTARÍA COMO NIVEL 1 PERO DIFICULTAD 5
 
 */
@@ -67,8 +69,6 @@ AUNQUE EL USUARIO EMPIEZE EN 5 CONTARÍA COMO NIVEL 1 PERO DIFICULTAD 5
 //Mejor se lo paso por parámetros y lo guardo en una variable general
 
 //le ponemos this para que distinga que es la variable de esta clase, no la que le paso que se llama igual
-
-
 
 
 
@@ -159,7 +159,7 @@ public class App extends Application {
     private String dificultad;//La elige el usuario
     private double velocidad = 1; //PARA EL TIMELINE DE LA SERPIENTE EN RELACIÓN A LA DIFICULTAD
     private String filasList;//La elije el usuario
-    private String columnasList;//La elije el usuario
+    //private String columnasList;//La elije el usuario
     
     
     
@@ -237,35 +237,38 @@ public class App extends Application {
         scene_height = filas_totales*TAM_PIEZA_SNAKE;
         //**********************************************************************
         
-        //DIÁLOGO DE OPCIONES (CHOICE DIALOG) COLUMNAS
-        //**********************************************************************
-        List<String> listaColumnas = Arrays.asList(ARRAY_COLUMNAS);
         
-        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(11), listaColumnas);//Quiero que salga mostrando el 21
-        dialogC.setTitle("COLUMNAS");
-        dialogC.setHeaderText("Elige las columnas");
-
-        // Crear un icono para la imagen del diálogo
-        ImageView columnasImage = new ImageView("/images/columnas.png");
-        columnasImage.setFitHeight(70);
-        columnasImage.setFitWidth(22);
-        // Ponerle la imágen del icono
-        dialogC.getDialogPane().setGraphic(columnasImage);
-        
-        Optional<String> result3 = dialogC.showAndWait();
-        columnasList = "cancelled.";
-
-        if (result3.isPresent()) {//Si elije una opción se guardará la velocidad
-            columnasList = result3.get();
-            columnas_totales = Integer.parseInt(columnasList);
-        }//Si no elije nada la columna será la que se mostraba inicialmente       
-        System.out.println("Columnas: "+columnas_totales);
-        System.out.println("");
-        scene_width = columnas_totales*TAM_PIEZA_SNAKE;
-        //**********************************************************************
-        
+//        
+//        //DIÁLOGO DE OPCIONES (CHOICE DIALOG) COLUMNAS
+//        //**********************************************************************
+//        List<String> listaColumnas = Arrays.asList(ARRAY_COLUMNAS);
+//        
+//        ChoiceDialog dialogC = new ChoiceDialog(listaColumnas.get(11), listaColumnas);//Quiero que salga mostrando el 21
+//        dialogC.setTitle("COLUMNAS");
+//        dialogC.setHeaderText("Elige las columnas");
+//
+//        // Crear un icono para la imagen del diálogo
+//        ImageView columnasImage = new ImageView("/images/columnas.png");
+//        columnasImage.setFitHeight(70);
+//        columnasImage.setFitWidth(22);
+//        // Ponerle la imágen del icono
+//        dialogC.getDialogPane().setGraphic(columnasImage);
+//        
+//        Optional<String> result3 = dialogC.showAndWait();
+//        columnasList = "cancelled.";
+//
+//        if (result3.isPresent()) {//Si elije una opción se guardará la velocidad
+//            columnasList = result3.get();
+//            columnas_totales = Integer.parseInt(columnasList);
+//        }//Si no elije nada la columna será la que se mostraba inicialmente       
+//        System.out.println("Columnas: "+columnas_totales);
+//        System.out.println("");
+//        scene_width = columnas_totales*TAM_PIEZA_SNAKE;
+//        //**********************************************************************
+                
         scene_height_mas_vbox = scene_height + HBOX_HEIGHT;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
-        
+        columnas_totales = (int)(filas_totales*1.5);//CALCULO LAS COLUMNAS A PARTIR DE LAS FILAS
+        scene_width = columnas_totales*TAM_PIEZA_SNAKE;//CLACULO LA ANCHURA DE LA ESCENA CON LAS COLUMNAS
                 
         
         StackPane root = new StackPane();//contenedor principal(stackpane)
@@ -329,7 +332,8 @@ public class App extends Application {
         panePuntHor.getChildren().add(textDificulty);
         panePuntuacion.getChildren().add(panePuntHor);
         //**********************************************************************
-              
+        
+        
         //Tablero incluído en VBOX (Debajo de la puntuación y dificultad)
         //el tablero ya contiene la cabeza de la serpiente y la manzana
         //Le paso las variables al tablero (que vamos a utilizar en tablero)
