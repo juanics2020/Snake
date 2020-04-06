@@ -12,8 +12,8 @@ public class SnakeGame {
     //ASÍ EL MOVIMIENTO GRÁFICO DE LA SERPIENTE COINCIDIRÁ CON EL MOVIMIENTO INTERNO DE LA MATRIZ
     
     public int puntuacion = 0;//va incrementado a medida que come manzanas
-    private int filas;//variable para total filas matriz   
-    private int columnas;//variable para total columnas matriz
+    private int filas = 0;//variable para total filas matriz   
+    private int columnas = 0;//variable para total columnas matriz
     //Declaro la matriz del tablero por ahora sin filas ni columnas[][]
     public static int [][] matrizTablero;//Ahora mismo no tiene tamaño y está vacía
         
@@ -48,8 +48,8 @@ public class SnakeGame {
         System.out.println("");
         System.out.println("Nº FILAS TOTALES: "+this.filas+", Nº COLUMNAS TOTALES: "+this.columnas);
         
-        for(int f=0; f<this.filas; f++){
-            for(int c=0; c<this.columnas; c++){
+        for(int f=0; f<filas; f++){
+            for(int c=0; c<columnas; c++){
                 matrizTablero[f][c] = App.NUM_EMPTY;//Ponemos la celda de la matriz vacía a 0
             }        
         }
@@ -121,9 +121,9 @@ public class SnakeGame {
         System.out.println("******************************************************");
         //Hacer con todos los elementos del arraylist. Si tiene 7 elementos (0-6)
         for(int c=0; c<arrayListCuerpo.size(); c++){
-            System.out.println("-----Tamaño ArrayList(nº punteros): "+arrayListCuerpo.size());
-            System.out.println("Puntero ("+c+") X (FILA): "+arrayListCuerpo.get(c).getY());
-            System.out.println("Puntero ("+c+") Y (COLUMNA): "+arrayListCuerpo.get(c).getX());
+            System.out.println("-----Tamaño ArrayList(Nº PUNTEROS): "+arrayListCuerpo.size());
+            System.out.println("Puntero ("+c+") Y (FILA): "+arrayListCuerpo.get(c).getX());
+            System.out.println("Puntero ("+c+") X (COLUMNA): "+arrayListCuerpo.get(c).getY()); 
             System.out.println("Puntero ("+c+") Z (Dirección): "+(int)arrayListCuerpo.get(c).getZ());
         }
         System.out.println("******************************************************");             
@@ -176,7 +176,7 @@ public class SnakeGame {
         }
                
         System.out.println("*****************************************************************************************************");
-        System.out.println("NUEVO PUNTERO "+(arrayListCuerpo.size()-1)+", X("+p.getY()+") [FILA] - Y("+p.getX()+") [COLUMNA] - Z("+(int)p.getZ()+") <DIRECCIÓN>");
+        System.out.println("NUEVO PUNTERO "+(arrayListCuerpo.size()-1)+", Y("+p.getX()+") [FILA] - X("+p.getY()+") [COLUMNA] - Z("+(int)p.getZ()+") <DIRECCIÓN>");
         System.out.println("*****************************************************************************************************");
                 
         return (contadorArray);//devuelve el número de puntero que se ha creado (índice)

@@ -14,8 +14,8 @@ import javafx.util.Duration;
 public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, MÉTODOS,... DE LA CLASE PANE (extends)
 //*****La clase en sí es el panel
        
-    private int filas;//variable para total filas matriz   
-    private int columnas;//variable para total columnas matriz
+    private int filas = 0;//variable para total filas matriz   
+    private int columnas = 0;//variable para total columnas matriz
 
     private String dificultad;//Guardará la dificultad
     private double velocidad;//Guardará la velocidad
@@ -37,8 +37,6 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     private boolean pendienteCrecimiento = false;
     private int puntero;//Nos devolverá el número del puntero que corresponde al nuevo puntero(creado en arrayListCuerpo)
     
-    private int totalManzanasComer;//GUARDARÁ EL TOTAL DE LAS MANZANAS QUE HAY QUE COMER
-    private int manzanasPorSubida;//GUARDARÁ CUÁNTAS MANZANAS HAY QUE COMER (*5)
     
     //Pone la serpiente en el tablero gráficamente //Método constructor (new Tablero)
     //Al crearlo en App le pasamos todos esto parámetros que usaremos en esta clase
@@ -50,21 +48,6 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         //Pongo el tablero al ancho y alto de la escena
         this.setWidth(width);
         this.setHeight(height);      
-        
-        //CALCULO LAS MANZANAS A COMER POR NIVEL Y LAS MANZANAS TOTALES A COMER PARA GANAR EL JUEGO
-        if(this.filas>this.columnas){//Cojo el que sea más pequeño
-            manzanasPorSubida = this.columnas;
-        }else{
-            manzanasPorSubida = this.filas;
-        }
-        totalManzanasComer = manzanasPorSubida*5;//Coincidirá con la mitad de la pantalla
-        
-        System.out.println("-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
-        System.out.println("TOTAL MANZANAS A COMER PARA GANAR: "+totalManzanasComer);
-        System.out.println("MANZANAS POR SUBIDA DE NIVEL: "+manzanasPorSubida);
-        System.out.println("-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
-        System.out.println(" ");
-        
         
         snakeGame = new SnakeGame(this.filas,this.columnas);//Objeto SnakeGame para crear la matriz del tablero
         
@@ -376,13 +359,13 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                         App.textScore.setText(String.valueOf(snakeGame.puntuacion));
                         
                         //SUBIR DE NIVEL
-                        //SI COME EL NÚMERO DE MANZANAS INDICADO SUBE LA DIFICULTAD Y LA VELOCIDAD
-                        if(snakeGame.puntuacion==(manzanasPorSubida*1) || snakeGame.puntuacion==(manzanasPorSubida*2) || snakeGame.puntuacion==(manzanasPorSubida*3) || snakeGame.puntuacion==(manzanasPorSubida*4)){
+                        //SI COME 10 MANZANAS SUBE LA DIFICULTAD Y LA VELOCIDAD
+                        if(snakeGame.puntuacion==10 || snakeGame.puntuacion==20 || snakeGame.puntuacion==30 || snakeGame.puntuacion==40){
                             dificultad=  Integer.toString(Integer.valueOf(dificultad)+1);
                             App.textDificulty.setText(dificultad);
                             velocidad = velocidad+0.5;
                             System.out.println("HAS SUBIDO DE NIVEL: "+" [DIFICULTAD: "+dificultad+"] "+"[VELOCIDAD: "+velocidad+"]");
-                        }else if(snakeGame.puntuacion==totalManzanasComer){//Si llega a comer el total de las manzanas GANA EL JUEGO
+                        }else if(snakeGame.puntuacion==50){//Si llega a comer 50 manzanas GANA EL JUEGO
                             timelineSnake.stop();
                             App.textP.setText(String.valueOf(snakeGame.puntuacion));//Actualizo marcador puntuación de la ventana ganar
                             App.textD.setText(dificultad);//Actualizo marcador dificultad de la ventana ganar                        
@@ -395,7 +378,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                         snakeGame.cambioPunteros(snakeGame.filaActual,snakeGame.columnaActual, direccionActual); 
                     }
                 }                               
-            } catch(ArrayIndexOutOfBoundsException e) { //Si choca con los límites MUERE******
+            } catch(ArrayIndexOutOfBoundsException e) { //SI choca con los llímites MUERE******
                 timelineSnake.stop();
                 this.deadSnake();
             }            
