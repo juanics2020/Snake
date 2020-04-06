@@ -1,6 +1,6 @@
-//CAMBIAR DIFICULTAD. QUE GANE SI CONSIGUE TANTAS MANZANAS COMO ((FILAS * COLUMNAS TOTALES /2)-COLUMNAS*3) para que se rellene todo de partes de serpiente menos tres filas
-//ej: 20 filas * 23 columnas = 460 celdas máximas, 460/2= 230, 23*3= 69, 230-69 = 161 celdas ocupará la serpiente como máximo
-//QUE VAYA SUBIENDO LA VELOCIDAD SEGÚN LAS FILAS Y COLUMNAS TAMBIÉN ((FILAS * COLUMNAS TOTALES /2)/10)
+
+//CUANDO LAS FILAS SON EL DOBLE DE LAS COLUMNAS O LAS COLUMNAS SON EL DOBLE DE LAS FILAS SALE OUT OF BOUNDS
+
 
 /*REGLAS DEL JUEGO:
 --------------------
@@ -8,18 +8,42 @@
 1º EL JUGADOR ELIGE EL NIVEL DE DIFICULTAD QUE DESEA DE 1 A 5 (VELOCIDAD DE MOVIEMIENTO DE LA SERPIENTE),
 EL NÚMERO DE FILAS Y COLUMNAS QUE QUIERE (para que el juego se adapte automáticamente a estas medidas)
 
+
+
 2º SI CHOCA (SALE DE LOS LÍMITES) SE LE PREGUNTA QUE SI QUIERE CONTINUAR:
     - SI QUIERE CONTINUAR, VUELVE A EMPEZAR CON DIFICULTAD 1 Y PUNTUACIÓN 0
     - SI NO QUIERE CONTINUAR, SALE DE LA APLICACIÓN
 
+
 3º A MEDIDA QUE COME MANZANAS SUBEN LOS PUNTOS Y SUBE DE NIVEL:
-    NIVEL INICIAL: DIFICULTAD QUE ELIJA EL JUGADOR,
-    CADA 10 MANZANAS SUBE UN NIVEL DE DIFICULTAD,
-    SI COME 50 MANZANAS GANA EL JUEGO Y SALE UNA PANTALLA PARA FELICITARLO
+    NIVEL INICIAL: DIFICULTAD QUE ELIJA EL JUGADOR.
+    Cada vez que se coma una manzana se añadirá una pieza al cuerpo.
+
+    - ¿CUÁNTAS MANZANAS TIENE QUE COMER PARA SUBIR DE NIVEL?
+    Las manzanas para subir de nivel serán las filas o las columnas (el que sea menor)(en cada nivel)
+        Ej: Si tengo 8 filas y 10 columnas = 8
+        Ej: Si tengo 13 filas y 10 columnas = 10
+
+    - ¿CUÁNDO SE GANA EL JUEGO?
+    Cuando la serpiente se coma el total de manzanas
+    El total de manzanas a comer será o las filas o las columnas (el que sea menor) * 5
+        Ej: Si tengo 8 filas y 10 columnas = 8*5 = 45
+        Ej: Si tengo 13 filas y 10 columnas = 10*5 = 50
+  
+    
+    Ej: Si tenemos 13 filas y 10 columnas:
+        NIVEL 1: --> 10 manzanas
+        NIVEL 2: --> 20 manzanas
+        NIVEL 3: --> 30 manzanas
+        NIVEL 4: --> 40 manzanas
+        NO HAY NIVEL 5 PORQUE GANA EL JUEGO --> 50 manzanas en total
+    
+   
+    SI COME TODAS LAS MANZANAS GANA EL JUEGO Y SALE UNA PANTALLA PARA FELICITARLO
 
 SI EL USUARIO COMIENZA EN 5 PUEDE LLEGAR HASTA EL NIVEL 10 DE DIFICULTAD ANTES DE GANAR
+AUNQUE EL USUARIO EMPIEZE EN 5 CONTARÍA COMO NIVEL 1 PERO DIFICULTAD 5
 
-Cada vez que se coma una manzana se añadirá una pieza al cuerpo
 */
 
 
@@ -77,7 +101,9 @@ public class App extends Application {
     //CONSTANTES GENERALES
     //Alto y Ancho de la imagen de una parte de la serpiente
     public static final int TAM_PIEZA_SNAKE = 42;//Tamaño que tendrán los visores de las imágenes (Tamaño grafico de cada celda) TAMAÑO RECOMENDADO: 42
-           
+    private final int HBOX_HEIGHT = 29; //TAMAÑO RECOMENDADO 29       
+    
+    
     //CONSTANTES PARA DIRECCIONES
     public static final int D_RIGHT = 1;//Constantes que para comparar la direcciones en switch
     public static final int D_LEFT = -1;//Ponemos static para poder usarlas en otras clases
@@ -106,12 +132,12 @@ public class App extends Application {
     
     private int scene_width = columnas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 882. SERÍA EL TAMAÑO DE LAS COLUMNAS DEL TABLERO * TAM_PIEZA_SNAKE
     private int scene_height = filas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 546. SERÍA EL TAMAÑO DE LAS FILAS DEL TABLERO * TAM_PIEZA_SNAKE
-    private int hbox_height = (int)(scene_height/18.82758620689655); //TAMAÑO RECOMENDADO 29 : (SECENE_HEIGHT/18,82758620689655)
-    private int scene_height_mas_vbox = scene_height + hbox_height;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
+    private int scene_height_mas_vbox = scene_height + HBOX_HEIGHT;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
           
     private int direccion = 2; //La serpiente comienza yendo hacia abajo
      
-    VBox panePuntuacion;   
+    VBox panePuntuacion;
+    public static Text textTotalApples;//muestras las manzanas totales que tiene que comer
     public static Text textScore; //muestra puntuación en el VBOX
     public static Text textDificulty;//muestra dificultad en el VBOX
     
@@ -238,8 +264,7 @@ public class App extends Application {
         scene_width = columnas_totales*TAM_PIEZA_SNAKE;
         //**********************************************************************
         
-        hbox_height = (int)(scene_height/18.82758620689655); //TAMAÑO RECOMENDADO 29 : (SECENE_HEIGHT/18,82758620689655)
-        scene_height_mas_vbox = scene_height + hbox_height;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
+        scene_height_mas_vbox = scene_height + HBOX_HEIGHT;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
         
                 
         
@@ -263,12 +288,18 @@ public class App extends Application {
         root.getChildren().add(panePuntuacion);
     
         HBox panePuntHor = new HBox();
-        panePuntHor.setSpacing(10);
+        panePuntHor.setSpacing(15);
         
+        //Imagen para las manzanas totales que tiene que comer para ganar
+        ImageView totalApples = new ImageView ("/images/apple.png");
+        //Texto para la puntuación (valor)
+        textTotalApples = new Text(String.valueOf(0));
+        textTotalApples.setFont(Font.font("Arial Black", 20));
+        textTotalApples.setFill(Color.YELLOW);
         //---
         //Texto de etiqueta para la puntuación
         Text textTitleScore = new Text("Puntuación: ");
-        textTitleScore.setFont(Font.font("Arial Black", 20));
+        textTitleScore.setFont(Font.font("Arial Black", 18));
         textTitleScore.setFill(Color.BLACK);
         //Texto para la puntuación (valor)
         textScore = new Text(String.valueOf(0));
@@ -277,7 +308,7 @@ public class App extends Application {
         //---
         //Texto de etiqueta para la dificultad
         Text textTitleDificulty = new Text("Dificultad: ");
-        textTitleDificulty.setFont(Font.font("Arial Black", 20));
+        textTitleDificulty.setFont(Font.font("Arial Black", 18));
         textTitleDificulty.setFill(Color.BLACK);
         //Texto para la dificultad
         textDificulty = new Text(dificultad);//la dificultad que selecciona el usuario en el diálogo
@@ -286,9 +317,12 @@ public class App extends Application {
         //---
         //centro los textos y le doy altura minima y máxima
         panePuntHor.setAlignment(Pos.CENTER);
-        panePuntHor.setMinHeight(hbox_height);
-        panePuntHor.setMaxHeight(hbox_height);
+        panePuntHor.setMinHeight(HBOX_HEIGHT);
+        panePuntHor.setMaxHeight(HBOX_HEIGHT);
         
+        
+        panePuntHor.getChildren().add(totalApples);
+        panePuntHor.getChildren().add(textTotalApples);        
         panePuntHor.getChildren().add(textTitleScore);
         panePuntHor.getChildren().add(textScore);
         panePuntHor.getChildren().add(textTitleDificulty);

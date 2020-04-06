@@ -37,6 +37,10 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     private boolean pendienteCrecimiento = false;
     private int puntero;//Nos devolverá el número del puntero que corresponde al nuevo puntero(creado en arrayListCuerpo)
     
+    private int totalManzanasComer;//GUARDARÁ EL TOTAL DE LAS MANZANAS QUE HAY QUE COMER
+    private int manzanasPorSubida;//GUARDARÁ CUÁNTAS MANZANAS HAY QUE COMER (*5)
+    
+    
     
     //Pone la serpiente en el tablero gráficamente //Método constructor (new Tablero)
     //Al crearlo en App le pasamos todos esto parámetros que usaremos en esta clase
@@ -50,6 +54,26 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         this.setHeight(height);      
         
         snakeGame = new SnakeGame(this.filas,this.columnas);//Objeto SnakeGame para crear la matriz del tablero
+        
+        
+        //CALCULO LAS MANZANAS A COMER POR NIVEL Y LAS MANZANAS TOTALES A COMER PARA GANAR EL JUEGO
+        // Las manzanas que tiene que comer en cada nivel para subir serán (las filas o columnas, el que sea más pequeño)
+        if(this.filas>this.columnas){//Cojo el que sea más pequeño
+            manzanasPorSubida = this.columnas;
+        }else{
+            manzanasPorSubida = this.filas;
+        }
+        totalManzanasComer = manzanasPorSubida*5;//Coincidirá con la mitad de la pantalla
+        //Muestro en el marcador las manzanas totales que tiene que comer para ganar
+        App.textTotalApples.setText(String.valueOf(totalManzanasComer));
+        
+        System.out.println("-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
+        System.out.println("TOTAL MANZANAS A COMER PARA GANAR: "+totalManzanasComer);
+        System.out.println("MANZANAS POR SUBIDA DE NIVEL: "+manzanasPorSubida);
+        System.out.println("-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
+        System.out.println(" ");
+        
+        
         
         //pone la serpiente en el tablero
         snake1 = new Snake(1);
@@ -360,12 +384,12 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
                         
                         //SUBIR DE NIVEL
                         //SI COME 10 MANZANAS SUBE LA DIFICULTAD Y LA VELOCIDAD
-                        if(snakeGame.puntuacion==10 || snakeGame.puntuacion==20 || snakeGame.puntuacion==30 || snakeGame.puntuacion==40){
+                        if(snakeGame.puntuacion==(manzanasPorSubida*1) || snakeGame.puntuacion==(manzanasPorSubida*2) || snakeGame.puntuacion==(manzanasPorSubida*3) || snakeGame.puntuacion==(manzanasPorSubida*4)){
                             dificultad=  Integer.toString(Integer.valueOf(dificultad)+1);
                             App.textDificulty.setText(dificultad);
                             velocidad = velocidad+0.5;
                             System.out.println("HAS SUBIDO DE NIVEL: "+" [DIFICULTAD: "+dificultad+"] "+"[VELOCIDAD: "+velocidad+"]");
-                        }else if(snakeGame.puntuacion==50){//Si llega a comer 50 manzanas GANA EL JUEGO
+                        }else if(snakeGame.puntuacion==totalManzanasComer){//Si llega a comer el total de las manzanas GANA EL JUEGO
                             timelineSnake.stop();
                             App.textP.setText(String.valueOf(snakeGame.puntuacion));//Actualizo marcador puntuación de la ventana ganar
                             App.textD.setText(dificultad);//Actualizo marcador dificultad de la ventana ganar                        
