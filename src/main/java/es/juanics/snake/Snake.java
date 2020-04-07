@@ -20,7 +20,7 @@ public class Snake extends Group{
 
     
     
-    public Snake(int parte){// parte 1 es cabeza y parte 2 es cuerpo
+    public Snake(byte parte){// parte 1 es cabeza y parte 2 es cuerpo
         //CARGO IMÁGENES DE LA SERPIENTE Y HAGO DOS CLASES DE SERPIENTE CON DOS VISORES (UNO PARA CADA PARTE DEL CUERPO)
         snakeHeadAb = new Image(getClass().getResourceAsStream("/images/Snakehead.png"));
         snakeHeadIz = new Image(getClass().getResourceAsStream("/images/Snakehead - iz.png"));
@@ -48,7 +48,7 @@ public class Snake extends Group{
     
     
     //Poner la imagen de la CABEZA según la dirección
-    public void setHead (int direccion){
+    public void setHead (byte direccion){
         switch (direccion) {//Según la tecla pulsada
             case App.D_RIGHT:// la serpiente se moverá a la derecha
                 snakeHeadView.setImage(snakeHeadDer);

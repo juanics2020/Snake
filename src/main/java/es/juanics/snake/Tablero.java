@@ -27,8 +27,8 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     private int matColumnaIni;//posición inicial de la cabeza en la COLUMNA dentro de la matriz    
      
     private Apple apple1;//Crear un objeto de tipo Apple  
-    private int siguienteDireccion = App.D_DOWN; //Cuando pulse las teclas guardará la siguiente direccion (comenzará hacia abajo)
-    private int direccionActual = App.D_DOWN;//Cogerá la nueva dirección que le den las teclas (comenzará hacia abajo)
+    private byte siguienteDireccion = App.D_DOWN; //Cuando pulse las teclas guardará la siguiente direccion (comenzará hacia abajo)
+    private byte direccionActual = App.D_DOWN;//Cogerá la nueva dirección que le den las teclas (comenzará hacia abajo)
 
     //ArrayList que guardará las imágenes para las imágenes de las serpientes
     //(de tipo Snake para decirle que parte de la serpiente quiero crear o cambiar)
@@ -77,7 +77,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
         
         
         //pone la serpiente en el tablero
-        snake1 = new Snake(1);
+        snake1 = new Snake((byte)1);
         arrayListImagenes.add(snake1);
         this.getChildren().add(snake1);
         
@@ -203,14 +203,14 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     
       
     //PASAR DEL APP AL TABLERO, LA DIRECCIÓN SIGUIENTE
-    public void nextDirection(int direccion){
+    public void nextDirection(byte direccion){
         siguienteDireccion = direccion;
         System.out.println("Siguiente DIRECCIÓN: "+siguienteDireccion);
     }
     
 
     //PONE LA IMAGEN DE LA SERPIENTE EN LA DIRECCIÓN QUE LE CORRESPONDA  
-    public void switchImagenSnake(int direccion){      
+    public void switchImagenSnake(byte direccion){      
         switch (direccionActual) {//Según la tecla pulsada
             case App.D_LEFT:// la serpiente se moverá a la izquierda
                 arrayListImagenes.get(0).setHead(App.D_LEFT);//cambio el sentido de la cabeza de la serpiente                                
@@ -230,7 +230,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     
     
     //AL INICIAR SIEMPRE LA PARTIDA HAY QUE HACER UN RETARDO ANTES DE QUE EMPIECE A MOVERSE LA SERPIENTE PARA DARLE TIEMPO AL USUARIO
-    public void reatrdoInicioPartida(int direccion){
+    public void reatrdoInicioPartida(byte direccion){
         //Sirve para lo que lo que metamos aquí. Podemos utilizar varios TimeLine con diferentes velocidades para diferentes cosas
         Timeline timelineRetardo = new Timeline(
                 // 0.017 ~= 60 FPS (equivalencia de segundos a Frames por Segundo)
@@ -267,7 +267,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     //Le paso el puntero del arrayListCuerpo que le corresponde a la nueva imagen
     public void setNewSnakeIntoArray(int puntero){  
         //pone la nueva parte en el array de las imágenes de la serpiente
-        Snake snakeV = new Snake(App.NUM_BODY);//La parte que ponemos siempre es el cuerpo, porque la cabeza se hace al principio
+        Snake snakeV = new Snake((byte)App.NUM_BODY);//La parte que ponemos siempre es el cuerpo, porque la cabeza se hace al principio
         //Ponemos la parte en la posición que le corresponde a su puntero
         snakeV.setLayoutX(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getX());
         snakeV.setLayoutY(App.TAM_PIEZA_SNAKE*snakeGame.arrayListCuerpo.get(puntero).getY());
@@ -291,7 +291,7 @@ public class Tablero extends Pane {//LA CLASE TABLERO HEREDA LAS PROPIEDADES, M�
     
    
     // MOVIMIENTO GRÁFICO DE LA SERPIENTE
-    public void snakeMovement(int direccion) {
+    public void snakeMovement(byte direccion) {
         direccionActual = direccion; //La dirección que le digamos por teclado. Comienza hacia abajo
                
         //El timeline se para cuando llamamos a la función si ya se había creado

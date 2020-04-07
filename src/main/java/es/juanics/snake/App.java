@@ -100,22 +100,22 @@ import javafx.stage.Stage;
 public class App extends Application {
     //CONSTANTES GENERALES
     //Alto y Ancho de la imagen de una parte de la serpiente
-    public static final int TAM_PIEZA_SNAKE = 42;//Tamaño que tendrán los visores de las imágenes (Tamaño grafico de cada celda) TAMAÑO RECOMENDADO: 42
-    private final int HBOX_HEIGHT = 29; //TAMAÑO RECOMENDADO 29       
+    public static final byte TAM_PIEZA_SNAKE = 42;//Tamaño que tendrán los visores de las imágenes (Tamaño grafico de cada celda) TAMAÑO RECOMENDADO: 42
+    private final byte HBOX_HEIGHT = 29; //TAMAÑO RECOMENDADO 29       
     
     
     //CONSTANTES PARA DIRECCIONES
-    public static final int D_RIGHT = 1;//Constantes que para comparar la direcciones en switch
-    public static final int D_LEFT = -1;//Ponemos static para poder usarlas en otras clases
-    public static final int D_UP = -2;
-    public static final int D_DOWN = 2;
+    public static final byte D_RIGHT = 1;//Constantes que para comparar la direcciones en switch
+    public static final byte D_LEFT = -1;//Ponemos static para poder usarlas en otras clases
+    public static final byte D_UP = -2;
+    public static final byte D_DOWN = 2;
     
     //CONSTANTES PARA MATRIZ TABLERO
-    public static final int NUM_EMPTY = 0;
-    public static final int NUM_HEAD = 1;
-    public static final int NUM_BODY = 2;
-    public static final int NUM_TAIL = 3;
-    public static final int NUM_APPLE = 4;
+    public static final byte NUM_EMPTY = 0;
+    public static final byte NUM_HEAD = 1;
+    public static final byte NUM_BODY = 2;
+    public static final byte NUM_TAIL = 3;
+    public static final byte NUM_APPLE = 4;
     
     //Para diálogo de opciones (DIFICULTAD)
     //USAREMOS UN ARRAYLIST PARA EL DIÁLOGO DE ELEGIR LA DIFICULTAD.
@@ -134,7 +134,7 @@ public class App extends Application {
     private int scene_height = filas_totales*TAM_PIEZA_SNAKE;//TAMAÑO RECOMENDADO: 546. SERÍA EL TAMAÑO DE LAS FILAS DEL TABLERO * TAM_PIEZA_SNAKE
     private int scene_height_mas_vbox = scene_height + HBOX_HEIGHT;//ALTURA DE LA PANTALLA SUMANDO TABLERO Y HBOX. (VBOX = TABLERO+HBOX)
           
-    private int direccion = 2; //La serpiente comienza yendo hacia abajo
+    private byte direccion = 2; //La serpiente comienza yendo hacia abajo
      
     VBox panePuntuacion;
     public static Text textTotalApples;//muestras las manzanas totales que tiene que comer
